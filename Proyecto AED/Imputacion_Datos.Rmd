@@ -17,7 +17,6 @@ Este documento Rmarkdown tiene como objetivo identificar y tratar los valores fa
 
 En primer lugar, analizamos el conjunto de datos correspondiente a 2019 (datos_cohorte_2019).
 
-
 ### Análisis de cada variable
 
 Veamos el número de países que presentan valores faltantes y el número de países con información disponible para cada variable.
@@ -35,6 +34,7 @@ View(valores_disponibles)
 ### Estrategia de imputación
 
 Para la imputación de datos faltantes utlizaremos estadísticos según el grupo de income del país con el dato faltante. Veamos cómo se distribuyen :
+
 ```{r}
 # Gráfico de sectores
 library(ggplot2)
@@ -53,7 +53,6 @@ pie(distribucion_income,
 
 
 ```
-
 
 ## Imputación gdp_per_capita
 
@@ -88,9 +87,9 @@ sum(is.na(datos_cohorte_2019$gdp_per_capita))
 View(datos_cohorte_2019$gdp_per_capita)
 ```
 
-## Imputación gasto_salud_gdp 
+## Imputación gasto_salud_gdp
 
-En este caso, haremos la imputación de los datos faltantes (NA) usando la media de la variable correspondiente dentro de cada grupo de ingresos (income). 
+En este caso, haremos la imputación de los datos faltantes (NA) usando la media de la variable correspondiente dentro de cada grupo de ingresos (income).
 
 Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>25 países).
 
@@ -98,7 +97,7 @@ Para ello, veamos en primer lugar el número de países con valores faltantes pa
 valores_na['gasto_salud_gdp']
 ```
 
-Procedemos con la imputación de los valores: 
+Procedemos con la imputación de los valores:
 
 ```{r}
 #Media por grupo de income
@@ -121,7 +120,6 @@ sum(is.na(datos_cohorte_2019$gasto_salud_gdp))
 View(datos_cohorte_2019$gasto_salud_gdp)
 ```
 
-
 ## Imputación esperanza_vida
 
 En este caso, haremos la imputación de los datos faltantes (NA) usando el método KNN.
@@ -134,7 +132,7 @@ Para ello, veamos en primer lugar el número de países con valores faltantes pa
 valores_na['esperanza_vida']
 ```
 
-Procedemos con la imputación de los valores: 
+Procedemos con la imputación de los valores:
 
 ```{r}
 if (!require("VIM")) install.packages("VIM")
@@ -148,10 +146,9 @@ sum(is.na(datos_cohorte_2019$esperanza_vida))
 View(datos_cohorte_2019$esperanza_vida)
 ```
 
-
 ## Imputación area
 
-Procedamos a la imputación de los datos faltantes (NA) usando la media de la variable correspondiente dentro de cada grupo de ingresos (income). 
+Procedamos a la imputación de los datos faltantes (NA) usando la media de la variable correspondiente dentro de cada grupo de ingresos (income).
 
 Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>25 países).
 
@@ -159,7 +156,7 @@ Para ello, veamos en primer lugar el número de países con valores faltantes pa
 valores_na['area']
 ```
 
-Procedemos con la imputación de los valores: 
+Procedemos con la imputación de los valores:
 
 ```{r}
 #Media por grupo de income
