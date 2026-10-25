@@ -1,5 +1,5 @@
 ---
-title: Full title of the paper (Capitalized)
+title: "Full title of the paper (Capitalized)"
 author:
   - name: Fran Jiménez Jiménez
     affil: 1
@@ -9,55 +9,38 @@ author:
     affil: 3
 affiliation:
   - num: 1
-    address: |
-      Universitat de València - 
-      Escola Técnica Superior d'Enginyería
-      Av. de la Universitat, S/N, 46100 Burjassot, València
+    address: "Universitat de València - Escola Técnica Superior d'Enginyería, Av. de la Universitat, S/N, 46100 Burjassot, València"
     email: franjiji@alumni.uv.es
   - num: 2
-    address: |
-      Universitat de València - 
-      Escola Técnica Superior d'Enginyería
-      Av. de la Universitat, S/N, 46100 Burjassot, València
+    address: "Universitat de València - Escola Técnica Superior d'Enginyería, Av. de la Universitat, S/N, 46100 Burjassot, València"
     email: orfercar@alumni.uv.es
   - num: 3
-    address: |
-      Universitat de València - 
-      Escola Técnica Superior d'Enginyería
-      Av. de la Universitat, S/N, 46100 Burjassot, València
+    address: "Universitat de València - Escola Técnica Superior d'Enginyería, Av. de la Universitat, S/N, 46100 Burjassot, València"
     email: avinlli@alumni.uv.es
-  
-# author citation list in chicago format
 authorcitation: |
   Jiménez, F.; Ortega, C.; Vinjoy, A.
-# firstnote to eighthnote
-firstnote: |
-  Current address: Updated affiliation
-secondnote: |
-  These authors contributed equally to this work.
-# document options
 journal: notspecified
 type: article
 status: submit
-# front matter
 simplesummary: |
   A Simple summary goes here.
 abstract: |
-  Escribid un párrafo de unas 150-200 palabras que resuma todo el trabajo sin usar subtítulos: el contexto (la importancia de estudiar las desigualdades en salud y el gasto público), los datos y métodos utilizados (datos del Banco Mundial de 2015-2022 procesados en RStudio), los hallazgos principales (correlación entre PIB, inversión en salud y carga de enfermedad) y la conclusión final.
-# back matter
+  Escribid un párrafo de unas 150-200 palabras que resuma todo el trabajo, destacando el contexto sobre las desigualdades en salud y el gasto público, los datos y métodos utilizados (datos del Banco Mundial de 2015-2022 procesados en RStudio), los hallazgos principales y la conclusión final.
 keywords: |
-  Poned entre 3 y 6 términos clave separados por punto y coma, por ejemplo: Análisis exploratorio de datos; Salud pública; Banco Mundial; Gasto sanitario; Transición demográfica; RStudio
+  Análisis exploratorio de datos; Salud pública; Banco Mundial; Gasto sanitario; Transición demográfica; RStudio
 acknowledgement: |
-  Este estudio es un proyecto de la asignatura de Análisis Exploratorio de Datos, del Máster de Ciéncia de Datos de la Universidad de Valencia. Consecuentemente, no ha recibido ningún tipo de financiación. 
-authorcontributions: |
-  Se debe especificar quién ha hecho cada parte...?
+  Este estudio es un proyecto de la asignatura de Análisis Exploratorio de Datos, del Máster de Ciencia de Datos de la Universitat de València.
 dataavailability: |
-  Los datos del estudio han sido extraídos del Banco Mundial (World Bank Open Data), al cual puede accederse por el siguiente enlace: https://databank.worldbank.org/, o a través del paquete 'WDI' de Rstudio. 
+  Los datos del estudio han sido extraídos del Banco Mundial (World Bank Open Data) a través del paquete 'WDI' de RStudio (https://databank.worldbank.org/).
 conflictsofinterest: |
-  Los autores declaran que no ha habido conflictos de interés.  
+  Los autores declaran que no existen conflictos de interés.
 abbreviations:
   - short: WDI
     long: World Development Indicators
+endnotes: false
+output: 
+  rticles::mdpi_article:
+    extra_dependencies: longtable
 ---
 
 # Introducción
