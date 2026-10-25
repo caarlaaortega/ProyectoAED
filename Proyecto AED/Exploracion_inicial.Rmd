@@ -109,6 +109,6 @@ variables_interes <- c('country', 'income', 'region', 'year', 'esperanza_vida',
 
 datos_cohorte_2019 <- subset(datos_salud, year == 2019, select = variables_interes)
 datos_cohorte_2020 <- subset(datos_salud, year == 2020, select = variables_interes)
-datos_cohorte_2021 = subset(datos_salud, year == 2021, select = variables_interes)
+datos_cohorte_2021 <- subset(datos_salud, year == 2021, select = variables_interes)
 ```
 
