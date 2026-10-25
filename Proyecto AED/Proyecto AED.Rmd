@@ -54,14 +54,10 @@ authorcontributions: |
 dataavailability: |
   Los datos del estudio han sido extraídos del Banco Mundial (World Bank Open Data), al cual puede accederse por el siguiente enlace: https://databank.worldbank.org/, o a través del paquete 'WDI' de Rstudio. 
 conflictsofinterest: |
-  Los autores declaran que no ha habido conflicto de interés.  
+  Los autores declaran que no ha habido conflictos de interés.  
 abbreviations:
   - short: WDI
     long: World Development Indicators
-endnotes: false
-output: 
-  rticles::mdpi_article:
-    extra_dependencies: longtable
 ---
 
 # Introducción
