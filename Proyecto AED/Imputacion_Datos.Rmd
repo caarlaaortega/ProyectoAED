@@ -11,22 +11,53 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+Este documento Rmarkdown tiene como objetivo realizar la imputación de las variables que vamos a utlizar en el proyecto.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Imputación Dataset 2019
 
-```{r cars}
-summary(cars)
+Hagamos un estudio de los datos en 2019.
+
+Veamos cuantos países contienen un dato NA para cada variable:
+```{r}
+#Cantidad de países con NA en cada variable
+valores_na<-sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
+view(valores_na)
+
+#Cantidad de países con valores en cada variable
+valores_disponibles<-sapply(datos_cohorte_2019,function(x) sum(!is.na(x)))
+view(valores_disponibles)
 ```
 
-## Including Plots
+Para la imputación de datos faltantes utlizaremos estadísticos según el grupo de income del país con el dato faltante. Veamos como se distribuyen :
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
+
+### GDP PER CAPITA
+
+Tenemos los siguiente valores faltantes para la variables gdppercapita
+```{r}
+valores_na['gdp_per_capita']
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Podemos imputar con la mediana de los países dentro de su mismo tipo de income.
+```{r}
+#Mediana por grupo de income
+mediana_gdp_income<-tapply(datos_cohorte_2019$gdp_per_capita,
+                       datos_cohorte_2019$income,
+                       median, 
+                       na.rm=TRUE)
+
+#Imputar usando la mediana
+filas_na_gdp <- which(
+  is.na(datos_cohorte_2019$gdp_per_capita)
+)
+
+datos_cohorte_2019$gdp_per_capita[filas_na_gdp] <-mediana_income[
+    as.character(datos_cohorte_2019$income[filas_na_gdp])
+  ]
+
+#Comprobación
+sum(is.na(datos_cohorte_2019$gdp_per_capita))
+```
