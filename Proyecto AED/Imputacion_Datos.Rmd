@@ -35,6 +35,28 @@ view(valores_disponibles)
 ### Estrategia de imputación
 
 Para la imputación de datos faltantes utlizaremos estadísticos según el grupo de income del país con el dato faltante. Veamos como se distribuyen :
+```{r}
+# Gráfico de sectores
+library(ggplot2)
+
+distribucion_income <- table(datos_cohorte_2019$income)
+
+pie(
+  distribucion_income,
+  labels = paste0(
+    names(distribucion_income),
+    "\n(n = ", as.vector(distribucion_income), ")"
+  ),
+  main = "Distribución de países por grupo de ingresos (2019)",
+  col = c('red','blue','purple','orange','pink'),
+  border = "white",
+  cex = 0.6
+)
+
+
+
+```
+
 
 ## Imputación gdp_per_capita
 
