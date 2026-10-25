@@ -149,3 +149,35 @@ view(datos_cohorte_2019$esperanza_vida)
 ```
 
 
+## Imputación area
+
+Procedamos a la imputación de los datos faltantes (NA) usando la media de la variable correspondiente dentro de cada grupo de ingresos (income). 
+
+Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>25 países).
+
+```{r}
+valores_na['area']
+```
+
+Procedemos con la imputación de los valores: 
+
+```{r}
+#Media por grupo de income
+media_area_income<-tapply(datos_cohorte_2019$area,
+                       datos_cohorte_2019$income,
+                       mean, 
+                       na.rm=TRUE)
+
+#Imputar usando la media
+filas_na_area <- which(
+  is.na(datos_cohorte_2019$area)
+)
+
+datos_cohorte_2019$area[filas_na_area] <- media_area_income[
+    as.character(datos_cohorte_2019$income[filas_na_area])
+  ]
+
+#Comprobación
+sum(is.na(datos_cohorte_2019$area))
+view(datos_cohorte_2019$area)
+```
