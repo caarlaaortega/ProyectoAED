@@ -92,7 +92,7 @@ view(datos_cohorte_2019$gdp_per_capita)
 
 En este caso, haremos la imputación de los datos faltantes (NA) usando la media de la variable correspondiente dentro de cada grupo de ingresos (income). 
 
-Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>25 países)
+Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>25 países).
 
 ```{r}
 valores_na['gasto_salud_gdp']
@@ -120,4 +120,32 @@ datos_cohorte_2019$gasto_salud_gdp[filas_na_gasto_salud_gdp] <- media_gasto_salu
 sum(is.na(datos_cohorte_2019$gasto_salud_gdp))
 view(datos_cohorte_2019$gasto_salud_gdp)
 ```
+
+
+## Imputación esperanza_vida
+
+En este caso, haremos la imputación de los datos faltantes (NA) usando el método KNN.
+
+El método KNN imputa los datos faltantes buscando los k individuos más similares según sus características y utilizando sus valores conocidos para estimar el valor ausente.
+
+Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>1 país).
+
+```{r}
+valores_na['esperanza_vida']
+```
+
+Procedemos con la imputación de los valores: 
+
+```{r}
+if (!require("VIM")) install.packages("VIM")
+library(VIM)
+
+# Imputar los valores faltantes usando la función kNN
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "esperanza_vida", k = 10, imp_var = FALSE)
+
+#Comprobación
+sum(is.na(datos_cohorte_2019$esperanza_vida))
+view(datos_cohorte_2019$esperanza_vida)
+```
+
 
