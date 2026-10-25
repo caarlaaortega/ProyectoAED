@@ -2,8 +2,11 @@
 title: Full title of the paper (Capitalized)
 author:
   - name: Fran Jiménez Jiménez
+    affil: 1
   - name: Carla Ortega Fernández
+    affil: 2
   - name: Alejandra Vinjoy Lliso
+    affil: 3
 affiliation:
   - num: 1
     address: |
@@ -26,14 +29,12 @@ affiliation:
   
 # author citation list in chicago format
 authorcitation: |
-  Leutnant, D.; Doe, J.
+  Jiménez, F.; Ortega, C.; Vinjoy, A.
 # firstnote to eighthnote
 firstnote: |
   Current address: Updated affiliation
 secondnote: |
   These authors contributed equally to this work.
-correspondence: |
-  leutnant@fh-muenster.de; Tel.: +XX-000-00-0000.
 # document options
 journal: notspecified
 type: article
@@ -42,127 +43,47 @@ status: submit
 simplesummary: |
   A Simple summary goes here.
 abstract: |
-  A single paragraph of about 200 words maximum. For research articles, 
-  abstracts should give a pertinent overview of the work. We strongly encourage
-  authors to use the following style of structured abstracts, but without 
-  headings: 1) Background: Place the question addressed in a broad context and
-  highlight the purpose of the study; 2) Methods: Describe briefly the main
-  methods or treatments applied; 3) Results: Summarize the article's main 
-  findings; and 4) Conclusion: Indicate the main conclusions or interpretations. 
-  The abstract should be an objective representation of the article, it must not 
-  contain results which are not presented and substantiated in the main text and 
-  should not exaggerate the main conclusions.
+  Escribid un párrafo de unas 150-200 palabras que resuma todo el trabajo sin usar subtítulos: el contexto (la importancia de estudiar las desigualdades en salud y el gasto público), los datos y métodos utilizados (datos del Banco Mundial de 2015-2022 procesados en RStudio), los hallazgos principales (correlación entre PIB, inversión en salud y carga de enfermedad) y la conclusión final.
 # back matter
 keywords: |
-  keyword 1; keyword 2; keyword 3 (list three to ten pertinent keywords specific 
-  to the article, yet reasonably common within the subject discipline.).
+  Poned entre 3 y 6 términos clave separados por punto y coma, por ejemplo: Análisis exploratorio de datos; Salud pública; Banco Mundial; Gasto sanitario; Transición demográfica; RStudio
 acknowledgement: |
-  All sources of funding of the study should be disclosed. Please clearly 
-  indicate grants that you have received in support of your research work. 
-  Clearly state if you received funds for covering the costs to publish in open 
-  access.
+  Este estudio es un proyecto de la asignatura de Análisis Exploratorio de Datos, del Máster de Ciéncia de Datos de la Universidad de Valencia. Consecuentemente, no ha recibido ningún tipo de financiación. 
 authorcontributions: |
-  For research articles with several authors, a short paragraph specifying their 
-  individual contributions must be provided. The following statements should be 
-  used ``X.X. and Y.Y. conceive and designed the experiments; X.X. performed the 
-  experiments; X.X. and Y.Y. analyzed the data; W.W. contributed 
-  reagents/materials/analysis tools; Y.Y. wrote the paper.'' Authorship must be
-  limited to those who have contributed substantially to the work reported.
-funding: |
-  Please add: ``This research received no external funding'' or ``This research 
-  was funded by NAME OF FUNDER grant number XXX.'' and  and ``The APC was funded 
-  by XXX''. Check carefully that the details given are accurate and use the 
-  standard spelling of funding agency names at 
-  \url{https://search.crossref.org/funding}, any errors may affect your future 
-  funding.
-institutionalreview: |
-  In this section, you should add the Institutional Review Board Statement and 
-  approval number, if relevant to your study. You might choose to exclude 
-  this statement if the study did not require ethical approval. Please note 
-  that the Editorial Office might ask you for further information. Please add 
-  “The study was conducted in accordance with the Declaration of Helsinki, 
-  and approved by the Institutional Review Board (or Ethics Committee) of 
-  NAME OF INSTITUTE (protocol code XXX and date of approval).” for studies 
-  involving humans. OR “The animal study protocol was approved by the 
-  Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE 
-  (protocol code XXX and date of approval).” for studies involving animals. 
-  OR “Ethical review and approval were waived for this study due to REASON 
-  (please provide a detailed justification).” OR “Not applicable” for
-   studies not involving humans or animals.
-informedconsent: |
-  Any research article describing a study involving humans should contain this 
-  statement. Please add ``Informed consent was obtained from all subjects 
-  involved in the study.'' OR ``Patient consent was waived due to REASON 
-  (please provide a detailed justification).'' OR ``Not applicable'' for 
-  studies not involving humans. You might also choose to exclude this statement 
-  if the study did not involve humans.
-  
-  Written informed consent for publication must be obtained from participating 
-  patients who can be identified (including by the patients themselves). Please 
-  state ``Written informed consent has been obtained from the patient(s) to 
-  publish this paper'' if applicable.
+  Se debe especificar quién ha hecho cada parte...?
 dataavailability: |
-  We encourage all authors of articles published in MDPI journals to share 
-  their research data. In this section, please provide details regarding where 
-  data supporting reported results can be found, including links to publicly 
-  archived datasets analyzed or generated during the study. Where no new data 
-  were created, or where data is unavailable due to privacy or ethical 
-  re-strictions, a statement is still required. Suggested Data Availability 
-  Statements are available in section “MDPI Research Data Policies” at 
-  \url{https://www.mdpi.com/ethics}.
+  Los datos del estudio han sido extraídos del Banco Mundial (World Bank Open Data), al cual puede accederse por el siguiente enlace: https://databank.worldbank.org/, o a través del paquete 'WDI' de Rstudio. 
 conflictsofinterest: |
-  Declare conflicts of interest or state 'The authors declare no conflict of 
-  interest.' Authors must identify and declare any personal circumstances or
-  interest that may be perceived as inappropriately influencing the
-  representation or interpretation of reported research results. Any role of the
-  funding sponsors in the design of the study; in the collection, analyses or 
-  interpretation of data in the writing of the manuscript, or in the decision to 
-  publish the results must be declared in this section. If there is no role, 
-  please state 'The founding sponsors had no role in the design of the study; 
-  in the collection, analyses, or interpretation of data; in the writing of the 
-  manuscript, an in the decision to publish the results'.
-sampleavailability: |
-  Samples of the compounds ...... are available from the authors.
-supplementary: |
- The following supporting information can be downloaded at:  
- \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title.
+  Los autores declaran que no ha habido conflicto de interés.  
 abbreviations:
-  - short: MDPI
-    long: Multidisciplinary Digital Publishing Institute
-  - short: DOAJ
-    long: Directory of open access journals
-  - short: TLA
-    long: Three letter acronym
-  - short: LD 
-    long: linear dichroism
-bibliography: mybibfile.bib
-appendix: appendix.tex
+  - short: WDI
+    long: World Development Indicators
 endnotes: false
 output: 
   rticles::mdpi_article:
     extra_dependencies: longtable
 ---
 
-# Introducción 
+# Introducción
 
-Aquí escribiremos la introducción del trabajo 
+Aquí escribiremos la introducción del trabajo
 
-# Materiales y Métodos 
+# Materiales y Métodos
 
 Aquí describiremos los métodos y la procedencia de los datos del Banco Mundial
 
-# Resultados 
+# Resultados
 
-Aquí presentaremos los gráficos y análisis estadísticos en R 
+Aquí presentaremos los gráficos y análisis estadísticos en R
 
 ```{r, echo=FALSE, fig.cap="Ejemplo de gráfico limpio"}
 # Tu código de R aquí
 ```
 
-# Discusión 
+# Discusión
 
-Aquí interpretaremos los resultados 
+Aquí interpretaremos los resultados
 
-# Conclusiones 
+# Conclusiones
 
-Conclusiones principales del estudio 
+Conclusiones principales del estudio
