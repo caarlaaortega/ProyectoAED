@@ -47,9 +47,22 @@ output:
 
 Aquí escribiremos la introducción del trabajo
 
+PREGUNTA CLAVE: ¿Existe una correspondencia real entre las prioridades de gasto de los gobiernos y las necesidades epidemiológicas de su población?
+
 # Materiales y Métodos
 
 Aquí describiremos los métodos y la procedencia de los datos del Banco Mundial
+
+## Fuente y obtención de los datos
+
+Los datos utilizados en este trabajo proceden del Banco Mundial, concretamente de la base de datos *World Development Indicators* (WDI). Esta base de datos recopila indicadores tanto económicos como sanitarios o demográficos de países de todo el mundo, lo que nos permitirá realizar comparaciones internacionales.
+
+La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial.
+
+## Selección de la muestra
+
+Período estudiado ---> 2019
+
 
 # Resultados
 
@@ -58,6 +71,17 @@ Aquí presentaremos los gráficos y análisis estadísticos en R
 ```{r, echo=FALSE, fig.cap="Ejemplo de gráfico limpio"}
 # Tu código de R aquí
 ```
+## Contexto socioeconómico de los países
+Estudio del gdp per capita y las categorías de income con el objetivo de contextualizar las diferencias económicas entre países.
+
+## Salud vs defensa
+Prioridades de gasto público. Comparación entre el gasto en salud y defensa de los diferentes países
+
+## Necesidades sanitarias
+Como difieren las necesidades sanitarias entre los diferentes países
+
+## Correspondencia entre gasto público y necesidades
+Conectar los apartados anteriores para responder a la pregunta principal
 
 # Discusión
 
