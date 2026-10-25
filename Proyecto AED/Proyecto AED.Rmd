@@ -59,6 +59,7 @@ Los datos utilizados en este trabajo proceden del Banco Mundial, concretamente d
 
 La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial.
 
+
 ## Selección de la muestra
 
 Período estudiado ---> 2019
@@ -71,8 +72,10 @@ Aquí presentaremos los gráficos y análisis estadísticos en R
 ```{r, echo=FALSE, fig.cap="Ejemplo de gráfico limpio"}
 # Tu código de R aquí
 ```
+
 ## Contexto socioeconómico de los países
 Estudio del gdp per capita y las categorías de income con el objetivo de contextualizar las diferencias económicas entre países.
+
 
 ## Salud vs defensa
 Prioridades de gasto público. Comparación entre el gasto en salud y defensa de los diferentes países
