@@ -86,6 +86,15 @@ variables_aed_init <- c(
   'gdp_per_capita', 'gasto_salud_gdp', 'gasto_defensa_gdp', 'mortalidad_infantil',
   'acceso_agua', 'causa_muerte_agudas', 'causa_muerte_cronicas', 'mortalidad_higiene'
   )
-```
 
+# Resumen de la presencia de datos por variable y por año. El objetivo es ver para qué años tiene esa variable, en cada país, un valor. 
+cobertura_por_anyo <- aggregate(
+  datos_salud[variables_aed_init],
+  by = list(year = datos_salud$year),
+  FUN = function(x) sum(!is.na(x)))
+print(cobertura_por_anyo)
+```
+A raíz de esta operación, 2019 es el año en el que mayor proporción de países presentan un valor para las variables estudiadas de forma mantenida. Por esta razón, se van a analizar los datos de 2019. Si bien es cierto que también se cuenta con datos abundantes de forma mantenida para 2020 y 2021, a excepción de la variable 'mortalidad_higiene', que tan solo tiene valor para 2019. 
+
+Podría resultar interesante revisar datos pre-pandemia, de durante la pandemia y post-pandemia, contando con 3 datasets de 2019, 2020 y 2021, para hacer un pequeño análisis temporal. Por esta razón, se fijarán estos como años de análisis. 
 
