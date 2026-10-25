@@ -1,0 +1,70 @@
+---
+title: "Exploración inicial - habituación al dataset"
+author: "Carla Ortega Fernández" 
+author: 'Fran Jiménez Jiménez'
+author: 'Alejandra Vinjoy Lliso'
+date: "2026-10-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Este documento Rmarkdown tiene como objetivo realizar un análisis inicial de los datos del Banco Mundial, ver la proporción de datos faltantes para cada variable de interés relacionada con el tema del proyecto, y tomar decisiones iniciales para lanzarlo. 
+
+```{r}
+# 1. Instalar y cargar los paquetes necesarios
+if (!require("WDI")) install.packages("WDI")
+if (!require("tidyverse")) install.packages("tidyverse")
+
+library(WDI)
+library(tidyverse)
+
+# 2. Definir los indicadores oficiales que queremos extraer
+indicadores <- c(
+  esperanza_vida = "SP.DYN.LE00.IN",       # Esperanza de vida al nacer (años)
+  gdp_per_capita = "NY.GDP.PCAP.CD",       # PIB per cápita (US$ actuales)
+  gasto_salud_gdp = "SH.XPD.CHEX.GD.ZS",   # Gasto en salud (% del PIB)
+  gasto_defensa_gdp = 'MS.MIL.XPND.GD.ZS', # Gasto en defensa (% del PIB)
+  mortalidad_infantil = "SP.DYN.IMRT.IN",   # Tasa de mortalidad infantil (por 1.000 nacidos vivos)
+  acceso_agua = "SH.H2O.BASW.ZS",          # Acceso a agua potable básica (% población)
+  escolaridad_secundaria = "SE.SEC.NENR",# Tasa neta de matriculación secundaria
+  causa_muerte_agudas = 'SH.DTH.COMM.ZS', # muertes por enfermedades agudas
+  causa_muerte_cronicas = 'SH.DTH.NCOM.ZS', # muertes por enfermedades crónicas
+  mortalidad_cronicas = 'SH.DYN.NCOM.ZS', # mortalidad por crónicas 
+  mortalidad_higiene = 'SH.STA.WASH.P5', # mortalidad por causas higiénicas
+  mortalidad_aire = 'CC.SH.AIRP.AMB', # mortalidad por contaminación aérea
+  fertilidad = 'SP.DYN.TFRT', # fertilidad 
+  fertilidad_adolescente = 'SP.ADO.TFRT', # fertilidad adolescente (mujeres de 12 a 18 años)
+  inmunizacion = 'HF.IMM.FULL' # personas inmunizadas mediante vacunación 
+)
+
+# 3. Descargar los datos desde la API oficial del Banco Mundial
+datos_salud <- WDI(
+  country = "all",            # Todos los países
+  indicator = indicadores, 
+  start = 2015,               # Rango de años a analizar
+  end = 2022,
+  extra = TRUE                # Incluye metadatos extra (región, grupo de ingresos)
+) %>% 
+  filter(region != "Aggregates") # Filtrar agregados regionales para quedarnos solo con países
+
+# 4. Inspección inicial del dataset
+glimpse(datos_salud)
+
+# 5. Buscar datos faltantes y cribar variables: 
+datos_faltantes <- function(variable){
+  filtrados <- datos_salud[!is.na(datos_salud[[variable]]), c('country', 'year', variable)]
+  p <- length(unique(filtrados$country))/217
+  return (p)
+}
+
+
+# 6. Visualización del porcentaje de países que algún año tienen el dato necesario
+for (variable in colnames(datos_salud)){
+  cat(variable,datos_faltantes(variable), '\n')
+}
+
+```
+
