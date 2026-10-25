@@ -11,14 +11,19 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Este documento Rmarkdown tiene como objetivo realizar la imputación de las variables que vamos a utlizar en el proyecto.
+Este documento Rmarkdown tiene como objetivo identificar y tratar los valores faltantes (NA) de las variables que se utilizarán en el proyecto. Para ello, se analizará la disponibilidad de los datos y se aplicará un método de imputación basado en el nivel de ingresos de cada país.
 
 
-## Imputación Dataset 2019
 
-Hagamos un estudio de los datos en 2019.
+# Imputación del conjunto de datos del 2019
 
-Veamos cuantos países contienen un dato NA para cada variable:
+En primer lugar, analizamos el conjunto de datos correspondiente a 2019 (datos_cohorte_2019).
+
+## Estudio previo 
+
+### Análisis de cada variable
+
+Veamos el número de países que presentan valores faltantes y el número de países con información disponible para cada variable.
 ```{r}
 #Cantidad de países con NA en cada variable
 valores_na<-sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
@@ -29,19 +34,26 @@ valores_disponibles<-sapply(datos_cohorte_2019,function(x) sum(!is.na(x)))
 view(valores_disponibles)
 ```
 
+### Estrategia de imputación
+
 Para la imputación de datos faltantes utlizaremos estadísticos según el grupo de income del país con el dato faltante. Veamos como se distribuyen :
 
 
 
 
-### GDP PER CAPITA
+## Imputación gdp_per_capita
 
-Tenemos los siguiente valores faltantes para la variables gdppercapita
+Para tratar los valores faltantes, se utilizará la mediana de la variable correspondiente dentro de cada grupo de ingresos (income).
+
+### Identificación valores faltantes
+
+Comprobamos cuantos países presentan valores NA en esta variable. (-->7 países)
 ```{r}
 valores_na['gdp_per_capita']
 ```
 
-Podemos imputar con la mediana de los países dentro de su mismo tipo de income.
+### Imputación con la mediana
+
 ```{r}
 #Mediana por grupo de income
 mediana_gdp_income<-tapply(datos_cohorte_2019$gdp_per_capita,
