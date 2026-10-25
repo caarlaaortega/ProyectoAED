@@ -25,11 +25,11 @@ Veamos el número de países que presentan valores faltantes y el número de pa�
 ```{r}
 #Cantidad de países con NA en cada variable
 valores_na<-sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
-view(valores_na)
+View(valores_na)
 
 #Cantidad de países con valores en cada variable
 valores_disponibles<-sapply(datos_cohorte_2019,function(x) sum(!is.na(x)))
-view(valores_disponibles)
+View(valores_disponibles)
 ```
 
 ### Estrategia de imputación
@@ -85,7 +85,7 @@ datos_cohorte_2019$gdp_per_capita[filas_na_gdp] <-mediana_gdp_income[
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$gdp_per_capita))
-view(datos_cohorte_2019$gdp_per_capita)
+View(datos_cohorte_2019$gdp_per_capita)
 ```
 
 ## Imputación gasto_salud_gdp 
@@ -118,7 +118,7 @@ datos_cohorte_2019$gasto_salud_gdp[filas_na_gasto_salud_gdp] <- media_gasto_salu
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$gasto_salud_gdp))
-view(datos_cohorte_2019$gasto_salud_gdp)
+View(datos_cohorte_2019$gasto_salud_gdp)
 ```
 
 
@@ -145,7 +145,7 @@ datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "esperanza_vida", k = 1
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$esperanza_vida))
-view(datos_cohorte_2019$esperanza_vida)
+View(datos_cohorte_2019$esperanza_vida)
 ```
 
 
@@ -179,5 +179,5 @@ datos_cohorte_2019$area[filas_na_area] <- media_area_income[
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$area))
-view(datos_cohorte_2019$area)
+View(datos_cohorte_2019$area)
 ```
