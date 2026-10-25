@@ -13,17 +13,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Este documento Rmarkdown tiene como objetivo identificar y tratar los valores faltantes (NA) de las variables que se utilizarán en el proyecto. Para ello, se analizará la disponibilidad de los datos y se aplicará un método de imputación basado en el nivel de ingresos de cada país.
 
-
-
 # Imputación del conjunto de datos del 2019
 
 En primer lugar, analizamos el conjunto de datos correspondiente a 2019 (datos_cohorte_2019).
 
-## Estudio previo 
 
 ### Análisis de cada variable
 
 Veamos el número de países que presentan valores faltantes y el número de países con información disponible para cada variable.
+
 ```{r}
 #Cantidad de países con NA en cada variable
 valores_na<-sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
@@ -38,21 +36,16 @@ view(valores_disponibles)
 
 Para la imputación de datos faltantes utlizaremos estadísticos según el grupo de income del país con el dato faltante. Veamos como se distribuyen :
 
-
-
-
 ## Imputación gdp_per_capita
 
 Para tratar los valores faltantes, se utilizará la mediana de la variable correspondiente dentro de cada grupo de ingresos (income).
 
-### Identificación valores faltantes
+Identificación valores faltantes: Comprobamos cuantos países presentan valores NA en esta variable. (--\>7 países)
 
-Comprobamos cuantos países presentan valores NA en esta variable. (-->7 países)
 ```{r}
 valores_na['gdp_per_capita']
 ```
-
-### Imputación con la mediana
+Imputación con la mediana
 
 ```{r}
 #Mediana por grupo de income
