@@ -1,7 +1,7 @@
 ---
 title: "Exploración inicial - habituación al dataset"
 author: "Carla Ortega Fernández" 
-author: 'Fran Jiménez Jiménez'
+author: 'Francisco Jiménez Jiménez'
 author: 'Alejandra Vinjoy Lliso'
 date: "2026-10-25"
 output: html_document

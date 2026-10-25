@@ -1,7 +1,7 @@
 ---
 title: "Imputacion Datos"
 author: "Carla Ortega Fernández" 
-author: 'Fran Jiménez Jiménez'
+author: 'Francisco Jiménez Jiménez'
 author: 'Alejandra Vinjoy Lliso'
 date: "2026-10-25"
 output: html_document
@@ -34,23 +34,20 @@ view(valores_disponibles)
 
 ### Estrategia de imputación
 
-Para la imputación de datos faltantes utlizaremos estadísticos según el grupo de income del país con el dato faltante. Veamos como se distribuyen :
+Para la imputación de datos faltantes utlizaremos estadísticos según el grupo de income del país con el dato faltante. Veamos cómo se distribuyen :
 ```{r}
 # Gráfico de sectores
 library(ggplot2)
 
 distribucion_income <- table(datos_cohorte_2019$income)
 
-pie(
-  distribucion_income,
-  labels = paste0(
-    names(distribucion_income),
-    "\n(n = ", as.vector(distribucion_income), ")"
-  ),
-  main = "Distribución de países por grupo de ingresos (2019)",
-  col = c('red','blue','purple','orange','pink'),
-  border = "white",
-  cex = 0.6
+pie(distribucion_income, 
+    labels = paste0(names(distribucion_income), 
+    "\n(n = ", as.vector(distribucion_income), ")"), 
+    main = "Distribución de países por grupo de ingresos (2019)", 
+    col = c('red','blue','purple','orange','pink'), 
+    border = "white",
+    cex = 0.6
 )
 
 
@@ -67,7 +64,8 @@ Identificación valores faltantes: Comprobamos cuantos países presentan valores
 ```{r}
 valores_na['gdp_per_capita']
 ```
-Imputación con la mediana
+
+Imputación con la mediana:
 
 ```{r}
 #Mediana por grupo de income
@@ -81,10 +79,45 @@ filas_na_gdp <- which(
   is.na(datos_cohorte_2019$gdp_per_capita)
 )
 
-datos_cohorte_2019$gdp_per_capita[filas_na_gdp] <-mediana_income[
+datos_cohorte_2019$gdp_per_capita[filas_na_gdp] <-mediana_gdp_income[
     as.character(datos_cohorte_2019$income[filas_na_gdp])
   ]
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$gdp_per_capita))
+view(datos_cohorte_2019$gdp_per_capita)
 ```
+
+## Imputación gasto_salud_gdp 
+
+En este caso, haremos la imputación de los datos faltantes (NA) usando la media de la variable correspondiente dentro de cada grupo de ingresos (income). 
+
+Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>25 países)
+
+```{r}
+valores_na['gasto_salud_gdp']
+```
+
+Procedemos con la imputación de los valores: 
+
+```{r}
+#Media por grupo de income
+media_gasto_salud_gdp_income<-tapply(datos_cohorte_2019$gasto_salud_gdp,
+                       datos_cohorte_2019$income,
+                       mean, 
+                       na.rm=TRUE)
+
+#Imputar usando la media
+filas_na_gasto_salud_gdp <- which(
+  is.na(datos_cohorte_2019$gasto_salud_gdp)
+)
+
+datos_cohorte_2019$gasto_salud_gdp[filas_na_gasto_salud_gdp] <- media_gasto_salud_gdp_income[
+    as.character(datos_cohorte_2019$income[filas_na_gasto_salud_gdp])
+  ]
+
+#Comprobación
+sum(is.na(datos_cohorte_2019$gasto_salud_gdp))
+view(datos_cohorte_2019$gasto_salud_gdp)
+```
+
