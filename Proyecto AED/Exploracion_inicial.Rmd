@@ -35,7 +35,7 @@ indicadores <- c(
   mortalidad_cronicas = 'SH.DYN.NCOM.ZS', # mortalidad por crónicas 
   mortalidad_higiene = 'SH.STA.WASH.P5', # mortalidad por causas higiénicas
   mortalidad_aire = 'CC.SH.AIRP.AMB', # mortalidad por contaminación aérea
-  fertilidad = 'SP.DYN.TFRT', # fertilidad 
+  fertilidad = 'SP.DYN.TFRT.IN', # fertilidad 
   fertilidad_adolescente = 'SP.ADO.TFRT', # fertilidad adolescente (mujeres de 12 a 18 años)
   inmunizacion = 'HF.IMM.FULL' # personas inmunizadas mediante vacunación 
 )
@@ -53,18 +53,39 @@ datos_salud <- WDI(
 # 4. Inspección inicial del dataset
 glimpse(datos_salud)
 
-# 5. Buscar datos faltantes y cribar variables: 
+```
+
+Una vez cargadas las variables de interés que podrían responder a las preguntas que se plantean, se realizará un estudio de datos faltantes. Las variables cargadas son "tridimensionales", pues se cuenta con la variable de interés recogida para: 
+* Cada país del mundo considerado. 
+* Cada año incluido en el intervalo 2015-2022. 
+Teniendo esta información en cuenta, y dado que no se va a realizar un análisis temporal, se buscará acotar los datos a los años que mayor información contengan. 
+Por ello, se va a realizar un análisis variable a variable de dónde está su información por país. 
+
+En primer lugar, se estudiará la proporción de datos no faltantes que hay para cada variable, agrupado por país: 
+```{r}
+# Buscar datos faltantes y cribar variables: 
 datos_faltantes <- function(variable){
   filtrados <- datos_salud[!is.na(datos_salud[[variable]]), c('country', 'year', variable)]
   p <- length(unique(filtrados$country))/217
   return (p)
 }
 
-
-# 6. Visualización del porcentaje de países que algún año tienen el dato necesario
+# Visualización del porcentaje de países que algún año tienen el dato necesario
 for (variable in colnames(datos_salud)){
   cat(variable,datos_faltantes(variable), '\n')
 }
-
 ```
+
+A raíz de este primer análisis inicial se concluye que tanto la variable de inmunización como la de mortalidad a causa de la contaminación aérea no se deberían considerar, pues únicamente aparece un valor no faltante para el 15.67% y el 4.61% de los países, respectivamente. Asimismo, asumiendo que se descartarán todas aquellas variables con más de un 30% de valores faltantes, también no se considerará la tasa de escolaridad, tan solo presente el dato para el 68.67% de los países. 
+
+Ahora se analizarán solo aquellas variables que tienen valores para más del 70% de los países, pero no en todos ellos. De estas, se estudiarán los años para los cuales cuentan con valor. El objetivo es construir un dataframe con los valores de estas variables para dichos años, pues el análisis temporal no está considerado en el presente proyecto. 
+
+```{r}
+# Las variables que deben estudiarse en profundidad son: 
+variables_aed_init <- c(
+  'gdp_per_capita', 'gasto_salud_gdp', 'gasto_defensa_gdp', 'mortalidad_infantil',
+  'acceso_agua', 'causa_muerte_agudas', 'causa_muerte_cronicas', 'mortalidad_higiene'
+  )
+```
+
 
