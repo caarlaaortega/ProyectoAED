@@ -51,6 +51,23 @@ pie(distribucion_income,
 )
 ```
 
+```{r}
+library(ggplot2)
+library(dplyr)
+
+#Calculamos frecuencias dplyr
+#distribucion_income<-datos_cohorte_2019 %>% count(income) %>% 
+ggplot(datos_cohorte_2019,aes(x='',fill=income))+
+  theme(aspect.ratio = 1)+
+  geom_bar(color='pink',width=1)+
+  coord_polar('y')+
+  labs(
+    title='Distribución de países por grupo de ingresos (2019)',
+    fill='Grupo de ingresos'
+  )
+```
+
+
 Vamos a realizar la imputación de los datos faltantes usando el método KNN. este método imputa los datos faltantes buscando los k individuos más similares según sus características y utilizando sus valores conocidos para estimar el valor ausente. 
 
 Para ello, identificaremos primero el número de variables que toman valor NA, para posteriormente realizar la imputación y comprobar si se ha llevado a cabo correctamente (sin valores ausentes).

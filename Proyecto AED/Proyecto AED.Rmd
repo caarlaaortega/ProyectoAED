@@ -79,6 +79,7 @@ Estudio del gdp per capita y las categorías de income con el objetivo de contex
 
 Prioridades de gasto público. Comparación entre el gasto en salud y defensa de los diferentes países
 
+
 ## Necesidades sanitarias
 
 Como difieren las necesidades sanitarias entre los diferentes países
