@@ -199,12 +199,8 @@ Estudiar caso a caso.
 ## Correlación entre variables
 Estudiar correlación entre variables
 Gráfica que agrupa las correlaciones ggpairs()
-<<<<<<< HEAD
-Poner theme()
-=======
 
 
 poner todo igual para ggplot con theme()
 
 invisibilizar los chunks para el pdf o html
->>>>>>> ba0f239c940daec14486b87e920bafac0119396d
