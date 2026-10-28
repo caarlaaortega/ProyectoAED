@@ -65,7 +65,10 @@ valores_na['gdp_per_capita']
 ```{r}
 if (!require("VIM")) install.packages("VIM")
 library(VIM)
+```
 
+
+```{r}
 # Imputar los valores faltantes usando la función kNN
 datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "gdp_per_capita", k = 10, imp_var = FALSE)
 
@@ -95,22 +98,21 @@ View(datos_cohorte_2019$gdp_per_capita)
 # View(datos_cohorte_2019$gdp_per_capita)
 ```
 
-## Imputación gasto_salud_gdp
+## Imputación gasto_salud_gdp y gasto_defensa_gdp
 
 ```{r}
 valores_na['gasto_salud_gdp']
+valores_na['gasto_defensa_gdp']
 ```
 
 ```{r}
-if (!require("VIM")) install.packages("VIM")
-library(VIM)
-
 # Imputar los valores faltantes usando la función kNN
 datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "gasto_salud_gdp", k = 10, imp_var = FALSE)
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "gasto_defensa_gdp", k = 10, imp_var = FALSE)
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$gasto_salud_gdp))
-View(datos_cohorte_2019$gasto_salud_gdp)
+sum(is.na(datos_cohorte_2019$gasto_defensa_gdp))
 ```
 
 ## Imputación esperanza_vida
@@ -121,9 +123,6 @@ valores_na['esperanza_vida']
 
 
 ```{r}
-if (!require("VIM")) install.packages("VIM")
-library(VIM)
-
 # Imputar los valores faltantes usando la función kNN
 datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "esperanza_vida", k = 10, imp_var = FALSE)
 
@@ -140,13 +139,40 @@ valores_na['area']
 
 
 ```{r}
-if (!require("VIM")) install.packages("VIM")
-library(VIM)
-
 # Imputar los valores faltantes usando la función kNN
 datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "area", k = 10, imp_var = FALSE)
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$area))
 View(datos_cohorte_2019$area)
+```
+
+## Imputación fertilidad y fertilidad_adolescente
+
+```{r}
+valores_na['fertilidad']
+valores_na['fertilidad_adolescente']
+```
+
+
+```{r}
+# Imputar los valores faltantes usando la función kNN
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'fertilidad', k = 10, imp_var = FALSE)
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'fertilidad_adolescente', k = 10, imp_var = FALSE)
+
+#Comprobación
+sum(is.na(datos_cohorte_2019$fertilidad))
+sum(is.na(datos_cohorte_2019$fertilidad_adolescente))
+
+```
+
+## Imputación resto de variables por KNN
+
+```{r}
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'population', k = 10, imp_var = FALSE)
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'mortalidad_infantil', k = 10, imp_var = FALSE)
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'mortalidad_higiene', k = 10, imp_var = FALSE)
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'acceso_agua', k = 10, imp_var = FALSE)
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'causa_muerte_agudas', k = 10, imp_var = FALSE)
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'causa_muerte_cronicas', k = 10, imp_var = FALSE)
 ```
