@@ -36,6 +36,23 @@ View(valores_disponibles)
 Para la imputación de datos faltantes utlizaremos estadísticos según el grupo de income del país con el dato faltante. Veamos cómo se distribuyen :
 
 ```{r}
+library(ggplot2)
+
+theme_set(
+  theme_minimal() +
+    theme(
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+      axis.title = element_text(size = 12),
+      axis.text = element_text(size = 10),
+      legend.position = "bottom"
+    )
+)
+```
+
+
+
+
+```{r}
 # Gráfico de sectores
 library(ggplot2)
 
