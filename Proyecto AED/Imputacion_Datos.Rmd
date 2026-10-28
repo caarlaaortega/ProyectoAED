@@ -49,71 +49,64 @@ pie(distribucion_income,
     border = "white",
     cex = 0.6
 )
-
-
-
 ```
 
+Vamos a realizar la imputación de los datos faltantes usando el método KNN. este método imputa los datos faltantes buscando los k individuos más similares según sus características y utilizando sus valores conocidos para estimar el valor ausente. 
+
+Para ello, identificaremos primero el número de variables que toman valor NA, para posteriormente realizar la imputación y comprobar si se ha llevado a cabo correctamente (sin valores ausentes).
+
 ## Imputación gdp_per_capita
-
-Para tratar los valores faltantes, se utilizará la mediana de la variable correspondiente dentro de cada grupo de ingresos (income).
-
-Identificación valores faltantes: Comprobamos cuantos países presentan valores NA en esta variable. (--\>7 países)
 
 ```{r}
 valores_na['gdp_per_capita']
 ```
 
-Imputación con la mediana:
 
 ```{r}
-#Mediana por grupo de income
-mediana_gdp_income<-tapply(datos_cohorte_2019$gdp_per_capita,
-                       datos_cohorte_2019$income,
-                       median, 
-                       na.rm=TRUE)
+if (!require("VIM")) install.packages("VIM")
+library(VIM)
 
-#Imputar usando la mediana
-filas_na_gdp <- which(
-  is.na(datos_cohorte_2019$gdp_per_capita)
-)
-
-datos_cohorte_2019$gdp_per_capita[filas_na_gdp] <-mediana_gdp_income[
-    as.character(datos_cohorte_2019$income[filas_na_gdp])
-  ]
+# Imputar los valores faltantes usando la función kNN
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "gdp_per_capita", k = 10, imp_var = FALSE)
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$gdp_per_capita))
 View(datos_cohorte_2019$gdp_per_capita)
 ```
 
+```{r}
+#Mediana por grupo de income
+# mediana_gdp_income<-tapply(datos_cohorte_2019$gdp_per_capita,
+                       # datos_cohorte_2019$income,
+                       # median, 
+                       # na.rm=TRUE)
+
+#Imputar usando la mediana
+# filas_na_gdp <- which(
+  # is.na(datos_cohorte_2019$gdp_per_capita)
+# )
+
+# datos_cohorte_2019$gdp_per_capita[filas_na_gdp] <-mediana_gdp_income[
+    # as.character(datos_cohorte_2019$income[filas_na_gdp])
+  # ]
+
+#Comprobación
+# sum(is.na(datos_cohorte_2019$gdp_per_capita))
+# View(datos_cohorte_2019$gdp_per_capita)
+```
+
 ## Imputación gasto_salud_gdp
-
-En este caso, haremos la imputación de los datos faltantes (NA) usando la media de la variable correspondiente dentro de cada grupo de ingresos (income).
-
-Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>25 países).
 
 ```{r}
 valores_na['gasto_salud_gdp']
 ```
 
-Procedemos con la imputación de los valores:
-
 ```{r}
-#Media por grupo de income
-media_gasto_salud_gdp_income<-tapply(datos_cohorte_2019$gasto_salud_gdp,
-                       datos_cohorte_2019$income,
-                       mean, 
-                       na.rm=TRUE)
+if (!require("VIM")) install.packages("VIM")
+library(VIM)
 
-#Imputar usando la media
-filas_na_gasto_salud_gdp <- which(
-  is.na(datos_cohorte_2019$gasto_salud_gdp)
-)
-
-datos_cohorte_2019$gasto_salud_gdp[filas_na_gasto_salud_gdp] <- media_gasto_salud_gdp_income[
-    as.character(datos_cohorte_2019$income[filas_na_gasto_salud_gdp])
-  ]
+# Imputar los valores faltantes usando la función kNN
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "gasto_salud_gdp", k = 10, imp_var = FALSE)
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$gasto_salud_gdp))
@@ -122,17 +115,10 @@ View(datos_cohorte_2019$gasto_salud_gdp)
 
 ## Imputación esperanza_vida
 
-En este caso, haremos la imputación de los datos faltantes (NA) usando el método KNN.
-
-El método KNN imputa los datos faltantes buscando los k individuos más similares según sus características y utilizando sus valores conocidos para estimar el valor ausente.
-
-Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>1 país).
-
 ```{r}
 valores_na['esperanza_vida']
 ```
 
-Procedemos con la imputación de los valores:
 
 ```{r}
 if (!require("VIM")) install.packages("VIM")
@@ -148,31 +134,17 @@ View(datos_cohorte_2019$esperanza_vida)
 
 ## Imputación area
 
-Procedamos a la imputación de los datos faltantes (NA) usando la media de la variable correspondiente dentro de cada grupo de ingresos (income).
-
-Para ello, veamos en primer lugar el número de países con valores faltantes para esta variable (--\>25 países).
-
 ```{r}
 valores_na['area']
 ```
 
-Procedemos con la imputación de los valores:
 
 ```{r}
-#Media por grupo de income
-media_area_income<-tapply(datos_cohorte_2019$area,
-                       datos_cohorte_2019$income,
-                       mean, 
-                       na.rm=TRUE)
+if (!require("VIM")) install.packages("VIM")
+library(VIM)
 
-#Imputar usando la media
-filas_na_area <- which(
-  is.na(datos_cohorte_2019$area)
-)
-
-datos_cohorte_2019$area[filas_na_area] <- media_area_income[
-    as.character(datos_cohorte_2019$income[filas_na_area])
-  ]
+# Imputar los valores faltantes usando la función kNN
+datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "area", k = 10, imp_var = FALSE)
 
 #Comprobación
 sum(is.na(datos_cohorte_2019$area))
