@@ -53,10 +53,7 @@ pie(distribucion_income,
 
 ```{r}
 library(ggplot2)
-library(dplyr)
 
-#Calculamos frecuencias dplyr
-#distribucion_income<-datos_cohorte_2019 %>% count(income) %>% 
 ggplot(datos_cohorte_2019,aes(x='',fill=income))+
   theme(aspect.ratio = 1)+
   geom_bar(color='pink',width=1)+
