@@ -190,3 +190,12 @@ datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'acceso_agua', k = 10, 
 datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'causa_muerte_agudas', k = 10, imp_var = FALSE)
 datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'causa_muerte_cronicas', k = 10, imp_var = FALSE)
 ```
+## Datos anómalos
+
+Boxplots para todas las variables, ver si tiene datos anomalos. E imputarlos según como sean.
+
+Estudiar caso a caso.
+
+## Correlación entre variables
+Estudiar correlación entre variables
+Gráfica que agrupa las correlaciones ggpairs()
