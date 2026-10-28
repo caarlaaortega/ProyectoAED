@@ -82,7 +82,7 @@ ggplot(datos_cohorte_2019,aes(x='',fill=income))+
 ```
 
 
-Vamos a realizar la imputación de los datos faltantes usando el método KNN. este método imputa los datos faltantes buscando los k individuos más similares según sus características y utilizando sus valores conocidos para estimar el valor ausente. 
+Vamos a realizar la imputación de los datos faltantes usando el método KNN. Este método imputa los datos faltantes buscando los k individuos más similares según sus características y utilizando sus valores conocidos para estimar el valor ausente. 
 
 Para ello, identificaremos primero el número de variables que toman valor NA, para posteriormente realizar la imputación y comprobar si se ha llevado a cabo correctamente (sin valores ausentes).
 
@@ -107,6 +107,7 @@ datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "gdp_per_capita", k = 1
 sum(is.na(datos_cohorte_2019$gdp_per_capita))
 View(datos_cohorte_2019$gdp_per_capita)
 ```
+
 
 ```{r}
 #Mediana por grupo de income
@@ -207,11 +208,74 @@ datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'acceso_agua', k = 10, 
 datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'causa_muerte_agudas', k = 10, imp_var = FALSE)
 datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'causa_muerte_cronicas', k = 10, imp_var = FALSE)
 ```
+
 ## Datos anómalos
 
 Boxplots para todas las variables, ver si tiene datos anomalos. E imputarlos según como sean.
 
 Estudiar caso a caso.
+Se grafican __boxplots__ para estudiar caso a caso. Para facilitar el análisis, se diferenciarán los boxplots de cada variable por grupo de ingresos (income) al que pertenece el país. De este modo, se podrán visualizar los datos anómalos y cómo varía la distribución de dicha variable respecto a los diferentes grupos de incomes. 
+
+```{r}
+library(plotly) # la usaremos para los gráficos interactivos
+library(dplyr)
+
+
+# Definimos una nueva variable que puede ser de interés (population per area)
+# podría representar una especie de densidad demográfica
+datos_cohorte_2019$pop_per_area <- datos_cohorte_2019$population / datos_cohorte_2019$area
+
+# Indicamos las variables de las que pretendemos hacer el análisis: 
+ind_explor_est <- c('esperanza_vida', 'fertilidad', 'fertilidad_adolescente',
+                    'pop_per_area', 'gdp_per_capita', 'gasto_salud_gdp',
+                    'gasto_defensa_gdp', 'mortalidad_infantil', 'acceso_agua',
+                    'causa_muerte_agudas', 'causa_muerte_cronicas', 
+                    'mortalidad_higiene')
+
+# Iniciamos un bucle para hacer el análisis: 
+for (indicador in ind_explor_est){
+  cat('\n')
+  cat('INDICADOR: ', indicador, '\n')
+  
+  # Estadísticos descriptivos por income:
+  cat('Estadísticos descriptivos por income\n')
+  resumen <- datos_cohorte_2019 %>%
+    group_by(income) %>%
+    summarise(
+      n = n(),
+      media = mean(.data[[indicador]]),
+      sd = sd(.data[[indicador]]),
+      minimo =min(.data[[indicador]]),
+      Q1 = quantile(.data[[indicador]], 0.25),
+      mediana = median(.data[[indicador]]),
+      Q3 = quantile(.data[[indicador]], 0.75),
+      maximo = max(.data[[indicador]])
+    )
+  print(resumen)
+  
+  # Boxplot interactivo con plotly
+  p_box <- plot_ly(
+    data = datos_cohorte_2019,
+    x = ~.data[[indicador]],
+    y = ~income,
+    type = 'box', 
+    color = ~income, 
+    text = ~paste(
+      'País:', country,
+      '\nRegión:', region,
+      '\nValor:', round(.data[[indicador]], 2)
+    ),
+    hoverinfo = 'text'
+  ) %>%
+    layout(
+      title = paste('Boxplot de', indicador),
+      xaxis = list(title = indicador),
+      yaxis = list(title = 'Income')
+    )
+  print(p_box)
+}
+```
+
 
 ## Correlación entre variables
 Estudiar correlación entre variables
