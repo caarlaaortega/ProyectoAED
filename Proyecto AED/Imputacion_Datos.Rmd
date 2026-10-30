@@ -13,6 +13,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Este documento Rmarkdown tiene como objetivo identificar y tratar los valores faltantes (NA) de las variables que se utilizarán en el proyecto. Para ello, se analizará la disponibilidad de los datos y se aplicará un método de imputación basado en el nivel de ingresos de cada país.
 
+```{r}
+library(VIM)
+```
+
+
 # Imputación del conjunto de datos del 2019
 
 En primer lugar, analizamos el conjunto de datos correspondiente a 2019 (datos_cohorte_2019).
@@ -86,128 +91,39 @@ Vamos a realizar la imputación de los datos faltantes usando el método KNN. Es
 
 Para ello, identificaremos primero el número de variables que toman valor NA, para posteriormente realizar la imputación y comprobar si se ha llevado a cabo correctamente (sin valores ausentes).
 
-## Imputación gdp_per_capita
-
 ```{r}
-valores_na['gdp_per_capita']
+# Estudiamos los valores faltantes que hay para cada variable:
+valores_na<-sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
+View(valores_na)
+
+# Imputación limpia de valores faltantes: 
+imputar_ind <- c('gdp_per_capita', 'gasto_salud_gdp', 'gasto_defensa_gdp',
+                 'esperanza_vida', 'area', 'fertilidad',
+                 'fertilidad_adolescente', 'population', 
+                 'mortalidad_higiene', 'mortalidad_infantil', 
+                 'acceso_agua', 'causa_muerte_agudas',
+                 'causa_muerte_cronicas')
+for (indicador in imputar_ind){
+  cat('\nEl indicador ', indicador, ' tiene ', valores_na[indicador], 
+      'valores faltantes.\n')
+  datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = indicador, 
+                            k = 10, imp_var = FALSE)
+  if (sum(is.na(datos_cohorte_2019[indicador])) == 0){
+    cat('La imputación para el indicador ', indicador,
+    ' se ha realizado correctamente.\n')
+  } else {
+    cat('La imputación para el indicador ', indicador, ' ha fallado.\n')
+  }
+}
+
+# Comprobamos si quedan variables con valores faltantes:
 ```
 
 
 ```{r}
-if (!require("VIM")) install.packages("VIM")
-library(VIM)
+View(sapply(datos_cohorte_2019,function(x) sum(is.na(x))))
 ```
 
-
-```{r}
-# Imputar los valores faltantes usando la función kNN
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "gdp_per_capita", k = 10, imp_var = FALSE)
-
-#Comprobación
-sum(is.na(datos_cohorte_2019$gdp_per_capita))
-View(datos_cohorte_2019$gdp_per_capita)
-```
-
-
-```{r}
-#Mediana por grupo de income
-# mediana_gdp_income<-tapply(datos_cohorte_2019$gdp_per_capita,
-                       # datos_cohorte_2019$income,
-                       # median, 
-                       # na.rm=TRUE)
-
-#Imputar usando la mediana
-# filas_na_gdp <- which(
-  # is.na(datos_cohorte_2019$gdp_per_capita)
-# )
-
-# datos_cohorte_2019$gdp_per_capita[filas_na_gdp] <-mediana_gdp_income[
-    # as.character(datos_cohorte_2019$income[filas_na_gdp])
-  # ]
-
-#Comprobación
-# sum(is.na(datos_cohorte_2019$gdp_per_capita))
-# View(datos_cohorte_2019$gdp_per_capita)
-```
-
-## Imputación gasto_salud_gdp y gasto_defensa_gdp
-
-```{r}
-valores_na['gasto_salud_gdp']
-valores_na['gasto_defensa_gdp']
-```
-
-```{r}
-# Imputar los valores faltantes usando la función kNN
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "gasto_salud_gdp", k = 10, imp_var = FALSE)
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "gasto_defensa_gdp", k = 10, imp_var = FALSE)
-
-#Comprobación
-sum(is.na(datos_cohorte_2019$gasto_salud_gdp))
-sum(is.na(datos_cohorte_2019$gasto_defensa_gdp))
-```
-
-## Imputación esperanza_vida
-
-```{r}
-valores_na['esperanza_vida']
-```
-
-
-```{r}
-# Imputar los valores faltantes usando la función kNN
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "esperanza_vida", k = 10, imp_var = FALSE)
-
-#Comprobación
-sum(is.na(datos_cohorte_2019$esperanza_vida))
-View(datos_cohorte_2019$esperanza_vida)
-```
-
-## Imputación area
-
-```{r}
-valores_na['area']
-```
-
-
-```{r}
-# Imputar los valores faltantes usando la función kNN
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = "area", k = 10, imp_var = FALSE)
-
-#Comprobación
-sum(is.na(datos_cohorte_2019$area))
-View(datos_cohorte_2019$area)
-```
-
-## Imputación fertilidad y fertilidad_adolescente
-
-```{r}
-valores_na['fertilidad']
-valores_na['fertilidad_adolescente']
-```
-
-
-```{r}
-# Imputar los valores faltantes usando la función kNN
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'fertilidad', k = 10, imp_var = FALSE)
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'fertilidad_adolescente', k = 10, imp_var = FALSE)
-
-#Comprobación
-sum(is.na(datos_cohorte_2019$fertilidad))
-sum(is.na(datos_cohorte_2019$fertilidad_adolescente))
-
-```
-
-## Imputación resto de variables por KNN
-
-```{r}
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'population', k = 10, imp_var = FALSE)
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'mortalidad_infantil', k = 10, imp_var = FALSE)
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'mortalidad_higiene', k = 10, imp_var = FALSE)
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'acceso_agua', k = 10, imp_var = FALSE)
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'causa_muerte_agudas', k = 10, imp_var = FALSE)
-datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = 'causa_muerte_cronicas', k = 10, imp_var = FALSE)
-```
 
 ## Datos anómalos
 
