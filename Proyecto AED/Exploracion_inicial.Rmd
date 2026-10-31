@@ -112,5 +112,35 @@ datos_cohorte_2020 <- subset(datos_salud, year == 2020, select = variables_inter
 datos_cohorte_2021 <- subset(datos_salud, year == 2021, select = variables_interes)
 ```
 
+```{r}
+# Estudiamos los valores faltantes que hay para cada variable:
+valores_na<-sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
+View(valores_na)
+
+# Imputación limpia de valores faltantes: 
+imputar_ind <- c('gdp_per_capita', 'gasto_salud_gdp', 'gasto_defensa_gdp',
+                 'esperanza_vida', 'area', 'fertilidad',
+                 'fertilidad_adolescente', 'population', 
+                 'mortalidad_higiene', 'mortalidad_infantil', 
+                 'acceso_agua', 'causa_muerte_agudas',
+                 'causa_muerte_cronicas')
+for (indicador in imputar_ind){
+  cat('\nEl indicador ', indicador, ' tiene ', valores_na[indicador], 
+      'valores faltantes.\n')
+  datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = indicador, 
+                            k = 10, imp_var = FALSE)
+  if (sum(is.na(datos_cohorte_2019[indicador])) == 0){
+    cat('La imputación para el indicador ', indicador,
+    ' se ha realizado correctamente.\n')
+  } else {
+    cat('La imputación para el indicador ', indicador, ' ha fallado.\n')
+  }
+}
+
+# Comprobamos si quedan variables con valores faltantes:
+View(sapply(datos_cohorte_2019,function(x) sum(is.na(x))))
+```
+
+
 
 
