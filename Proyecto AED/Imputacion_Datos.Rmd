@@ -79,7 +79,7 @@ Para ello, identificaremos primero el número de variables que toman valor NA, p
 
 ```{r}
 # Estudiamos los valores faltantes que hay para cada variable:
-valores_na<-sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
+valores_na <- sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
 View(valores_na)
 
 # Imputación limpia de valores faltantes: 
@@ -113,9 +113,8 @@ View(sapply(datos_cohorte_2019,function(x) sum(is.na(x))))
 
 ## Datos anómalos
 
-Boxplots para todas las variables, ver si tiene datos anomalos. E imputarlos según como sean.
+Realización de boxplots para todas las variables, ver si tiene datos anómalos e imputarlos según cómo sean.
 
-Estudiar caso a caso.
 Se grafican __boxplots__ para estudiar caso a caso. Para facilitar el análisis, se diferenciarán los boxplots de cada variable por grupo de ingresos (income) al que pertenece el país. De este modo, se podrán visualizar los datos anómalos y cómo varía la distribución de dicha variable respecto a los diferentes grupos de incomes. 
 
 ```{r}
@@ -187,3 +186,32 @@ Gráfica que agrupa las correlaciones ggpairs()
 poner todo igual para ggplot con theme()
 
 invisibilizar los chunks para el pdf o html
+
+
+```{r}
+if (!require("GGally")) install.packages("GGally")
+library(GGally)
+
+datos_corr <- datos_cohorte_2019 %>%
+  select(
+    esperanza_vida,
+    fertilidad,
+    fertilidad_adolescente,
+    pop_per_area,
+    gdp_per_capita,
+    gasto_salud_gdp,
+    gasto_defensa_gdp,
+    mortalidad_infantil,
+    acceso_agua,
+    causa_muerte_agudas,
+    causa_muerte_cronicas,
+    mortalidad_higiene
+  )
+
+# Correlación entre variables
+cor(datos_corr, use = "pairwise.complete.obs")
+
+# Gráfica
+ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 3)))
+```
+

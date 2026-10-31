@@ -113,6 +113,9 @@ datos_cohorte_2021 <- subset(datos_salud, year == 2021, select = variables_inter
 ```
 
 ```{r}
+if(!requireNamespace("VIM")) install.packages("VIM")
+library(VIM)
+
 # Estudiamos los valores faltantes que hay para cada variable:
 valores_na<-sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
 View(valores_na)
