@@ -180,7 +180,7 @@ for (indicador in ind_explor_est){
 
 ## Correlación entre variables
 
-```{r}
+```{r, fig.width=20, fig.height=20}
 if (!require("GGally")) install.packages("GGally")
 library(GGally)
 
@@ -205,5 +205,6 @@ cor(datos_corr, use = "pairwise.complete.obs")
 
 # Gráfica
 ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 3)),  mapping = aes(colour = datos_cohorte_2019$income, alpha = 0.5))
+ggsave('./results/grafica_correlaciones.pdf')
 ```
 
