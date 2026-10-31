@@ -54,6 +54,7 @@ PREGUNTA CLAVE: ¿Existe una correspondencia real entre las prioridades de gasto
 Aquí describiremos los métodos y la procedencia de los datos del Banco Mundial.
 
 Usaremos el siguiente theme para las gráficas:
+
 ```{r}
 library(ggplot2)
 
@@ -72,11 +73,49 @@ theme_set(
 
 Los datos utilizados en este trabajo proceden del Banco Mundial, concretamente de la base de datos *World Development Indicators* (WDI). Esta base de datos recopila indicadores tanto económicos como sanitarios o demográficos de países de todo el mundo, lo que nos permitirá realizar comparaciones internacionales.
 
-La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial.
+La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial. Esta base de datos contiene indicadores económicos, sociales y demográficos a nivel mundial, con datos para aproximadamente 200 países y sus regiones desde 1960.
+
+Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son:
+
+- **Esperanza de vida al nacer (total)**: número de años que un recién nacido viviría si los patrones de mortalidad del momento se mantienen a lo largo de vida (años). Código: SP.DYN.LE00.IN.
+
+- **PIB per capita**: Producto Interior Bruto, ganancias totales ganadas mediante la producción de bienes y servicioes en un territorio económico durante un periodo contable, y dividido entre la población general (US'\$').Código: NY.GDP.PCAP.CD.
+
+- **Gasto en salud**: Estimación de los gastos en salud icluyendo los productos y servicios sanitarios consumidos cada año, sin incluir edificios, maquinaria, IT y stocks de vacunas para emergencias (% PIB). Código: SH.XPD.CHEX.GD.ZS.
+
+- **Gasto en defensa**: Gasto en defensa respecto al PIB (% PIB). Código: MS.MIL.XPND.GD.ZS.
+
+- **Mortalidad infantil**: Número de muertes de bebes de 0 a 12 meses por cada 1000 nacimientos al año (n:1000). Código: SP.DYN.IMRT.IN.
+
+- **Acceso al agua**: Personas utilizando los servicios mínimos básicos de agua potable (% población). Código: SH.H2O.BASW.ZS.
+
+- **Escolaridad secundaria (total)**: Niños que reciben educación secundaria básica oficial (% neto). Código: SE.SEC.NENR.
+
+- **Causa de muerte por enf. agudas**: Personas que han fallecido por enfermedades agudas, que incluyen enfermedades infecciosas y parasitarias, infecciones respiratorias y deficiencias nutricionales (% del total de muertes). Código: SH.DTH.COMM.ZS.
+
+- **Causa de muerte por enf. crónicas**: Personas que han fallecido por enfermedades crónicas, que incluyen cáncer, diabetes, trastonos cardiovasculares, digestivos, dermatológicos, musculoesqueléticos y anomalías congenitales (% del total de muertes). Código: SH.DTH.NCOM.ZS.
+
+- **Mortalidad por falta de higiene**: Personas que han muerto por el uso de agua en malas condiciones, condiciones sanitarias inseguras y falta de higiene (número de muertes por 100.000 personas). Código: SH.STA.WASH.P5.
+
+- **Fertilidad**: Número de niños que daría a luz una mujer si viviese hasta el final de sus años fértiles en el momento temporal captado (nacimientos por mujer).Código: SP.DYN.TFRT.IN.
+
+- **Embarazos adolescentes**: Ratio de fertilidad adolescente, número de nacimientos por cada 1000 mujeres con una edad entre 15 y 19 años (nacimientos por 1000 adolescentes). Código: SP.ADO.TFRT.
+
+- **Población**: Número de residentes del país estimados a mitad del año (#personas). Código: SP.POP.TOTL.
+
+- **Area**: Superfície total del país potencialmente habitable, excluyendo el área ocupada por agua (ríos y lagos), y zonas exclusivamente económicas/laborales ($km^2$). Código: AG.LND.TOTL.K2.
+
+- **Mortalidad por contaminación del aire**: Número de muertes por transtornos derivados de la inhalación de partículas contaminantes presentes en el aire (muertes por 100.000 habitantes).Código: CC.SH.AIRP.AMB.
+
+- **Inmunización**: Número de niños inmunizados completamente entre 15 y 23 meses (%). Código: HF.IMM.FULL.
+
+De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración inicial de los datos, puesto que son los años más recientes y de los que potencialmente se cuente con más cantidad de datos actualizados. 
 
 ## Selección de la muestra
+Dado que los datos descargados eran extremadamente abundantes (2476 observaciones de 29 variables), con '3 dimensiones' (temporal, indicador y países), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%. 
 
-Período estudiado ---\> 2019
+Tras este análisis exploratorio (documento Exploración_inicial.Rmd), se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene. El resto de variables fueron descartadas.
+
 
 # Resultados
 
@@ -93,7 +132,6 @@ Estudio del gdp per capita y las categorías de income con el objetivo de contex
 ## Salud vs defensa
 
 Prioridades de gasto público. Comparación entre el gasto en salud y defensa de los diferentes países
-
 
 ## Necesidades sanitarias
 
