@@ -179,14 +179,6 @@ for (indicador in ind_explor_est){
 
 
 ## Correlación entre variables
-Estudiar correlación entre variables
-Gráfica que agrupa las correlaciones ggpairs()
-
-
-poner todo igual para ggplot con theme()
-
-invisibilizar los chunks para el pdf o html
-
 
 ```{r}
 if (!require("GGally")) install.packages("GGally")
@@ -212,6 +204,6 @@ datos_corr <- datos_cohorte_2019 %>%
 cor(datos_corr, use = "pairwise.complete.obs")
 
 # Gráfica
-ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 3)))
+ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 3)),  mapping = aes(colour = datos_cohorte_2019$income, alpha = 0.5))
 ```
 
