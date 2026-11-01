@@ -58,86 +58,7 @@ Usaremos el siguiente theme para las gráficas:
 ```{r, echo = FALSE}
 library(ggplot2)
 
-library(ggplot2)
 load(file = './results/datos_cohorte_2019.RData')
-tema_AED <- function(base_size = 12,
-                      base_family = "sans") {
-  theme_minimal(base_size = base_size,
-                base_family = base_family) +
-    theme(
-      # Fondo
-      plot.background = element_rect(
-        fill = "white",
-        colour = NA
-      ),
-      panel.background = element_rect(
-        fill = "white",
-        colour = NA
-      ),
-      
-      # Título y subtítulo
-      plot.title = element_text(
-        size = rel(1.6),
-        face = "bold",
-        colour = "#1A1A1A",
-        margin = margin(b = 8)
-      ),
-      plot.subtitle = element_text(
-        size = rel(1.05),
-        colour = "#666666",
-        margin = margin(b = 15)
-      ),
-      
-      # Etiquetas de ejes
-      axis.title = element_text(
-        size = 8,
-        face = "bold",
-        colour = "#333333"
-      ),
-      axis.text = element_text(
-        colour = "#4D4D4D"
-      ),
-      
-      # Cuadrícula
-      panel.grid.major.y = element_line(
-        colour = "#E5E5E5",
-        linewidth = 0.4
-      ),
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor = element_blank(),
-      
-      # Ejes
-      axis.line.x = element_line(
-        colour = "#A0A0A0"
-      ),
-      axis.line.y = element_blank(),
-      
-      # Leyenda
-      legend.position = "bottom",
-      legend.title = element_text(
-        face = "bold"
-      ),
-      legend.background = element_blank(),
-      
-      # Facets
-      strip.background = element_rect(
-        fill = "#F2F2F2",
-        colour = NA
-      ),
-      strip.text = element_text(
-        face = "bold",
-        colour = "#333333"
-      ),
-      
-      # Márgenes
-      plot.margin = margin(
-        t = 15,
-        r = 20,
-        b = 15,
-        l = 20
-      )
-    )
-}
   
 ```
 
@@ -181,25 +102,21 @@ Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegid
 
 - **Inmunización**: Número de niños inmunizados completamente entre 15 y 23 meses (%). Código: HF.IMM.FULL.
 
-De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración inicial de los datos, puesto que son los años más recientes y de los que potencialmente se cuente con más cantidad de datos actualizados. 
+De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración inicial de los datos, puesto que son los años más recientes y de los que potencialmente se cuente con más cantidad de datos actualizados.
 
 ## Selección de la muestra
-Dado que los datos descargados eran extremadamente abundantes (2476 observaciones de 29 variables), con '3 dimensiones' (temporal, indicador y países), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%. 
 
-Tras este análisis exploratorio (documento Exploración_inicial.Rmd), se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional que se ha creado a partir de la población y el área del país). El resto de variables fueron descartadas. 
+Dado que los datos descargados eran extremadamente abundantes (2476 observaciones de 29 variables), con '3 dimensiones' (temporal, indicador y países), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%.
 
+Tras este análisis exploratorio (documento Exploración_inicial.Rmd), se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional que se ha creado a partir de la población y el área del país). El resto de variables fueron descartadas.
 
 # Resultados
 
-A continuación se muestran los resultados del estudio, divididos en 4 bloques, que están organizados de modo que permitan responder a la pregunta principal del trabajo. 
-- Bloque 1. **Contexto socioeconómico de los países**. 
-- Bloque 2. **Comparación del gasto en salud y en defensa de los países**.
-- Bloque 3. **Necesidades sanitarias por países**.
-- Bloque 4. **Agregación final: correspondencia entre el gasto público y las necesidades de los ciudadanos del país**.
+A continuación se muestran los resultados del estudio, divididos en 4 bloques, que están organizados de modo que permitan responder a la pregunta principal del trabajo. - Bloque 1. **Contexto socioeconómico de los países**. - Bloque 2. **Comparación del gasto en salud y en defensa de los países**. - Bloque 3. **Necesidades sanitarias por países**. - Bloque 4. **Agregación final: correspondencia entre el gasto público y las necesidades de los ciudadanos del país**.
 
 ## Bloque 1. Contexto socioeconómico.
 
-El objetivo es analizar el PIB por cápita de los diferentes países, agrupándolos atendiendo a la variable 'income'. Asimismo, se estudiará a las regiones a las que pertenece cada país, por grupos, para determinar si existe alguna relación entre situación económica y localización geográfica. Finalmente, se incorporará el concepto de densidad demográfica para estudiar si existe una relación entre esta y el PIB per capita del país. 
+El objetivo es analizar el PIB por cápita de los diferentes países, agrupándolos atendiendo a la variable 'income'. Asimismo, se estudiará a las regiones a las que pertenece cada país, por grupos, para determinar si existe alguna relación entre situación económica y localización geográfica. Finalmente, se incorporará el concepto de densidad demográfica para estudiar si existe una relación entre esta y el PIB per capita del país.
 
 ```{r, echo=FALSE}
 # 1. PIB medio per cápita por grupos de income: 
@@ -314,8 +231,6 @@ ggplot(datos_cohorte_2019, aes(x = gdp_per_capita, y = pop_per_area, colour = in
 ggsave('./results/Densidad_demografica_vs_PIB_region.pdf')
   
 ```
-
-
 
 ## Salud vs defensa
 
