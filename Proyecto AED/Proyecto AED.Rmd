@@ -55,18 +55,90 @@ Aquí describiremos los métodos y la procedencia de los datos del Banco Mundial
 
 Usaremos el siguiente theme para las gráficas:
 
-```{r}
+```{r, echo = FALSE}
 library(ggplot2)
 
-theme_set(
-  theme_minimal() +
+library(ggplot2)
+load(file = './results/datos_cohorte_2019.RData')
+tema_AED <- function(base_size = 12,
+                      base_family = "sans") {
+  theme_minimal(base_size = base_size,
+                base_family = base_family) +
     theme(
-      plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-      axis.title = element_text(size = 12),
-      axis.text = element_text(size = 10),
-      legend.position = "bottom"
-    ) 
-)
+      # Fondo
+      plot.background = element_rect(
+        fill = "white",
+        colour = NA
+      ),
+      panel.background = element_rect(
+        fill = "white",
+        colour = NA
+      ),
+      
+      # Título y subtítulo
+      plot.title = element_text(
+        size = rel(1.6),
+        face = "bold",
+        colour = "#1A1A1A",
+        margin = margin(b = 8)
+      ),
+      plot.subtitle = element_text(
+        size = rel(1.05),
+        colour = "#666666",
+        margin = margin(b = 15)
+      ),
+      
+      # Etiquetas de ejes
+      axis.title = element_text(
+        size = 8,
+        face = "bold",
+        colour = "#333333"
+      ),
+      axis.text = element_text(
+        colour = "#4D4D4D"
+      ),
+      
+      # Cuadrícula
+      panel.grid.major.y = element_line(
+        colour = "#E5E5E5",
+        linewidth = 0.4
+      ),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor = element_blank(),
+      
+      # Ejes
+      axis.line.x = element_line(
+        colour = "#A0A0A0"
+      ),
+      axis.line.y = element_blank(),
+      
+      # Leyenda
+      legend.position = "bottom",
+      legend.title = element_text(
+        face = "bold"
+      ),
+      legend.background = element_blank(),
+      
+      # Facets
+      strip.background = element_rect(
+        fill = "#F2F2F2",
+        colour = NA
+      ),
+      strip.text = element_text(
+        face = "bold",
+        colour = "#333333"
+      ),
+      
+      # Márgenes
+      plot.margin = margin(
+        t = 15,
+        r = 20,
+        b = 15,
+        l = 20
+      )
+    )
+}
+  
 ```
 
 ## Fuente y obtención de los datos
@@ -130,12 +202,120 @@ A continuación se muestran los resultados del estudio, divididos en 4 bloques, 
 El objetivo es analizar el PIB por cápita de los diferentes países, agrupándolos atendiendo a la variable 'income'. Asimismo, se estudiará a las regiones a las que pertenece cada país, por grupos, para determinar si existe alguna relación entre situación económica y localización geográfica. Finalmente, se incorporará el concepto de densidad demográfica para estudiar si existe una relación entre esta y el PIB per capita del país. 
 
 ```{r, echo=FALSE}
-# Visualizamos 
+# 1. PIB medio per cápita por grupos de income: 
+# Visualizamos un boxplot del PIB per cpaita agrupado por income.
+# Como el PIB per cápita suele tener colas largas hacia la 
+# derecha (hay países con un PIB muy elevado, muy ricos), se
+# representará una escala logaritmica en el eje y.
+
+# Ordenamos el income de menor a mayor para que en el boxplot
+# siga un orden lógico:
+datos_cohorte_2019$income <- factor(
+  datos_cohorte_2019$income, 
+  levels = c('Low income', 'Lower middle income', 
+             'Upper middle income', 'High income'))
+
+ggplot(datos_cohorte_2019, aes(x = income, y = gdp_per_capita, 
+                               fill = income)) +
+  # Boxplot:
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  # Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', shape = 18, 
+               size = 3, color = 'darkred', aes(group = income)) +
+  # Escala logarítmica:
+  scale_y_log10(labels = scales::dollar_format(prefix = '$'),
+                breaks = c(100, 1000, 10000, 100000)) +
+  # Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') + 
+  # Etiquetas:
+  labs(title = 'Distribución del PIB per cápita',
+    subtitle = 'Diferenciación por niveles de ingresos',
+    x = 'Nivel de ingresos del país',
+    y = 'PIB per cápita (US$, escala log10)',
+    fill = 'Ingresos') +
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 7, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank()) 
+
+# Guardamos la gráfica:
+ggsave('./results/Distribucion_PIB.pdf')
+
+# 2. Relación entre región, PIB per cápita y el 'income'
+# Las variables región e income son categóricas, y el PIB es 
+# numérica. Vamos a representar la región vs. income en un 
+# gráfico de barras apiladas y el PIB per capita vs. región 
+# mediante boxplots. 
+
+# Región vs. income:
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), fill = income)) +
+  geom_bar(position = 'fill', color = 'black', alpha = 0.8) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(title = 'Distribución porcentual de ingresos por región',
+       subtitle = 'Proporción de niveles de renta en cada área geográfica',
+       x = 'Región geográfica',
+       y = 'Porcentaje (%)',
+       fill = 'Nivel de ingresos') + 
+  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'right', legend.key.size = unit(5, 'pt')) + coord_flip()
+
+# Guardamos la gráfica
+ggsave('./results/Distribucion_porc_ingresos_region.pdf')
+
+# Hacemos un test chi2 para ver si existe una asociación
+# estadísticamente significativa entre el income y la región:
+
+t_contingencia <- table(datos_cohorte_2019$region,
+                        datos_cohorte_2019$income)
+resultado_chi2 <- chisq.test(t_contingencia, simulate.p.value = TRUE, B = 10000)
+resultado_chi2
+
+# Región vs. PIB per cápita:
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gdp_per_capita, 
+                               fill = region)) +
+  # Boxplot:
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  # Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', shape = 18, 
+               size = 3, color = 'darkred', aes(group = region)) +
+  # Escala logarítmica:
+  scale_y_log10(labels = scales::dollar_format(prefix = '$'),
+                breaks = c(100, 1000, 10000, 100000)) +
+  # Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') + 
+  # Etiquetas:
+  labs(title = 'Distribución del PIB per cápita',
+    subtitle = 'Diferenciación por región',
+    x = 'Región',
+    y = 'PIB per cápita (US$, escala log10)',
+    fill = 'Región') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') + coord_flip()
+
+# Guardamos la gráfica
+ggsave('./results/Distribucion_PIB_region.pdf')
+
+# 3. Comparación de la densidad demográfica con el PIB por cápita:
+# Para ello se realizará un scatter plot, usando una escala 
+# logarítmica en ambos ejes (pues la densidad de población
+# también se encuentra desbalanceada)
+ggplot(datos_cohorte_2019, aes(x = gdp_per_capita, y = pop_per_area, colour = income)) +
+  geom_point(alpha = 0.75) + 
+  scale_y_log10(labels = scales::label_comma(),
+                breaks = c(1, 10, 100, 1000, 10000)) +
+  scale_x_log10(labels = scales::dollar_format(prefix = '$'),
+                breaks = c(500, 100, 1000, 10000)) +
+  scale_fill_brewer(palette = 'Set2', name = 'Nivel de ingresos') +
+  labs(title = 'Densidad demográfica vs. PIB per cápita',
+       subtitle = 'Escala logarítmica base 10',
+       x = "PIB per cápita (US$, escala logarítmica)",
+       y = "hab/km², escala logarítmica") + coord_flip()
+
+# Guardamos la gráfica
+ggsave('./results/Densidad_demografica_vs_PIB_region.pdf')
+  
 ```
 
-## Contexto socioeconómico de los países
 
-Estudio del gdp per capita y las categorías de income con el objetivo de contextualizar las diferencias económicas entre países.
 
 ## Salud vs defensa
 
