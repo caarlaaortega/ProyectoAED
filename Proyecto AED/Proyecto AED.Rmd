@@ -93,7 +93,7 @@ Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegid
 - **Fertilidad**: Número de niños que daría a luz una mujer si viviese hasta el final de sus años fértiles en el momento temporal captado (nacimientos por mujer). *Código: SP.DYN.TFRT.IN.*
 
 - **Embarazos adolescentes**: Ratio de fertilidad adolescente, número de nacimientos por cada 1000 mujeres con una edad entre 15 y 19 años (nacimientos por 1000 adolescentes). *Código: SP.ADO.TFRT*.
-
+YE
 - **Población**: Número de residentes del país estimados a mitad del año (#personas). *Código: SP.POP.TOTL.*
 
 - **Area**: Superfície total del país potencialmente habitable, excluyendo el área ocupada por agua (ríos y lagos), y zonas exclusivamente económicas/laborales ($km^2$). *Código: AG.LND.TOTL.K2.*
@@ -129,7 +129,7 @@ El objetivo es analizar el PIB por cápita de los diferentes países, agrupándo
 ```{r, echo=FALSE}
 # 1. PIB medio per cápita por grupos de income: 
 
-# Visualizamos un boxplot del PIB per cpaita agrupado por income.
+# Visualizamos un boxplot del PIB per cápita agrupado por income.
 # Como el PIB per cápita suele tener colas largas hacia la 
 # derecha (hay países con un PIB muy elevado, muy ricos), se
 # representará una escala logaritmica en el eje y.
@@ -247,6 +247,72 @@ ggsave('./results/Densidad_demografica_vs_PIB_region.pdf')
 ## Bloque 2. Inversión en salud y defensa. 
 
 El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos. 
+
+```{r}
+# 1. Relación entre el gasto en defensa, gasto en sanidad y el 'income':
+
+# Las variables de gasto son numéricas y la variable 'income' es 
+# categórica. Vamos a representar gasto vs. income mediante boxplots. 
+ 
+
+#Income vs. gasto en salud
+ggplot(datos_cohorte_2019,
+       aes(x = income, y = gasto_salud_gdp,
+           fill = income)) +
+  #Boxplot:
+  geom_boxplot(alpha = 0.7,outlier.shape = 21, outlier.size = 2) +
+  #Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', 
+               shape = 18,size = 3,color = 'darkred',aes(group = income)) +
+  #Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') +
+  #Etiquetas:
+  labs(title = 'Distribución del gasto sanitario',
+       subtitle = 'Diferenciación por niveles de ingresos',
+       x = 'Nivel de ingresos del país',
+       y = 'Gasto sanitario (% del PIB)',
+       fill = 'Ingresos') +
+
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 7, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank())
+
+# Guardamos la gráfica
+ggsave('./results/Gasto_salud_income.pdf')
+
+
+#Income vs. gasto en defensa
+ggplot(datos_cohorte_2019,
+       aes(x = income, y = gasto_defensa_gdp,
+           fill = income)) +
+  #Boxplot:
+  geom_boxplot(alpha = 0.7,outlier.shape = 21, outlier.size = 2) +
+  #Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', 
+               shape = 18,size = 3,color = 'darkred',aes(group = income)) +
+  #Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') +
+  #Etiquetas:
+  labs(title = 'Distribución del gasto sanitario',
+       subtitle = 'Diferenciación por niveles de ingresos',
+       x = 'Nivel de ingresos del país',
+       y = 'Gasto militar (% del PIB)',
+       fill = 'Ingresos') +
+
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 7, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank())
+
+# Guardamos la gráfica
+ggsave('./results/Gasto_defensa_income.pdf')
+
+# 2. Relación entre el gasto en defensa, gasto en sanidad y la región:
+```
+
+
+## Bloque 3. Necesidades sanitarias.
+
+Como difieren las necesidades sanitarias entre los diferentes países
 
 
 
