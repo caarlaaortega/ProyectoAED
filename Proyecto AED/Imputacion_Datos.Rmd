@@ -126,6 +126,8 @@ library(dplyr)
 # podría representar una especie de densidad demográfica
 datos_cohorte_2019$pop_per_area <- datos_cohorte_2019$population / datos_cohorte_2019$area
 
+save(datos_cohorte_2019, file = './results/datos_cohorte_2019.RData')
+
 # Indicamos las variables de las que pretendemos hacer el análisis: 
 ind_explor_est <- c('esperanza_vida', 'fertilidad', 'fertilidad_adolescente',
                     'pop_per_area', 'gdp_per_capita', 'gasto_salud_gdp',
@@ -197,7 +199,8 @@ datos_corr <- datos_cohorte_2019 %>%
     acceso_agua,
     causa_muerte_agudas,
     causa_muerte_cronicas,
-    mortalidad_higiene
+    mortalidad_higiene,
+    pop_per_area
   )
 
 # Correlación entre variables
