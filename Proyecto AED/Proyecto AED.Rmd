@@ -70,37 +70,37 @@ La obtención de los datos se ha realizado mendiante el paquete WDI de R, que pe
 
 Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son:
 
-- **Esperanza de vida al nacer (total)**: número de años que un recién nacido viviría si los patrones de mortalidad del momento se mantienen a lo largo de vida (años). Código: SP.DYN.LE00.IN.
+- **Esperanza de vida al nacer (total)**: número de años que un recién nacido viviría si los patrones de mortalidad del momento se mantienen a lo largo de vida (años). *Código: SP.DYN.LE00.IN.*
 
-- **PIB per capita**: Producto Interior Bruto, ganancias totales ganadas mediante la producción de bienes y servicioes en un territorio económico durante un periodo contable, y dividido entre la población general (US'\$').Código: NY.GDP.PCAP.CD.
+- **PIB per capita**: Producto Interior Bruto, ganancias totales ganadas mediante la producción de bienes y servicioes en un territorio económico durante un periodo contable, y dividido entre la población general (US\$).*Código: NY.GDP.PCAP.CD.*
 
-- **Gasto en salud**: Estimación de los gastos en salud icluyendo los productos y servicios sanitarios consumidos cada año, sin incluir edificios, maquinaria, IT y stocks de vacunas para emergencias (% PIB). Código: SH.XPD.CHEX.GD.ZS.
+- **Gasto en salud**: Estimación de los gastos en salud icluyendo los productos y servicios sanitarios consumidos cada año, sin incluir edificios, maquinaria, IT y stocks de vacunas para emergencias (% PIB). *Código: SH.XPD.CHEX.GD.ZS.*
 
-- **Gasto en defensa**: Gasto en defensa respecto al PIB (% PIB). Código: MS.MIL.XPND.GD.ZS.
+- **Gasto en defensa**: Gasto en defensa respecto al PIB (% PIB). *Código: MS.MIL.XPND.GD.ZS.*
 
-- **Mortalidad infantil**: Número de muertes de bebes de 0 a 12 meses por cada 1000 nacimientos al año (n:1000). Código: SP.DYN.IMRT.IN.
+- **Mortalidad infantil**: Número de muertes de bebes de 0 a 12 meses por cada 1000 nacimientos al año (n:1000). *Código: SP.DYN.IMRT.IN*.
 
-- **Acceso al agua**: Personas utilizando los servicios mínimos básicos de agua potable (% población). Código: SH.H2O.BASW.ZS.
+- **Acceso al agua**: Personas utilizando los servicios mínimos básicos de agua potable (% población). *Código: SH.H2O.BASW.ZS.*
 
-- **Escolaridad secundaria (total)**: Niños que reciben educación secundaria básica oficial (% neto). Código: SE.SEC.NENR.
+- **Escolaridad secundaria (total)**: Niños que reciben educación secundaria básica oficial (% neto). *Código: SE.SEC.NENR.*
 
-- **Causa de muerte por enf. agudas**: Personas que han fallecido por enfermedades agudas, que incluyen enfermedades infecciosas y parasitarias, infecciones respiratorias y deficiencias nutricionales (% del total de muertes). Código: SH.DTH.COMM.ZS.
+- **Causa de muerte por enf. agudas**: Personas que han fallecido por enfermedades agudas, que incluyen enfermedades infecciosas y parasitarias, infecciones respiratorias y deficiencias nutricionales (% del total de muertes). *Código: SH.DTH.COMM.ZS*.
 
-- **Causa de muerte por enf. crónicas**: Personas que han fallecido por enfermedades crónicas, que incluyen cáncer, diabetes, trastonos cardiovasculares, digestivos, dermatológicos, musculoesqueléticos y anomalías congenitales (% del total de muertes). Código: SH.DTH.NCOM.ZS.
+- **Causa de muerte por enf. crónicas**: Personas que han fallecido por enfermedades crónicas, que incluyen cáncer, diabetes, trastonos cardiovasculares, digestivos, dermatológicos, musculoesqueléticos y anomalías congenitales (% del total de muertes). *Código: SH.DTH.NCOM.ZS.*
 
-- **Mortalidad por falta de higiene**: Personas que han muerto por el uso de agua en malas condiciones, condiciones sanitarias inseguras y falta de higiene (número de muertes por 100.000 personas). Código: SH.STA.WASH.P5.
+- **Mortalidad por falta de higiene**: Personas que han muerto por el uso de agua en malas condiciones, condiciones sanitarias inseguras y falta de higiene (número de muertes por 100.000 personas). *Código: SH.STA.WASH.P5.*
 
-- **Fertilidad**: Número de niños que daría a luz una mujer si viviese hasta el final de sus años fértiles en el momento temporal captado (nacimientos por mujer).Código: SP.DYN.TFRT.IN.
+- **Fertilidad**: Número de niños que daría a luz una mujer si viviese hasta el final de sus años fértiles en el momento temporal captado (nacimientos por mujer). *Código: SP.DYN.TFRT.IN.*
 
-- **Embarazos adolescentes**: Ratio de fertilidad adolescente, número de nacimientos por cada 1000 mujeres con una edad entre 15 y 19 años (nacimientos por 1000 adolescentes). Código: SP.ADO.TFRT.
+- **Embarazos adolescentes**: Ratio de fertilidad adolescente, número de nacimientos por cada 1000 mujeres con una edad entre 15 y 19 años (nacimientos por 1000 adolescentes). *Código: SP.ADO.TFRT*.
 
-- **Población**: Número de residentes del país estimados a mitad del año (#personas). Código: SP.POP.TOTL.
+- **Población**: Número de residentes del país estimados a mitad del año (#personas). *Código: SP.POP.TOTL.*
 
-- **Area**: Superfície total del país potencialmente habitable, excluyendo el área ocupada por agua (ríos y lagos), y zonas exclusivamente económicas/laborales ($km^2$). Código: AG.LND.TOTL.K2.
+- **Area**: Superfície total del país potencialmente habitable, excluyendo el área ocupada por agua (ríos y lagos), y zonas exclusivamente económicas/laborales ($km^2$). *Código: AG.LND.TOTL.K2.*
 
-- **Mortalidad por contaminación del aire**: Número de muertes por transtornos derivados de la inhalación de partículas contaminantes presentes en el aire (muertes por 100.000 habitantes).Código: CC.SH.AIRP.AMB.
+- **Mortalidad por contaminación del aire**: Número de muertes por transtornos derivados de la inhalación de partículas contaminantes presentes en el aire (muertes por 100.000 habitantes). *Código: CC.SH.AIRP.AMB.*
 
-- **Inmunización**: Número de niños inmunizados completamente entre 15 y 23 meses (%). Código: HF.IMM.FULL.
+- **Inmunización**: Número de niños inmunizados completamente entre 15 y 23 meses (%). *Código: HF.IMM.FULL.*
 
 De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración inicial de los datos, puesto que son los años más recientes y de los que potencialmente se cuente con más cantidad de datos actualizados.
 
@@ -108,18 +108,27 @@ De todo el registro de años con los que se cuenta en el dataset del Banco Mundi
 
 Dado que los datos descargados eran extremadamente abundantes (2476 observaciones de 29 variables), con '3 dimensiones' (temporal, indicador y países), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%.
 
-Tras este análisis exploratorio (documento Exploración_inicial.Rmd), se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional que se ha creado a partir de la población y el área del país). El resto de variables fueron descartadas.
+Tras este análisis exploratorio (documento `Exploración_inicial.Rmd`), se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional creada a partir de la población y el área del país). El resto de variables fueron descartadas.
 
 # Resultados
 
-A continuación se muestran los resultados del estudio, divididos en 4 bloques, que están organizados de modo que permitan responder a la pregunta principal del trabajo. - Bloque 1. **Contexto socioeconómico de los países**. - Bloque 2. **Comparación del gasto en salud y en defensa de los países**. - Bloque 3. **Necesidades sanitarias por países**. - Bloque 4. **Agregación final: correspondencia entre el gasto público y las necesidades de los ciudadanos del país**.
+A continuación se muestran los resultados del estudio, divididos en 4 bloques, que están organizados de modo que permitan responder a la pregunta principal del trabajo.
+
+- Bloque 1. **Contexto socioeconómico de los países**.
+
+- Bloque 2. **Comparación del gasto en salud y en defensa de los países**.
+
+- Bloque 3. **Necesidades sanitarias por países**.
+
+- Bloque 4. **Agregación final: correspondencia entre el gasto público y las necesidades de los ciudadanos del país**.
 
 ## Bloque 1. Contexto socioeconómico.
 
-El objetivo es analizar el PIB por cápita de los diferentes países, agrupándolos atendiendo a la variable 'income'. Asimismo, se estudiará a las regiones a las que pertenece cada país, por grupos, para determinar si existe alguna relación entre situación económica y localización geográfica. Finalmente, se incorporará el concepto de densidad demográfica para estudiar si existe una relación entre esta y el PIB per capita del país.
+El objetivo es analizar el PIB por cápita de los diferentes países, agrupándolos atendiendo a la variable 'income'. Asimismo, se estudiará a las regiones a las que pertenece cada país, por grupos, para determinar si existe alguna relación entre situación económica y localización geográfica. Finalmente, se incorporará el concepto de densidad demográfica para estudiar si existe una relación entre esta y el PIB por cápita del país.
 
 ```{r, echo=FALSE}
 # 1. PIB medio per cápita por grupos de income: 
+
 # Visualizamos un boxplot del PIB per cpaita agrupado por income.
 # Como el PIB per cápita suele tener colas largas hacia la 
 # derecha (hay países con un PIB muy elevado, muy ricos), se
@@ -157,7 +166,8 @@ ggplot(datos_cohorte_2019, aes(x = income, y = gdp_per_capita,
 # Guardamos la gráfica:
 ggsave('./results/Distribucion_PIB.pdf')
 
-# 2. Relación entre región, PIB per cápita y el 'income'
+# 2. Relación entre región, PIB per cápita y el 'income':
+
 # Las variables región e income son categóricas, y el PIB es 
 # numérica. Vamos a representar la región vs. income en un 
 # gráfico de barras apiladas y el PIB per capita vs. región 
@@ -212,9 +222,11 @@ ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gdp_per_capit
 ggsave('./results/Distribucion_PIB_region.pdf')
 
 # 3. Comparación de la densidad demográfica con el PIB por cápita:
+
 # Para ello se realizará un scatter plot, usando una escala 
 # logarítmica en ambos ejes (pues la densidad de población
 # también se encuentra desbalanceada)
+
 ggplot(datos_cohorte_2019, aes(x = gdp_per_capita, y = pop_per_area, colour = income)) +
   geom_point(alpha = 0.75) + 
   scale_y_log10(labels = scales::label_comma(),
@@ -231,6 +243,12 @@ ggplot(datos_cohorte_2019, aes(x = gdp_per_capita, y = pop_per_area, colour = in
 ggsave('./results/Densidad_demografica_vs_PIB_region.pdf')
   
 ```
+
+## Bloque 2. Inversión en salud y defensa. 
+
+El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos. 
+
+
 
 ## Salud vs defensa
 
