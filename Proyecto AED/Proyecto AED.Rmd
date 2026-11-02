@@ -307,6 +307,54 @@ ggplot(datos_cohorte_2019,
 ggsave('./results/Distribucion_gasto_defensa.pdf')
 
 # 2. Relación entre el gasto en defensa, gasto en sanidad y la región:
+
+# Región vs. gasto sanitario
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gasto_salud_gdp, 
+                               fill = region)) +
+  # Boxplot:
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  # Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', shape = 18, 
+               size = 3, color = 'darkred', aes(group = region)) +
+  # Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') + 
+  # Etiquetas:
+  labs(title = 'Distribución del gasto en salud',
+    subtitle = 'Diferenciación por región',
+    x = 'Región',
+    y = 'Gasto en salud (% del PIB)',
+    fill = 'Región') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') + coord_flip()
+
+ggsave('./results/Distribucion_gasto_salud_region.pdf')
+
+
+# Región vs. gasto de defensa
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gasto_defensa_gdp, 
+                               fill = region)) +
+  # Boxplot:
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  # Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', shape = 18, 
+               size = 3, color = 'darkred', aes(group = region)) +
+  # Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') + 
+  # Etiquetas:
+  labs(title = 'Distribución del gasto en defensa',
+    subtitle = 'Diferenciación por región',
+    x = 'Región',
+    y = 'Gasto en defensa (% del PIB)',
+    fill = 'Región') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') + coord_flip()
+
+ggsave('./results/Distribucion_asto_defensa_region.pdf')
+
+# 3. Relación entre el gasto sanitario y de defensa:
+
+# Para ello seguiremos el mismo patrón del apartado anterior y se realizará un scatter splot
+
 ```
 
 
