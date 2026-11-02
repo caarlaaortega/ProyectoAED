@@ -249,6 +249,8 @@ ggsave('./results/Densidad_demografica_vs_PIB_region.pdf')
 El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos. 
 
 ```{r}
+# GRÁFICAS SEPARADAS
+
 # 1. Relación entre el gasto en defensa, gasto en sanidad y el 'income':
 
 # Las variables de gasto son numéricas y la variable 'income' es 
@@ -293,7 +295,7 @@ ggplot(datos_cohorte_2019,
   #Paleta de colores:
   scale_fill_brewer(palette = 'Set2') +
   #Etiquetas:
-  labs(title = 'Distribución del gasto sanitario',
+  labs(title = 'Distribución del gasto en defensa',
        subtitle = 'Diferenciación por niveles de ingresos',
        x = 'Nivel de ingresos del país',
        y = 'Gasto militar (% del PIB)',
@@ -355,17 +357,26 @@ ggsave('./results/Distribucion_asto_defensa_region.pdf')
 ```
 
 ```{r}
+# GRAFICAS JUNTAS PARA INCOME Y REGION
+
 # 1. Comparación entre el gasto en defensa, gasto en sanidad según 'income':
 
-# Para comparar el porcentaje de gasto en los dos campos según el nivel de ingresos, vamos a realizar una gráfica con dos scatter plots, uno para cada gasto.
-# De esta forma podemos comparar como afecta el nivel de ingresos al gasto tanto en salud como defensa y a su vez comparar que tanto porcentaje del PIB invierten los países en cada categoría.
+# El objetivo de este análisis es comparar la distribución del gasto
+# sanitario y del gasto en defensa entre países pertenecientes a
+# distintos niveles de ingresos.
+#
+# Para ello, se utilizarán boxplots para poder analizar si existen diferencias en los
+# patrones de gasto según el nivel de ingresos de los países y comparar
+# la proporción del PIB que destinan a cada uno de estos ámbitos.
 
-# Unimos las variables de gasto sanitario y militar
-# Creando una columna para tipo de gasto y otra con los valores
+
+# Unimos las variables de gasto sanitario y militar,
+# creando una columna que identifica el tipo de gasto
+# y otra que recoge los valores correspondientes.
 
 library(tidyr)
 library(dplyr)
-datos_gastos<-datos_cohorte_2019%>%select(income,gasto_salud_gdp,gasto_defensa_gdp)%>%
+datos_gastos<-datos_cohorte_2019%>%select(region,income,gasto_salud_gdp,gasto_defensa_gdp)%>%
   pivot_longer(.,names_to = 'Tipo de gasto' ,values_to = 'Gasto (%PIB)' ,cols=c(gasto_salud_gdp , gasto_defensa_gdp) )%>%
   mutate(`Tipo de gasto`=recode(
     `Tipo de gasto` , gasto_salud_gdp='Gasto en salud', gasto_defensa_gdp='Gasto en defensa'
@@ -394,6 +405,60 @@ ggplot(datos_gastos, aes(x=income,y=`Gasto (%PIB)`,fill=income))+
 # Guardamos la gráfica
 ggsave('./results/Comparacion_gastos_income.pdf')
 
+
+# 2. Comparación entre el gasto en defensa, gasto en sanidad según la región:
+
+# El objetivo de este análisis es comparar la distribución del gasto
+# sanitario y del gasto en defensa entre las distintas regiones
+# geográficas.
+#
+# Para ello, también se utilizarán boxplots para poder identificar posibles diferencias regionales
+# en los patrones de gasto y analizar qué proporción del PIB destinan
+# los países de cada región a ambos ámbitos.
+
+
+ggplot(datos_gastos, aes(x=str_wrap(region,width=15), y=`Gasto (%PIB)`, fill=region))+
+  geom_boxplot(alpha=0.7,outlier.shape = 21,outlier.size = 1)+
+  stat_summary(fun=mean,geom='point', shape=18, size=2, color='darkred', aes(group=region))+
+  facet_wrap(~`Tipo de gasto`, ncol=1)+
+  scale_fill_brewer(palette='Set2')+
+  labs(
+    title = 'Comparación del gasto sanitario y militar',
+    subtitle = 'Distribución por regiones',
+    x = 'Región',
+    y = 'Gasto (% del PIB)'
+  ) +
+  theme(axis.text.y = element_text(angle = 0, hjust = 0.5, size = 5, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank()) +
+  
+  coord_flip()
+
+# Guardamos la gráfica
+ggsave('./results/Comparacion_gastos_region.pdf')
+
+
+# 3. Relación entre el gasto sanitario y el gasto en defensa.
+
+# Representamos la relación entre ambos tipos de gastos mediante un scatter plot.
+
+# Vamos a tener
+# Eje X: gasto en salud (% del PIB)
+# Eje Y: gasto en defensa (% del PIB)
+# Nivel de ingresos por color
+ 
+#ggplot(datos_cohorte_2019, aes(x=gasto_salud_gdp, y=gasto_defensa_gdp, color=income))+
+ # geom_point(alpha=0.75)+
+  #scale_color_brewer(palette='Set2', name='Nivel de ingresos')+
+  #labs(
+   #title = 'Relación entre el gasto sanitario y militar',
+   # subtitle = 'Por nivel de ingresos',
+   # x = 'Gasto en defensa (% del PIB)',
+   # y = 'Gasto sanitario (% del PIB)',
+   # color = 'Nivel de ingresos'
+ # ) + coord_flip()
+
+#ggsave('./results/Relacion_gastos.pdf')
 ```
 
 
