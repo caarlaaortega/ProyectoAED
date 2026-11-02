@@ -15,6 +15,17 @@ Este documento Rmarkdown tiene como objetivo identificar y tratar los valores fa
 
 ```{r}
 library(VIM)
+
+# ANÁLISIS EXPLORATORIO INICIAL DE LOS DATOS DE LA COHORTE
+sumario <- data.frame(variable = colnames(datos_cohorte_2019))
+sumario$type <- sapply(datos_cohorte_2019, function(x) class(x)[1])
+sumario$levels <- sapply(datos_cohorte_2019, function(x) length(unique(x)))
+sumario$topLevels <- sapply(datos_cohorte_2019, function(x) names(which.max(table(x))))
+sumario$topCount <- sapply(datos_cohorte_2019, function(x) max(table(x)))
+sumario$topFrac <- round(sumario$topCount/nrow(datos_cohorte_2019),4)
+sumario$missFreq <- sapply(datos_cohorte_2019, function(x) sum(is.na(x)))
+sumario$missFrac <- round(sumario$missFreq/nrow(datos_cohorte_2019),4)
+sumario
 ```
 
 
@@ -210,4 +221,20 @@ cor(datos_corr, use = "pairwise.complete.obs")
 ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 3)),  mapping = aes(colour = datos_cohorte_2019$income, alpha = 0.5))
 ggsave('./results/grafica_correlaciones.pdf')
 ```
+
+## SUMARIO (caracterización de las variables del dataset)
+
+```{r}
+# ANÁLISIS EXPLORATORIO FINAL DE LOS DATOS DE LA COHORTE
+sumario <- data.frame(variable = colnames(datos_cohorte_2019))
+sumario$type <- sapply(datos_cohorte_2019, function(x) class(x)[1])
+sumario$levels <- sapply(datos_cohorte_2019, function(x) length(unique(x)))
+sumario$topLevels <- sapply(datos_cohorte_2019, function(x) names(which.max(table(x))))
+sumario$topCount <- sapply(datos_cohorte_2019, function(x) max(table(x)))
+sumario$topFrac <- round(sumario$topCount/nrow(datos_cohorte_2019),4)
+sumario$missFreq <- sapply(datos_cohorte_2019, function(x) sum(is.na(x)))
+sumario$missFrac <- round(sumario$missFreq/nrow(datos_cohorte_2019),4)
+sumario
+```
+
 
