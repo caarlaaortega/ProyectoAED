@@ -278,7 +278,7 @@ ggplot(datos_cohorte_2019,
         panel.grid.minor = element_blank())
 
 # Guardamos la gráfica
-ggsave('./results/Gasto_salud_income.pdf')
+ggsave('./results/Distribucion_gasto_salud.pdf')
 
 
 #Income vs. gasto en defensa
@@ -304,7 +304,7 @@ ggplot(datos_cohorte_2019,
         panel.grid.minor = element_blank())
 
 # Guardamos la gráfica
-ggsave('./results/Gasto_defensa_income.pdf')
+ggsave('./results/Distribucion_gasto_defensa.pdf')
 
 # 2. Relación entre el gasto en defensa, gasto en sanidad y la región:
 ```
