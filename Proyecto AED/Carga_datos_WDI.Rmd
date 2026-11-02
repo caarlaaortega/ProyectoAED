@@ -1,0 +1,117 @@
+---
+title: "Exploración inicial - habituación al dataset"
+author: "Carla Ortega Fernández" 
+author: 'Francisco Jiménez Jiménez'
+author: 'Alejandra Vinjoy Lliso'
+date: "2026-10-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Este documento Rmarkdown tiene como objetivo realizar un análisis inicial de los datos del Banco Mundial, ver la proporción de datos faltantes para cada variable de interés relacionada con el tema del proyecto, y tomar decisiones iniciales para lanzarlo. 
+
+```{r}
+# 1. Instalar y cargar los paquetes necesarios
+if (!require("WDI")) install.packages("WDI")
+if (!require("tidyverse")) install.packages("tidyverse")
+
+library(WDI)
+library(tidyverse)
+
+# 2. Definir los indicadores oficiales que queremos extraer
+indicadores <- c(
+  esperanza_vida = "SP.DYN.LE00.IN",       # Esperanza de vida al nacer (años)
+  gdp_per_capita = "NY.GDP.PCAP.CD",       # PIB per cápita (US$ actuales)
+  gasto_salud_gdp = "SH.XPD.CHEX.GD.ZS",   # Gasto en salud (% del PIB)
+  gasto_defensa_gdp = 'MS.MIL.XPND.GD.ZS', # Gasto en defensa (% del PIB)
+  mortalidad_infantil = "SP.DYN.IMRT.IN",   # Tasa de mortalidad infantil (por 1.000 nacidos vivos)
+  acceso_agua = "SH.H2O.BASW.ZS",          # Acceso a agua potable básica (% población)
+  escolaridad_secundaria = "SE.SEC.NENR",# Tasa neta de matriculación secundaria
+  causa_muerte_agudas = 'SH.DTH.COMM.ZS', # muertes por enfermedades agudas
+  causa_muerte_cronicas = 'SH.DTH.NCOM.ZS', # muertes por enfermedades crónicas
+  mortalidad_cronicas = 'SH.DYN.NCOM.ZS', # mortalidad por crónicas 
+  mortalidad_higiene = 'SH.STA.WASH.P5', # mortalidad por causas higiénicas
+  mortalidad_aire = 'CC.SH.AIRP.AMB', # mortalidad por contaminación aérea
+  fertilidad = 'SP.DYN.TFRT.IN', # fertilidad 
+  fertilidad_adolescente = 'SP.ADO.TFRT', # fertilidad adolescente (mujeres de 12 a 18 años)
+  inmunizacion = 'HF.IMM.FULL', # personas inmunizadas mediante vacunación 
+  population = 'SP.POP.TOTL', # población total
+  area = 'AG.LND.TOTL.K2' # superficie en km2
+)
+
+# 3. Descargar los datos desde la API oficial del Banco Mundial
+datos_salud <- WDI(
+  country = "all",            # Todos los países
+  indicator = indicadores, 
+  start = 2015,               # Rango de años a analizar
+  end = 2022,
+  extra = TRUE                # Incluye metadatos extra (región, grupo de ingresos)
+) %>% 
+  filter(region != "Aggregates") # Filtrar agregados regionales para quedarnos solo con países
+
+# 4. Inspección inicial del dataset
+glimpse(datos_salud)
+
+```
+
+Una vez cargadas las variables de interés que podrían responder a las preguntas que se plantean, se realizará un estudio de datos faltantes. Las variables cargadas son "tridimensionales", pues se cuenta con la variable de interés recogida para: 
+
+* Cada país del mundo considerado. 
+* Cada año incluido en el intervalo 2015-2022. 
+
+Teniendo esta información en cuenta, y dado que no se va a realizar un análisis temporal, se buscará acotar los datos a los años que mayor información contengan. 
+Por ello, se va a realizar un análisis variable a variable de dónde está su información por país. 
+
+En primer lugar, se estudiará la proporción de datos no faltantes que hay para cada variable, agrupado por país: 
+```{r}
+# Buscar datos faltantes y cribar variables: 
+datos_faltantes <- function(variable){
+  filtrados <- datos_salud[!is.na(datos_salud[[variable]]), c('country', 'year', variable)]
+  p <- length(unique(filtrados$country))/217
+  return (p)
+}
+
+# Visualización del porcentaje de países que algún año tienen el dato necesario
+for (variable in colnames(datos_salud)){
+  cat(variable,datos_faltantes(variable), '\n')
+}
+```
+
+A raíz de este primer análisis inicial se concluye que tanto la variable de inmunización como la de mortalidad a causa de la contaminación aérea no se deberían considerar, pues únicamente aparece un valor no faltante para el 15.67% y el 4.61% de los países, respectivamente. Asimismo, asumiendo que se descartarán todas aquellas variables con más de un 30% de valores faltantes, también no se considerará la tasa de escolaridad, tan solo presente el dato para el 68.67% de los países. 
+
+Ahora se analizarán solo aquellas variables que tienen valores para más del 70% de los países, pero no en todos ellos. De estas, se estudiarán los años para los cuales cuentan con valor. El objetivo es construir un dataframe con los valores de estas variables para dichos años, pues el análisis temporal no está considerado en el presente proyecto. 
+
+```{r}
+# Las variables que deben estudiarse en profundidad son: 
+variables_aed_init <- c(
+  'gdp_per_capita', 'gasto_salud_gdp', 'gasto_defensa_gdp', 'mortalidad_infantil',
+  'acceso_agua', 'causa_muerte_agudas', 'causa_muerte_cronicas', 'mortalidad_higiene')
+
+# Resumen de la presencia de datos por variable y por año. El objetivo es ver para qué años tiene esa variable, en cada país, un valor. 
+cobertura_por_anyo <- aggregate(
+  datos_salud[variables_aed_init],
+  by = list(year = datos_salud$year),
+  FUN = function(x) sum(!is.na(x)))
+print(cobertura_por_anyo)
+```
+A raíz de esta operación, 2019 es el año en el que mayor proporción de países presentan un valor para las variables estudiadas de forma mantenida. Por esta razón, se van a analizar los datos de 2019. Si bien es cierto que también se cuenta con datos abundantes de forma mantenida para 2020 y 2021, a excepción de la variable 'mortalidad_higiene', que tan solo tiene valor para 2019. 
+
+```{r}
+# Creamos tres datasets con las variables que nos interesan: 
+variables_interes <- c('country', 'income', 'region', 'year', 'esperanza_vida',
+                       'fertilidad', 'fertilidad_adolescente', 'population',
+                       'area', variables_aed_init)
+
+datos_cohorte_2019_raw <- subset(datos_salud, year == 2019, select = variables_interes)
+
+save(datos_cohorte_2019_raw, file = './results/datos_cohorte_2019_raw.RData') 
+```
+
+
+
+
+
+
