@@ -351,9 +351,48 @@ ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gasto_defensa
 
 ggsave('./results/Distribucion_asto_defensa_region.pdf')
 
-# 3. Relación entre el gasto sanitario y de defensa:
 
-# Para ello seguiremos el mismo patrón del apartado anterior y se realizará un scatter splot
+```
+
+```{r}
+# 1. Comparación entre el gasto en defensa, gasto en sanidad según 'income':
+
+# Para comparar el porcentaje de gasto en los dos campos según el nivel de ingresos, vamos a realizar una gráfica con dos scatter plots, uno para cada gasto.
+# De esta forma podemos comparar como afecta el nivel de ingresos al gasto tanto en salud como defensa y a su vez comparar que tanto porcentaje del PIB invierten los países en cada categoría.
+
+# Unimos las variables de gasto sanitario y militar
+# Creando una columna para tipo de gasto y otra con los valores
+
+library(tidyr)
+library(dplyr)
+datos_gastos<-datos_cohorte_2019%>%select(income,gasto_salud_gdp,gasto_defensa_gdp)%>%
+  pivot_longer(.,names_to = 'Tipo de gasto' ,values_to = 'Gasto (%PIB)' ,cols=c(gasto_salud_gdp , gasto_defensa_gdp) )%>%
+  mutate(`Tipo de gasto`=recode(
+    `Tipo de gasto` , gasto_salud_gdp='Gasto en salud', gasto_defensa_gdp='Gasto en defensa'
+  ))
+
+ggplot(datos_gastos, aes(x=income,y=`Gasto (%PIB)`,fill=income))+
+  #Boxplots:
+  geom_boxplot(alpha=0.7, outlier.shape = 21, outlier.size = 1)+
+  #Añadimos la media:
+  stat_summary(fun=mean, geom='point',shape=18,size=2, color='darkred',aes(group = income))+
+  #Separamos por tipo de gasto
+  facet_wrap(~`Tipo de gasto`)+
+  #Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') +
+  #Etiquetas:
+  labs(
+    title = 'Comparación del gasto sanitario y militar',
+    subtitle = 'Distribución según el nivel de ingresos',
+    x = 'Nivel de ingresos del país',
+    y = 'Gasto (% del PIB)'
+  ) +
+  theme(axis.text.x = element_text(angle = 20, hjust = 0.5, size = 5, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank())
+
+# Guardamos la gráfica
+ggsave('./results/Comparacion_gastos_income.pdf')
 
 ```
 
