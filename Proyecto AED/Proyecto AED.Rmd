@@ -463,7 +463,98 @@ ggsave('./results/Comparacion_gastos_region.pdf')
 
 ## Bloque 3. Necesidades sanitarias.
 
-Como difieren las necesidades sanitarias entre los diferentes países
+El objetivo de este bloque es analizar las necesidades sanitarias de los diferentes países, estudiando cómo varían en función de su nivel de ingresos y de su región geográfica. Para ello, se utilizarán indicadores relacionados con la esperanza de vida, la mortalidad infantil, las condiciones de higiene y el acceso al agua potable. Además, se estudiará la distribución de las principales causas de mortalidad, diferenciando entre enfermedades agudas y crónicas. 
+
+De este modo, se pretende identificar las principales desigualdades sanitarias existentes entre países y determinar si estas están relacionadas con su situación socioeconómica o geográfica.
+
+```{r}
+# BLOQUE 3. NECESIDADES SANITARIAS
+
+# 1. Indicadores generales de salud según income.
+
+# Esperanza de vida:
+ggplot(datos_cohorte_2019,
+       aes(x = income, y = esperanza_vida, fill = income)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',
+               shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la esperanza de vida',
+    subtitle = 'Diferenciación por niveles de ingresos',
+    x = 'Nivel de ingresos del país',
+    y = 'Esperanza de vida (años)'
+  ) +
+  theme(axis.text.x = element_text(size = 7, face = 'bold'),
+        legend.position = 'none',
+        panel.grid.minor = element_blank())
+
+ggsave('./results/Esperanza_vida_income.pdf')
+
+
+# Mortalidad infantil:
+ggplot(datos_cohorte_2019,
+       aes(x = income, y = mortalidad_infantil, fill = income)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',
+               shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la mortalidad infantil',
+    subtitle = 'Diferenciación por niveles de ingresos',
+    x = 'Nivel de ingresos del país',
+    y = 'Muertes por cada 1000 nacimientos'
+  ) +
+  theme(axis.text.x = element_text(size = 7, face = 'bold'),
+        legend.position = 'none',
+        panel.grid.minor = element_blank())
+
+ggsave('./results/Mortalidad_infantil_income.pdf')
+
+
+# 2. Indicadores generales de salud según región.
+
+# Esperanza de vida:
+ggplot(datos_cohorte_2019,
+       aes(x = stringr::str_wrap(region, width = 15),
+           y = esperanza_vida, fill = region)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',
+               shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la esperanza de vida',
+    subtitle = 'Diferenciación por región geográfica',
+    x = 'Región',
+    y = 'Esperanza de vida (años)'
+  ) +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') +
+  coord_flip()
+
+ggsave('./results/Esperanza_vida_region.pdf')
+
+
+# Mortalidad infantil:
+ggplot(datos_cohorte_2019,
+       aes(x = stringr::str_wrap(region, width = 15),
+           y = mortalidad_infantil, fill = region)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',
+               shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la mortalidad infantil',
+    subtitle = 'Diferenciación por región geográfica',
+    x = 'Región',
+    y = 'Muertes por cada 1000 nacimientos'
+  ) +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') +
+  coord_flip()
+
+ggsave('./results/Mortalidad_infantil_region.pdf')
+```
 
 
 

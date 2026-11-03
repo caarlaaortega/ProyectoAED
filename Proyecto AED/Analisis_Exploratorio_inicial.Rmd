@@ -204,6 +204,8 @@ ggsave('./results/grafica_correlaciones.pdf')
 
 ### Sumario Final
 
+El sumario final realiza un resumen de las características principales de cada variable del conjunto de datos después del preprocesado y la imputación de valores faltantes.
+
 ```{r}
 # Sumario final de los datos de la cohorte de 2019:
 sumario <- data.frame(variable = colnames(datos_cohorte_2019))
@@ -217,4 +219,4 @@ sumario$missFrac <- round(sumario$missFreq/nrow(datos_cohorte_2019),4)
 sumario
 ```
 
-
+Como era de esperar, se observa que todas las variables presentan 0 valores faltantes, lo que confirma que el proceso de imputación mediante KNN se ha realizado correctamente.
