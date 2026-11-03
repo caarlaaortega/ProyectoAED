@@ -1,5 +1,5 @@
 ---
-title: "Full title of the paper (Capitalized)"
+title: "ANÁLISIS EXPLORATORIO"
 author:
   - name: Francisco Jiménez Jiménez
     affil: 1
@@ -51,12 +51,11 @@ PREGUNTA CLAVE: ¿Existe una correspondencia real entre las prioridades de gasto
 
 # Materiales y Métodos
 
-Aquí describiremos los métodos y la procedencia de los datos del Banco Mundial.
-
-Usaremos el siguiente theme para las gráficas:
-
 ```{r, echo = FALSE}
 library(ggplot2)
+library(stringr)
+library(dplyr)
+library(tidyr)
 
 load(file = './results/datos_cohorte_2019.RData')
   
@@ -468,13 +467,6 @@ Como difieren las necesidades sanitarias entre los diferentes países
 
 
 
-## Salud vs defensa
-
-Prioridades de gasto público. Comparación entre el gasto en salud y defensa de los diferentes países
-
-## Necesidades sanitarias
-
-Como difieren las necesidades sanitarias entre los diferentes países
 
 ## Correspondencia entre gasto público y necesidades
 
