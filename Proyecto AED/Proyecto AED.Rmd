@@ -247,118 +247,9 @@ ggsave('./results/Densidad_demografica_vs_PIB_region.pdf')
 
 El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos. 
 
-```{r}
-# GRÁFICAS SEPARADAS
-
-# 1. Relación entre el gasto en defensa, gasto en sanidad y el 'income':
-
-# Las variables de gasto son numéricas y la variable 'income' es 
-# categórica. Vamos a representar gasto vs. income mediante boxplots. 
- 
-
-#Income vs. gasto en salud
-ggplot(datos_cohorte_2019,
-       aes(x = income, y = gasto_salud_gdp,
-           fill = income)) +
-  #Boxplot:
-  geom_boxplot(alpha = 0.7,outlier.shape = 21, outlier.size = 2) +
-  #Añadimos la media:
-  stat_summary(fun = mean, geom = 'point', 
-               shape = 18,size = 3,color = 'darkred',aes(group = income)) +
-  #Paleta de colores:
-  scale_fill_brewer(palette = 'Set2') +
-  #Etiquetas:
-  labs(title = 'Distribución del gasto sanitario',
-       subtitle = 'Diferenciación por niveles de ingresos',
-       x = 'Nivel de ingresos del país',
-       y = 'Gasto sanitario (% del PIB)',
-       fill = 'Ingresos') +
-
-  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 7, face = 'bold'),
-        legend.position = 'none', 
-        panel.grid.minor = element_blank())
-
-# Guardamos la gráfica
-ggsave('./results/Distribucion_gasto_salud.pdf')
-
-
-#Income vs. gasto en defensa
-ggplot(datos_cohorte_2019,
-       aes(x = income, y = gasto_defensa_gdp,
-           fill = income)) +
-  #Boxplot:
-  geom_boxplot(alpha = 0.7,outlier.shape = 21, outlier.size = 2) +
-  #Añadimos la media:
-  stat_summary(fun = mean, geom = 'point', 
-               shape = 18,size = 3,color = 'darkred',aes(group = income)) +
-  #Paleta de colores:
-  scale_fill_brewer(palette = 'Set2') +
-  #Etiquetas:
-  labs(title = 'Distribución del gasto en defensa',
-       subtitle = 'Diferenciación por niveles de ingresos',
-       x = 'Nivel de ingresos del país',
-       y = 'Gasto militar (% del PIB)',
-       fill = 'Ingresos') +
-
-  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 7, face = 'bold'),
-        legend.position = 'none', 
-        panel.grid.minor = element_blank())
-
-# Guardamos la gráfica
-ggsave('./results/Distribucion_gasto_defensa.pdf')
-
-# 2. Relación entre el gasto en defensa, gasto en sanidad y la región:
-
-# Región vs. gasto sanitario
-ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gasto_salud_gdp, 
-                               fill = region)) +
-  # Boxplot:
-  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
-  # Añadimos la media:
-  stat_summary(fun = mean, geom = 'point', shape = 18, 
-               size = 3, color = 'darkred', aes(group = region)) +
-  # Paleta de colores:
-  scale_fill_brewer(palette = 'Set2') + 
-  # Etiquetas:
-  labs(title = 'Distribución del gasto en salud',
-    subtitle = 'Diferenciación por región',
-    x = 'Región',
-    y = 'Gasto en salud (% del PIB)',
-    fill = 'Región') +
-  theme(axis.text.y = element_text(size = 7, face = 'bold'),
-        legend.position = 'none') + coord_flip()
-
-ggsave('./results/Distribucion_gasto_salud_region.pdf')
-
-
-# Región vs. gasto de defensa
-ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gasto_defensa_gdp, 
-                               fill = region)) +
-  # Boxplot:
-  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
-  # Añadimos la media:
-  stat_summary(fun = mean, geom = 'point', shape = 18, 
-               size = 3, color = 'darkred', aes(group = region)) +
-  # Paleta de colores:
-  scale_fill_brewer(palette = 'Set2') + 
-  # Etiquetas:
-  labs(title = 'Distribución del gasto en defensa',
-    subtitle = 'Diferenciación por región',
-    x = 'Región',
-    y = 'Gasto en defensa (% del PIB)',
-    fill = 'Región') +
-  theme(axis.text.y = element_text(size = 7, face = 'bold'),
-        legend.position = 'none') + coord_flip()
-
-ggsave('./results/Distribucion_asto_defensa_region.pdf')
-
-
-```
 
 ```{r}
-# GRAFICAS JUNTAS PARA INCOME Y REGION
-
-# 1. Comparación entre el gasto en defensa, gasto en sanidad según 'income':
+# 1. Comparación entre el gasto en defensa y gasto en sanidad según el nivel de ingresos 'income':
 
 # El objetivo de este análisis es comparar la distribución del gasto
 # sanitario y del gasto en defensa entre países pertenecientes a
@@ -373,8 +264,10 @@ ggsave('./results/Distribucion_asto_defensa_region.pdf')
 # creando una columna que identifica el tipo de gasto
 # y otra que recoge los valores correspondientes.
 
+library(tidyverse)
 library(tidyr)
 library(dplyr)
+
 datos_gastos<-datos_cohorte_2019%>%select(region,income,gasto_salud_gdp,gasto_defensa_gdp)%>%
   pivot_longer(.,names_to = 'Tipo de gasto' ,values_to = 'Gasto (%PIB)' ,cols=c(gasto_salud_gdp , gasto_defensa_gdp) )%>%
   mutate(`Tipo de gasto`=recode(
@@ -435,29 +328,6 @@ ggplot(datos_gastos, aes(x=str_wrap(region,width=15), y=`Gasto (%PIB)`, fill=reg
 
 # Guardamos la gráfica
 ggsave('./results/Comparacion_gastos_region.pdf')
-
-
-# 3. Relación entre el gasto sanitario y el gasto en defensa.
-
-# Representamos la relación entre ambos tipos de gastos mediante un scatter plot.
-
-# Vamos a tener
-# Eje X: gasto en salud (% del PIB)
-# Eje Y: gasto en defensa (% del PIB)
-# Nivel de ingresos por color
- 
-#ggplot(datos_cohorte_2019, aes(x=gasto_salud_gdp, y=gasto_defensa_gdp, color=income))+
- # geom_point(alpha=0.75)+
-  #scale_color_brewer(palette='Set2', name='Nivel de ingresos')+
-  #labs(
-   #title = 'Relación entre el gasto sanitario y militar',
-   # subtitle = 'Por nivel de ingresos',
-   # x = 'Gasto en defensa (% del PIB)',
-   # y = 'Gasto sanitario (% del PIB)',
-   # color = 'Nivel de ingresos'
- # ) + coord_flip()
-
-#ggsave('./results/Relacion_gastos.pdf')
 ```
 
 
@@ -556,9 +426,125 @@ ggplot(datos_cohorte_2019,
 ggsave('./results/Mortalidad_infantil_region.pdf')
 ```
 
+<<<<<<< HEAD
 ## Correspondencia entre gasto público y necesidades
+=======
 
-Conectar los apartados anteriores para responder a la pregunta principal
+
+```{r}
+# 4. Comparación de las diferentes causas de mortalidad
+
+# En estas gráficas veremos las diferencias en la distribución
+# de la mortalidad por enfermedades agudas y crónicas,
+# comparando los países según su nivel de ingresos y su región
+# geográfica. Esto permitirá identificar posibles desigualdades
+# entre países y regiones en los patrones de mortalidad.
+
+# Unimos las variables de causa_muerte_agudas y causa_muerte_cronicas,
+# creando una columna que identifica el tipo de enfermedad
+# y otra que recoge los valores correspondientes al procetaje de mortalidad. 
+
+datos_mortalidad <- datos_cohorte_2019 %>%
+  select(income, region, causa_muerte_agudas,causa_muerte_cronicas) %>%
+ pivot_longer(cols = c(causa_muerte_agudas, causa_muerte_cronicas), names_to = 'Tipo de enfermedad', values_to = 'Mortalidad (%)') %>%
+ mutate( `Tipo de enfermedad` = recode( `Tipo de enfermedad`, causa_muerte_agudas = 'Enfermedades agudas', causa_muerte_cronicas = 'Enfermedades crónicas'))
+
+# Comparación según income:
+ggplot(datos_mortalidad, aes(x = income, y = `Mortalidad (%)`, fill = `Tipo de enfermedad`)) +
+ geom_boxplot(alpha = 0.7,outlier.shape = 21, outlier.size = 1) +
+ scale_fill_brewer(palette = 'Set2') +
+  facet_grid(
+    . ~ income, scales = "free_x",
+  space = "free_x"
+  ) +
+ labs(
+   title = 'Distribución de las causas de mortalidad',
+   subtitle = 'Comparación entre enfermedades agudas y crónicas',
+   x = 'Nivel de ingresos del país',
+   y = 'Porcentaje del total de muertes',
+   fill = 'Tipo de enfermedad'
+ ) +
+ theme(axis.text.x = element_blank(),
+       legend.position = 'bottom',
+       panel.grid.minor = element_blank())
+
+#ggsave('./results/Causas_mortalidad_income.pdf')
+
+
+# Comparación según región:
+ggplot(datos_mortalidad, aes(x = stringr::str_wrap(region, width = 15), y = `Mortalidad (%)`, fill = `Tipo de enfermedad`)) +
+ geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 1) +
+ scale_fill_brewer(palette = 'Set2') +
+ labs(
+   title = 'Distribución de las causas de mortalidad',
+   subtitle = 'Comparación entre enfermedades agudas y crónicas por región',
+   x = 'Región geográfica',
+   y = 'Porcentaje del total de muertes',
+   fill = 'Tipo de enfermedad'
+ ) +
+ theme(axis.text.y = element_text(size = 7, face = 'bold'),
+       legend.position = 'bottom')
+
+#ggsave('./results/Causas_mortalidad_region.pdf')
+
+
+```
+# Bloque 4. Correspondencia entre gasto público y necesidades
+
+En este último bloque, veremos si existe una correspondencia entre el gasto público
+
+```{r}
+# Comparación final entre el gasto sanitario y las necesidades de los países.
+
+# Para analizar si el gasto destinado a salud se corresponde con las necesidades
+# sanitarias de cada país, elaboramos un gráfico de dispersión (scatter plot).
+# En el eje X representaremos el gasto en salud y en el eje Y un índice
+# compuesto de necesidades sanitarias.
+
+# Cálculo del índice de necesidades:
+# En primer lugar, estandarizamos las variables seleccionadas para que todas
+# tengan una escala comparable y puedan combinarse en un único indicador.
+# Posteriormente, ajustamos el sentido de las variables según su relación
+# con las necesidades sanitarias.
+# Finalmente, calculamos la media de las variables.
+
+# Un valor más elevado del índice indicará una mayor necesidad sanitaria
+# relativa del país.
+
+library(dplyr)
+library(ggplot2)
+
+datos_correspondencia <- datos_cohorte_2019 %>%
+ mutate(
+   indice_necesidades = rowMeans(cbind(
+       scale(mortalidad_infantil),
+       scale(mortalidad_higiene),
+       scale(fertilidad),
+       scale(fertilidad_adolescente),
+       -scale(esperanza_vida),
+       -scale(acceso_agua)
+     ),
+     na.rm = TRUE
+   )
+ )
+
+ggplot(datos_correspondencia, aes(x = indice_necesidades, y = gasto_salud_gdp)) +
+ geom_point(aes(color=income)) +
+  geom_smooth(color='darkred',fill='darkred')+
+ scale_colour_brewer(palette = "Set2") +
+ labs(title = "Comparación gasto sanitario vs. necesidades sanitarias",
+   subtitle = "Por niveles de ingresos",
+   x = "Índice de necesidades sanitarias",
+   y = "Gasto sanitario (% del PIB)",
+   colour = "Nivel de ingresos"
+ ) +
+ theme_minimal() 
+
+
+ggsave("./results/Correspondencia_gasto_necesidades.pdf")
+```
+
+
 
 # Discusión
 

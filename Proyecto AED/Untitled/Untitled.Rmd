@@ -1,0 +1,786 @@
+---
+title: Full title of the paper (Capitalized)
+author:
+  - name: Dominik Leutnant
+    affil: 1,2,\ddagger,*
+    orcid: 0000-0003-3293-2315
+  - name: John Doe
+    affil: 2, \dagger, \ddagger
+affiliation:
+  - num: 1
+    address: |
+      Muenster University of Applied Sciences - 
+      Institute for Infrastructure, Water, Resources, Environment
+      Correnstr. 25, 48149 Muenster, Germany
+    email: leutnant@fh-muenster.de
+  - num: 2
+    address: |
+      Your department
+      Street, City, Country
+    email: mail@mail.com
+# author citation list in chicago format
+authorcitation: |
+  Leutnant, D.; Doe, J.
+# firstnote to eighthnote
+firstnote: |
+  Current address: Updated affiliation
+secondnote: |
+  These authors contributed equally to this work.
+correspondence: |
+  leutnant@fh-muenster.de; Tel.: +XX-000-00-0000.
+# document options
+journal: notspecified
+type: article
+status: submit
+# front matter
+simplesummary: |
+  A Simple summary goes here.
+abstract: |
+  A single paragraph of about 200 words maximum. For research articles, 
+  abstracts should give a pertinent overview of the work. We strongly encourage
+  authors to use the following style of structured abstracts, but without 
+  headings: 1) Background: Place the question addressed in a broad context and
+  highlight the purpose of the study; 2) Methods: Describe briefly the main
+  methods or treatments applied; 3) Results: Summarize the article's main 
+  findings; and 4) Conclusion: Indicate the main conclusions or interpretations. 
+  The abstract should be an objective representation of the article, it must not 
+  contain results which are not presented and substantiated in the main text and 
+  should not exaggerate the main conclusions.
+# back matter
+keywords: |
+  keyword 1; keyword 2; keyword 3 (list three to ten pertinent keywords specific 
+  to the article, yet reasonably common within the subject discipline.).
+acknowledgement: |
+  All sources of funding of the study should be disclosed. Please clearly 
+  indicate grants that you have received in support of your research work. 
+  Clearly state if you received funds for covering the costs to publish in open 
+  access.
+authorcontributions: |
+  For research articles with several authors, a short paragraph specifying their 
+  individual contributions must be provided. The following statements should be 
+  used ``X.X. and Y.Y. conceive and designed the experiments; X.X. performed the 
+  experiments; X.X. and Y.Y. analyzed the data; W.W. contributed 
+  reagents/materials/analysis tools; Y.Y. wrote the paper.'' Authorship must be
+  limited to those who have contributed substantially to the work reported.
+funding: |
+  Please add: ``This research received no external funding'' or ``This research 
+  was funded by NAME OF FUNDER grant number XXX.'' and  and ``The APC was funded 
+  by XXX''. Check carefully that the details given are accurate and use the 
+  standard spelling of funding agency names at 
+  \url{https://search.crossref.org/funding}, any errors may affect your future 
+  funding.
+institutionalreview: |
+  In this section, you should add the Institutional Review Board Statement and 
+  approval number, if relevant to your study. You might choose to exclude 
+  this statement if the study did not require ethical approval. Please note 
+  that the Editorial Office might ask you for further information. Please add 
+  “The study was conducted in accordance with the Declaration of Helsinki, 
+  and approved by the Institutional Review Board (or Ethics Committee) of 
+  NAME OF INSTITUTE (protocol code XXX and date of approval).” for studies 
+  involving humans. OR “The animal study protocol was approved by the 
+  Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE 
+  (protocol code XXX and date of approval).” for studies involving animals. 
+  OR “Ethical review and approval were waived for this study due to REASON 
+  (please provide a detailed justification).” OR “Not applicable” for
+   studies not involving humans or animals.
+informedconsent: |
+  Any research article describing a study involving humans should contain this 
+  statement. Please add ``Informed consent was obtained from all subjects 
+  involved in the study.'' OR ``Patient consent was waived due to REASON 
+  (please provide a detailed justification).'' OR ``Not applicable'' for 
+  studies not involving humans. You might also choose to exclude this statement 
+  if the study did not involve humans.
+  
+  Written informed consent for publication must be obtained from participating 
+  patients who can be identified (including by the patients themselves). Please 
+  state ``Written informed consent has been obtained from the patient(s) to 
+  publish this paper'' if applicable.
+dataavailability: |
+  We encourage all authors of articles published in MDPI journals to share 
+  their research data. In this section, please provide details regarding where 
+  data supporting reported results can be found, including links to publicly 
+  archived datasets analyzed or generated during the study. Where no new data 
+  were created, or where data is unavailable due to privacy or ethical 
+  re-strictions, a statement is still required. Suggested Data Availability 
+  Statements are available in section “MDPI Research Data Policies” at 
+  \url{https://www.mdpi.com/ethics}.
+conflictsofinterest: |
+  Declare conflicts of interest or state 'The authors declare no conflict of 
+  interest.' Authors must identify and declare any personal circumstances or
+  interest that may be perceived as inappropriately influencing the
+  representation or interpretation of reported research results. Any role of the
+  funding sponsors in the design of the study; in the collection, analyses or 
+  interpretation of data in the writing of the manuscript, or in the decision to 
+  publish the results must be declared in this section. If there is no role, 
+  please state 'The founding sponsors had no role in the design of the study; 
+  in the collection, analyses, or interpretation of data; in the writing of the 
+  manuscript, an in the decision to publish the results'.
+sampleavailability: |
+  Samples of the compounds ...... are available from the authors.
+supplementary: |
+ The following supporting information can be downloaded at:  
+ \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title.
+abbreviations:
+  - short: MDPI
+    long: Multidisciplinary Digital Publishing Institute
+  - short: DOAJ
+    long: Directory of open access journals
+  - short: TLA
+    long: Three letter acronym
+  - short: LD 
+    long: linear dichroism
+bibliography: mybibfile.bib
+appendix: appendix.tex
+endnotes: false
+output: 
+  rticles::mdpi_article:
+    extra_dependencies: longtable
+header-includes:
+  - |
+    \makeatletter
+    \providecommand{\pandocbounded}[1]{#1}
+    \makeatother
+---
+
+# Version
+
+This Rmd-skeleton uses the mdpi Latex template published 2023-03-25. 
+However, the official template gets more frequently updated than the **rticles**
+package. Therefore, please make sure prior to paper submission, that you're 
+using the most recent .cls, .tex and .bst files 
+(available [here](http://www.mdpi.com/authors/latex)).
+
+# Article Header Information
+
+The YAML header includes information needed mainly for formatting the front and 
+back matter of the article. Required elements include:
+
+```yaml
+title: Title of the paper
+author:
+  - name: first and last name
+    affil: |
+      One or more comma seperated numbers corresponding to affilitation
+      and one or more  comma seperated symbols corresponding 
+      optional notes.
+    orcid: optional orcid number
+affiliation:  
+  - num: 1,..., n for each affiliation
+    address: required
+    email: required
+authorcitation: |
+  Lastname, F.
+correspondence: |
+  email@email.com; Tel.: +XX-000-00-0000.
+journal: notspecified
+type: article
+status: submit
+```
+
+Journal options are in Table \ref{tab:mdpinames}. The `status` variable should 
+generally not be changed by authors. The `type` variable describes 
+the type of of submission and defaults to `article` but can be replaced with any of the ones in Table \ref{tab:mdpitype}
+
+```{r mdpitype, echo = FALSE}
+type <- c("abstract, addendum, article, book, bookreview, briefreport, 
+casereport, comment, commentary, communication, conferenceproceedings, 
+correction, conferencereport, entry, expressionofconcern, extendedabstract, 
+datadescriptor, editorial, essay, erratum, hypothesis, interestingimage, 
+obituary, opinion, projectreport, reply, retraction, review, perspective, 
+protocol, shortnote, studyprotocol, systematicreview, supfile, 
+technicalnote, viewpoint, guidelines, registeredreport, tutorial")
+knitr::kable(rticles::string_to_table(type, 3), 
+             col.names = NULL, format = "latex", booktab = TRUE, 
+             caption = "MDPI article types.")
+```
+
+## Journal Specific YAML variables
+
+```yaml
+# for journal Diversity,
+# add the Life Science Identifier using:
+lsid: http://zoobank.org/urn:lsid:zoobank.org:act:nnnn
+
+
+# for journal Applied Sciences
+# add featured application
+featuredapplication: |
+  Authors are encouraged to provide a concise 
+  description of the specific application or 
+  a potential application of the work. This 
+  section is not mandatory.
+
+# for the journal Data
+# add dataset doi and license
+dataset: https://doi.org/10.1000/182
+datasetlicense: CC-BY-4.0
+
+# for the journal Toxins
+# add key contributions
+keycontributions: |
+  The breakthroughs or highlights of the manuscript. 
+  Authors can write one or two sentences to describe 
+  the most important part of the paper.
+
+# for the journal Encyclopedia
+encyclopediadef: |
+  For entry manuscripts only: please provide a brief overview
+  of the entry title instead of an abstract.
+entrylink: The Link to this entry published on the encyclopedia platform.
+
+# for the journal Advances in Respiratory Medicine
+# add highlights
+addhighlights: |
+  This is an obligatory section in “Advances in Respiratory Medicine”, 
+  whose goal is to increase the discoverability and readability of the
+  article via search engines and other scholars. Highlights should not 
+  be a copy of the abstract, but a simple text allowing the reader to 
+  quickly and simplified find out what the article is about and what can 
+  be cited from it. Each of these parts should be devoted up to 2~bullet 
+  points.
+
+```
+
+
+\startlandscape
+```{r, mdpinames, echo=FALSE, results='asis'}
+mdpi_journals <- "acoustics, actuators, addictions, admsci, adolescents, aerobiology, aerospace, agriculture, agriengineering, agrochemicals, agronomy, ai, air, algorithms, allergies, alloys, analytica, analytics, anatomia, animals, antibiotics, antibodies, antioxidants, applbiosci, appliedchem, appliedmath, applmech, applmicrobiol, applnano, applsci, aquacj, architecture, arm, arthropoda, arts, asc, asi, astronomy, atmosphere, atoms, audiolres, automation, axioms, bacteria, batteries, bdcc, behavsci, beverages, biochem, bioengineering, biologics, biology, biomass, biomechanics, biomed, biomedicines, biomedinformatics, biomimetics, biomolecules, biophysica, biosensors, biotech, birds, bloods, blsf, brainsci, breath, buildings, businesses, cancers, carbon, cardiogenetics, catalysts, cells, ceramics, challenges, chemengineering, chemistry, chemosensors, chemproc, children, chips, cimb, civileng, cleantechnol, climate, clinpract, clockssleep, cmd, coasts, coatings, colloids, colorants, commodities, compounds, computation, computers, condensedmatter, conservation, constrmater, cosmetics, covid, crops, cryptography, crystals, csmf, ctn, curroncol, cyber, dairy, data, ddc, dentistry, dermato, dermatopathology, designs, devices, diabetology, diagnostics, dietetics, digital, disabilities, diseases, diversity, dna, drones, dynamics, earth, ebj, ecologies, econometrics, economies, education, ejihpe, electricity, electrochem, electronicmat, electronics, encyclopedia, endocrines, energies, eng, engproc, entomology, entropy, environments, environsciproc, epidemiologia, epigenomes, est, fermentation, fibers, fintech, fire, fishes, fluids, foods, forecasting, forensicsci, forests, foundations, fractalfract, fuels, future, futureinternet, futurepharmacol, futurephys, futuretransp, galaxies, games, gases, gastroent, gastrointestdisord, gels, genealogy, genes, geographies, geohazards, geomatics, geosciences, geotechnics, geriatrics, grasses, gucdd, hazardousmatters, healthcare, hearts, hemato, hematolrep, heritage, higheredu, highthroughput, histories, horticulturae, hospitals, humanities, humans, hydrobiology, hydrogen, hydrology, hygiene, idr, ijerph, ijfs, ijgi, ijms, ijns, ijpb, ijtm, ijtpp, ime, immuno, informatics, information, infrastructures, inorganics, insects, instruments, inventions, iot, j, jal, jcdd, jcm, jcp, jcs, jcto, jdb, jeta, jfb, jfmk, jimaging, jintelligence, jlpea, jmmp, jmp, jmse, jne, jnt, jof, joitmc, jor, journalmedia, jox, jpm, jrfm, jsan, jtaer, jvd, jzbg, kidneydial, kinasesphosphatases, knowledge, land, languages, laws, life, liquids, literature, livers, logics, logistics, lubricants, lymphatics, machines, macromol, magnetism, magnetochemistry, make, marinedrugs, materials, materproc, mathematics, mca, measurements, medicina, medicines, medsci, membranes, merits, metabolites, metals, meteorology, methane, metrology, micro, microarrays, microbiolres, micromachines, microorganisms, microplastics, minerals, mining, modelling, molbank, molecules, mps, msf, mti, muscles, nanoenergyadv, nanomanufacturing, nanomaterials, ncrna, ndt, network, neuroglia, neurolint, neurosci, nitrogen, notspecified, nri, nursrep, nutraceuticals, nutrients, obesities, oceans, ohbm, onco, oncopathology, optics, oral, organics, organoids, osteology, oxygen, parasites, parasitologia, particles, pathogens, pathophysiology, pediatrrep, pharmaceuticals, pharmaceutics, pharmacoepidemiology, pharmacy, philosophies, photochem, photonics, phycology, physchem, physics, physiologia, plants, plasma, platforms, pollutants, polymers, polysaccharides, poultry, powders, preprints, proceedings, processes, prosthesis, proteomes, psf, psych, psychiatryint, psychoactives, publications, quantumrep, quaternary, qubs, radiation, reactions, receptors, recycling, regeneration, religions, remotesensing, reports, reprodmed, resources, rheumato, risks, robotics, ruminants, safety, sci, scipharm, sclerosis, seeds, sensors, separations, sexes, signals, sinusitis, skins, smartcities, sna, societies, socsci, software, soilsystems, solar, solids, spectroscj, sports, standards, stats, std, stresses, surfaces, surgeries, suschem, sustainability, symmetry, synbio, systems, targets, taxonomy, technologies, telecom, test, textiles, thalassrep, thermo, tomography, tourismhosp, toxics, toxins, transplantology, transportation, traumacare, traumas, tropicalmed, universe, urbansci, uro, vaccines, vehicles, venereology, vetsci, vibration, virtualworlds, viruses, vision, waste, water, wem, wevj, wind, women, world, youth, zoonoticdis"
+
+knitr::kable(rticles::string_to_table(mdpi_journals, 8),
+             col.names = NULL,
+             format = "latex",
+             booktabs = TRUE, 
+             caption = "MDPI journal names.",
+             longtable = TRUE)
+
+```
+\finishlandscape
+
+
+
+
+# Introducción
+
+Aquí escribiremos la introducción del trabajo
+
+PREGUNTA CLAVE: ¿Existe una correspondencia real entre las prioridades de gasto de los gobiernos y las necesidades epidemiológicas de su población?
+
+# Materiales y Métodos
+
+```{r, echo = FALSE}
+library(ggplot2)
+library(stringr)
+library(dplyr)
+library(tidyr)
+
+load(file = './results/datos_cohorte_2019.RData')
+  
+```
+
+## Fuente y obtención de los datos
+
+Los datos utilizados en este trabajo proceden del Banco Mundial, concretamente de la base de datos *World Development Indicators* (WDI). Esta base de datos recopila indicadores tanto económicos como sanitarios o demográficos de países de todo el mundo, lo que nos permitirá realizar comparaciones internacionales.
+
+La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial. Esta base de datos contiene indicadores económicos, sociales y demográficos a nivel mundial, con datos para aproximadamente 200 países y sus regiones desde 1960.
+
+Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son:
+
+- **Esperanza de vida al nacer (total)**: número de años que un recién nacido viviría si los patrones de mortalidad del momento se mantienen a lo largo de vida (años). *Código: SP.DYN.LE00.IN.*
+
+- **PIB per capita**: Producto Interior Bruto, ganancias totales ganadas mediante la producción de bienes y servicioes en un territorio económico durante un periodo contable, y dividido entre la población general (US\$).*Código: NY.GDP.PCAP.CD.*
+
+- **Gasto en salud**: Estimación de los gastos en salud icluyendo los productos y servicios sanitarios consumidos cada año, sin incluir edificios, maquinaria, IT y stocks de vacunas para emergencias (% PIB). *Código: SH.XPD.CHEX.GD.ZS.*
+
+- **Gasto en defensa**: Gasto en defensa respecto al PIB (% PIB). *Código: MS.MIL.XPND.GD.ZS.*
+
+- **Mortalidad infantil**: Número de muertes de bebes de 0 a 12 meses por cada 1000 nacimientos al año (n:1000). *Código: SP.DYN.IMRT.IN*.
+
+- **Acceso al agua**: Personas utilizando los servicios mínimos básicos de agua potable (% población). *Código: SH.H2O.BASW.ZS.*
+
+- **Escolaridad secundaria (total)**: Niños que reciben educación secundaria básica oficial (% neto). *Código: SE.SEC.NENR.*
+
+- **Causa de muerte por enf. agudas**: Personas que han fallecido por enfermedades agudas, que incluyen enfermedades infecciosas y parasitarias, infecciones respiratorias y deficiencias nutricionales (% del total de muertes). *Código: SH.DTH.COMM.ZS*.
+
+- **Causa de muerte por enf. crónicas**: Personas que han fallecido por enfermedades crónicas, que incluyen cáncer, diabetes, trastonos cardiovasculares, digestivos, dermatológicos, musculoesqueléticos y anomalías congenitales (% del total de muertes). *Código: SH.DTH.NCOM.ZS.*
+
+- **Mortalidad por falta de higiene**: Personas que han muerto por el uso de agua en malas condiciones, condiciones sanitarias inseguras y falta de higiene (número de muertes por 100.000 personas). *Código: SH.STA.WASH.P5.*
+
+- **Fertilidad**: Número de niños que daría a luz una mujer si viviese hasta el final de sus años fértiles en el momento temporal captado (nacimientos por mujer). *Código: SP.DYN.TFRT.IN.*
+
+- **Embarazos adolescentes**: Ratio de fertilidad adolescente, número de nacimientos por cada 1000 mujeres con una edad entre 15 y 19 años (nacimientos por 1000 adolescentes). *Código: SP.ADO.TFRT*.
+YE
+- **Población**: Número de residentes del país estimados a mitad del año (#personas). *Código: SP.POP.TOTL.*
+
+- **Area**: Superfície total del país potencialmente habitable, excluyendo el área ocupada por agua (ríos y lagos), y zonas exclusivamente económicas/laborales ($km^2$). *Código: AG.LND.TOTL.K2.*
+
+- **Mortalidad por contaminación del aire**: Número de muertes por transtornos derivados de la inhalación de partículas contaminantes presentes en el aire (muertes por 100.000 habitantes). *Código: CC.SH.AIRP.AMB.*
+
+- **Inmunización**: Número de niños inmunizados completamente entre 15 y 23 meses (%). *Código: HF.IMM.FULL.*
+
+De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración inicial de los datos, puesto que son los años más recientes y de los que potencialmente se cuente con más cantidad de datos actualizados.
+
+## Selección de la muestra
+
+Dado que los datos descargados eran extremadamente abundantes (2476 observaciones de 29 variables), con '3 dimensiones' (temporal, indicador y países), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%.
+
+Tras este análisis exploratorio (documento `Exploración_inicial.Rmd`), se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional creada a partir de la población y el área del país). El resto de variables fueron descartadas.
+
+# Resultados
+
+A continuación se muestran los resultados del estudio, divididos en 4 bloques, que están organizados de modo que permitan responder a la pregunta principal del trabajo.
+
+- Bloque 1. **Contexto socioeconómico de los países**.
+
+- Bloque 2. **Comparación del gasto en salud y en defensa de los países**.
+
+- Bloque 3. **Necesidades sanitarias por países**.
+
+- Bloque 4. **Agregación final: correspondencia entre el gasto público y las necesidades de los ciudadanos del país**.
+
+## Bloque 1. Contexto socioeconómico.
+
+El objetivo es analizar el PIB por cápita de los diferentes países, agrupándolos atendiendo a la variable 'income'. Asimismo, se estudiará a las regiones a las que pertenece cada país, por grupos, para determinar si existe alguna relación entre situación económica y localización geográfica. Finalmente, se incorporará el concepto de densidad demográfica para estudiar si existe una relación entre esta y el PIB por cápita del país.
+
+```{r, echo=FALSE}
+# 1. PIB medio per cápita por grupos de income: 
+
+# Visualizamos un boxplot del PIB per cápita agrupado por income.
+# Como el PIB per cápita suele tener colas largas hacia la 
+# derecha (hay países con un PIB muy elevado, muy ricos), se
+# representará una escala logaritmica en el eje y.
+
+# Ordenamos el income de menor a mayor para que en el boxplot
+# siga un orden lógico:
+datos_cohorte_2019$income <- factor(
+  datos_cohorte_2019$income, 
+  levels = c('Low income', 'Lower middle income', 
+             'Upper middle income', 'High income'))
+
+ggplot(datos_cohorte_2019, aes(x = income, y = gdp_per_capita, 
+                               fill = income)) +
+  # Boxplot:
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  # Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', shape = 18, 
+               size = 3, color = 'darkred', aes(group = income)) +
+  # Escala logarítmica:
+  scale_y_log10(labels = scales::dollar_format(prefix = '$'),
+                breaks = c(100, 1000, 10000, 100000)) +
+  # Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') + 
+  # Etiquetas:
+  labs(title = 'Distribución del PIB per cápita',
+    subtitle = 'Diferenciación por niveles de ingresos',
+    x = 'Nivel de ingresos del país',
+    y = 'PIB per cápita (US$, escala log10)',
+    fill = 'Ingresos') +
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 7, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank()) 
+
+# Guardamos la gráfica:
+ggsave('./results/Distribucion_PIB.pdf')
+
+# 2. Relación entre región, PIB per cápita y el 'income':
+
+# Las variables región e income son categóricas, y el PIB es 
+# numérica. Vamos a representar la región vs. income en un 
+# gráfico de barras apiladas y el PIB per capita vs. región 
+# mediante boxplots. 
+
+# Región vs. income:
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), fill = income)) +
+  geom_bar(position = 'fill', color = 'black', alpha = 0.8) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(title = 'Distribución porcentual de ingresos por región',
+       subtitle = 'Proporción de niveles de renta en cada área geográfica',
+       x = 'Región geográfica',
+       y = 'Porcentaje (%)',
+       fill = 'Nivel de ingresos') + 
+  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'right', legend.key.size = unit(5, 'pt')) + coord_flip()
+
+# Guardamos la gráfica
+ggsave('./results/Distribucion_porc_ingresos_region.pdf')
+
+# Hacemos un test chi2 para ver si existe una asociación
+# estadísticamente significativa entre el income y la región:
+
+t_contingencia <- table(datos_cohorte_2019$region,
+                        datos_cohorte_2019$income)
+resultado_chi2 <- chisq.test(t_contingencia, simulate.p.value = TRUE, B = 10000)
+resultado_chi2
+
+# Región vs. PIB per cápita:
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gdp_per_capita, 
+                               fill = region)) +
+  # Boxplot:
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  # Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', shape = 18, 
+               size = 3, color = 'darkred', aes(group = region)) +
+  # Escala logarítmica:
+  scale_y_log10(labels = scales::dollar_format(prefix = '$'),
+                breaks = c(100, 1000, 10000, 100000)) +
+  # Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') + 
+  # Etiquetas:
+  labs(title = 'Distribución del PIB per cápita',
+    subtitle = 'Diferenciación por región',
+    x = 'Región',
+    y = 'PIB per cápita (US$, escala log10)',
+    fill = 'Región') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') + coord_flip()
+
+# Guardamos la gráfica
+ggsave('./results/Distribucion_PIB_region.pdf')
+
+# 3. Comparación de la densidad demográfica con el PIB por cápita:
+
+# Para ello se realizará un scatter plot, usando una escala 
+# logarítmica en ambos ejes (pues la densidad de población
+# también se encuentra desbalanceada)
+
+ggplot(datos_cohorte_2019, aes(x = gdp_per_capita, y = pop_per_area, colour = income)) +
+  geom_point(alpha = 0.75) + 
+  scale_y_log10(labels = scales::label_comma(),
+                breaks = c(1, 10, 100, 1000, 10000)) +
+  scale_x_log10(labels = scales::dollar_format(prefix = '$'),
+                breaks = c(500, 100, 1000, 10000)) +
+  scale_fill_brewer(palette = 'Set2', name = 'Nivel de ingresos') +
+  labs(title = 'Densidad demográfica vs. PIB per cápita',
+       subtitle = 'Escala logarítmica base 10',
+       x = "PIB per cápita (US$, escala logarítmica)",
+       y = "hab/km², escala logarítmica") + coord_flip()
+
+# Guardamos la gráfica
+ggsave('./results/Densidad_demografica_vs_PIB_region.pdf')
+  
+```
+
+## Bloque 2. Inversión en salud y defensa. 
+
+El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos. 
+
+```{r}
+# GRÁFICAS SEPARADAS
+
+# 1. Relación entre el gasto en defensa, gasto en sanidad y el 'income':
+
+# Las variables de gasto son numéricas y la variable 'income' es 
+# categórica. Vamos a representar gasto vs. income mediante boxplots. 
+ 
+
+#Income vs. gasto en salud
+ggplot(datos_cohorte_2019,
+       aes(x = income, y = gasto_salud_gdp,
+           fill = income)) +
+  #Boxplot:
+  geom_boxplot(alpha = 0.7,outlier.shape = 21, outlier.size = 2) +
+  #Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', 
+               shape = 18,size = 3,color = 'darkred',aes(group = income)) +
+  #Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') +
+  #Etiquetas:
+  labs(title = 'Distribución del gasto sanitario',
+       subtitle = 'Diferenciación por niveles de ingresos',
+       x = 'Nivel de ingresos del país',
+       y = 'Gasto sanitario (% del PIB)',
+       fill = 'Ingresos') +
+
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 7, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank())
+
+# Guardamos la gráfica
+ggsave('./results/Distribucion_gasto_salud.pdf')
+
+
+#Income vs. gasto en defensa
+ggplot(datos_cohorte_2019,
+       aes(x = income, y = gasto_defensa_gdp,
+           fill = income)) +
+  #Boxplot:
+  geom_boxplot(alpha = 0.7,outlier.shape = 21, outlier.size = 2) +
+  #Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', 
+               shape = 18,size = 3,color = 'darkred',aes(group = income)) +
+  #Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') +
+  #Etiquetas:
+  labs(title = 'Distribución del gasto en defensa',
+       subtitle = 'Diferenciación por niveles de ingresos',
+       x = 'Nivel de ingresos del país',
+       y = 'Gasto militar (% del PIB)',
+       fill = 'Ingresos') +
+
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 7, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank())
+
+# Guardamos la gráfica
+ggsave('./results/Distribucion_gasto_defensa.pdf')
+
+# 2. Relación entre el gasto en defensa, gasto en sanidad y la región:
+
+# Región vs. gasto sanitario
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gasto_salud_gdp, 
+                               fill = region)) +
+  # Boxplot:
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  # Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', shape = 18, 
+               size = 3, color = 'darkred', aes(group = region)) +
+  # Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') + 
+  # Etiquetas:
+  labs(title = 'Distribución del gasto en salud',
+    subtitle = 'Diferenciación por región',
+    x = 'Región',
+    y = 'Gasto en salud (% del PIB)',
+    fill = 'Región') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') + coord_flip()
+
+ggsave('./results/Distribucion_gasto_salud_region.pdf')
+
+
+# Región vs. gasto de defensa
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15), y = gasto_defensa_gdp, 
+                               fill = region)) +
+  # Boxplot:
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  # Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', shape = 18, 
+               size = 3, color = 'darkred', aes(group = region)) +
+  # Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') + 
+  # Etiquetas:
+  labs(title = 'Distribución del gasto en defensa',
+    subtitle = 'Diferenciación por región',
+    x = 'Región',
+    y = 'Gasto en defensa (% del PIB)',
+    fill = 'Región') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') + coord_flip()
+
+ggsave('./results/Distribucion_asto_defensa_region.pdf')
+
+
+```
+
+
+```{r}
+# GRAFICAS JUNTAS PARA INCOME Y REGION
+
+# 1. Comparación entre el gasto en defensa, gasto en sanidad según 'income':
+
+# El objetivo de este análisis es comparar la distribución del gasto
+# sanitario y del gasto en defensa entre países pertenecientes a
+# distintos niveles de ingresos.
+#
+# Para ello, se utilizarán boxplots para poder analizar si existen diferencias en los
+# patrones de gasto según el nivel de ingresos de los países y comparar
+# la proporción del PIB que destinan a cada uno de estos ámbitos.
+
+
+# Unimos las variables de gasto sanitario y militar,
+# creando una columna que identifica el tipo de gasto
+# y otra que recoge los valores correspondientes.
+
+library(tidyr)
+library(dplyr)
+datos_gastos<-datos_cohorte_2019%>%select(region,income,gasto_salud_gdp,gasto_defensa_gdp)%>%
+  pivot_longer(.,names_to = 'Tipo de gasto' ,values_to = 'Gasto (%PIB)' ,cols=c(gasto_salud_gdp , gasto_defensa_gdp) )%>%
+  mutate(`Tipo de gasto`=recode(
+    `Tipo de gasto` , gasto_salud_gdp='Gasto en salud', gasto_defensa_gdp='Gasto en defensa'
+  ))
+
+ggplot(datos_gastos, aes(x=income,y=`Gasto (%PIB)`,fill=income))+
+  #Boxplots:
+  geom_boxplot(alpha=0.7, outlier.shape = 21, outlier.size = 1)+
+  #Añadimos la media:
+  stat_summary(fun=mean, geom='point',shape=18,size=2, color='darkred',aes(group = income))+
+  #Separamos por tipo de gasto
+  facet_wrap(~`Tipo de gasto`)+
+  #Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') +
+  #Etiquetas:
+  labs(
+    title = 'Comparación del gasto sanitario y militar',
+    subtitle = 'Distribución según el nivel de ingresos',
+    x = 'Nivel de ingresos del país',
+    y = 'Gasto (% del PIB)'
+  ) +
+  theme(axis.text.x = element_text(angle = 20, hjust = 0.5, size = 5, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank())
+
+# Guardamos la gráfica
+ggsave('./results/Comparacion_gastos_income.pdf')
+
+
+# 2. Comparación entre el gasto en defensa, gasto en sanidad según la región:
+
+# El objetivo de este análisis es comparar la distribución del gasto
+# sanitario y del gasto en defensa entre las distintas regiones
+# geográficas.
+#
+# Para ello, también se utilizarán boxplots para poder identificar posibles diferencias regionales
+# en los patrones de gasto y analizar qué proporción del PIB destinan
+# los países de cada región a ambos ámbitos.
+
+
+ggplot(datos_gastos, aes(x=str_wrap(region,width=15), y=`Gasto (%PIB)`, fill=region))+
+  geom_boxplot(alpha=0.7,outlier.shape = 21,outlier.size = 1)+
+  stat_summary(fun=mean,geom='point', shape=18, size=2, color='darkred', aes(group=region))+
+  facet_wrap(~`Tipo de gasto`, ncol=1)+
+  scale_fill_brewer(palette='Set2')+
+  labs(
+    title = 'Comparación del gasto sanitario y militar',
+    subtitle = 'Distribución por regiones',
+    x = 'Región',
+    y = 'Gasto (% del PIB)'
+  ) +
+  theme(axis.text.y = element_text(angle = 0, hjust = 0.5, size = 5, face = 'bold'),
+        legend.position = 'none', 
+        panel.grid.minor = element_blank()) +
+  
+  coord_flip()
+
+# Guardamos la gráfica
+ggsave('./results/Comparacion_gastos_region.pdf')
+
+
+# 3. Relación entre el gasto sanitario y el gasto en defensa.
+
+# Representamos la relación entre ambos tipos de gastos mediante un scatter plot.
+
+# Vamos a tener
+# Eje X: gasto en salud (% del PIB)
+# Eje Y: gasto en defensa (% del PIB)
+# Nivel de ingresos por color
+ 
+#ggplot(datos_cohorte_2019, aes(x=gasto_salud_gdp, y=gasto_defensa_gdp, color=income))+
+ # geom_point(alpha=0.75)+
+  #scale_color_brewer(palette='Set2', name='Nivel de ingresos')+
+  #labs(
+   #title = 'Relación entre el gasto sanitario y militar',
+   # subtitle = 'Por nivel de ingresos',
+   # x = 'Gasto en defensa (% del PIB)',
+   # y = 'Gasto sanitario (% del PIB)',
+   # color = 'Nivel de ingresos'
+ # ) + coord_flip()
+
+#ggsave('./results/Relacion_gastos.pdf')
+```
+
+
+## Bloque 3. Necesidades sanitarias.
+
+El objetivo de este bloque es analizar las necesidades sanitarias de los diferentes países, estudiando cómo varían en función de su nivel de ingresos y de su región geográfica. Para ello, se utilizarán indicadores relacionados con la esperanza de vida, la mortalidad infantil, las condiciones de higiene y el acceso al agua potable. Además, se estudiará la distribución de las principales causas de mortalidad, diferenciando entre enfermedades agudas y crónicas. 
+
+De este modo, se pretende identificar las principales desigualdades sanitarias existentes entre países y determinar si estas están relacionadas con su situación socioeconómica o geográfica.
+
+```{r}
+# BLOQUE 3. NECESIDADES SANITARIAS
+
+# 1. Indicadores generales de salud según income.
+
+# Esperanza de vida:
+ggplot(datos_cohorte_2019,
+       aes(x = income, y = esperanza_vida, fill = income)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',
+               shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la esperanza de vida',
+    subtitle = 'Diferenciación por niveles de ingresos',
+    x = 'Nivel de ingresos del país',
+    y = 'Esperanza de vida (años)'
+  ) +
+  theme(axis.text.x = element_text(size = 7, face = 'bold'),
+        legend.position = 'none',
+        panel.grid.minor = element_blank())
+
+ggsave('./results/Esperanza_vida_income.pdf')
+
+
+# Mortalidad infantil:
+ggplot(datos_cohorte_2019,
+       aes(x = income, y = mortalidad_infantil, fill = income)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',
+               shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la mortalidad infantil',
+    subtitle = 'Diferenciación por niveles de ingresos',
+    x = 'Nivel de ingresos del país',
+    y = 'Muertes por cada 1000 nacimientos'
+  ) +
+  theme(axis.text.x = element_text(size = 7, face = 'bold'),
+        legend.position = 'none',
+        panel.grid.minor = element_blank())
+
+ggsave('./results/Mortalidad_infantil_income.pdf')
+
+
+# 2. Indicadores generales de salud según región.
+
+# Esperanza de vida:
+ggplot(datos_cohorte_2019,
+       aes(x = stringr::str_wrap(region, width = 15),
+           y = esperanza_vida, fill = region)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',
+               shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la esperanza de vida',
+    subtitle = 'Diferenciación por región geográfica',
+    x = 'Región',
+    y = 'Esperanza de vida (años)'
+  ) +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') +
+  coord_flip()
+
+ggsave('./results/Esperanza_vida_region.pdf')
+
+
+# Mortalidad infantil:
+ggplot(datos_cohorte_2019,
+       aes(x = stringr::str_wrap(region, width = 15),
+           y = mortalidad_infantil, fill = region)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',
+               shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la mortalidad infantil',
+    subtitle = 'Diferenciación por región geográfica',
+    x = 'Región',
+    y = 'Muertes por cada 1000 nacimientos'
+  ) +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') +
+  coord_flip()
+
+ggsave('./results/Mortalidad_infantil_region.pdf')
+```
+
+## Correspondencia entre gasto público y necesidades
+
+Conectar los apartados anteriores para responder a la pregunta principal
+
+# Discusión
+
+Aquí interpretaremos los resultados
+
+# Conclusiones
+
+Conclusiones principales del estudio
