@@ -556,9 +556,6 @@ ggplot(datos_cohorte_2019,
 ggsave('./results/Mortalidad_infantil_region.pdf')
 ```
 
-
-
-
 ## Correspondencia entre gasto público y necesidades
 
 Conectar los apartados anteriores para responder a la pregunta principal
