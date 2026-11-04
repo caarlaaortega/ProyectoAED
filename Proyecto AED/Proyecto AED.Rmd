@@ -2,13 +2,13 @@
 title: Proyecto Análisis Exploratorio de Datos. Grupo C.
 author:
   - name: Fran Jiménez Jiménez
-    affil: 1,\ddagger,*
+    affil: 1,*
     email: franjiji@alumni.uv.es
   - name: Carla Ortega Fernández
-    affil: 1, \ddagger
+    affil: 1,*
     email: orfercar@alumni.uv.es
   - name: Alejandra Vinjoy Lliso
-    affil: 1, \ddagger
+    affil: 1,*
     email: avinlli@alumni.uv.es
 affiliation:
   - num: 1
@@ -16,7 +16,7 @@ affiliation:
       Escola Tècnica Superior d'Enginyería (ETSE) - 
       Avinguda de la Universitat, S/N, 46100 Burjassot, Valencia
 correspondence: |
-  leutnant@fh-muenster.de; Tel.: +XX-000-00-0000.
+  franjiji@alumni.uv.es; orfercar@alumni.uv.es; avinlli@alumni.uv.es
 # document options
 type: article
 # front matter
