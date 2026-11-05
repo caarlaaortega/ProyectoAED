@@ -84,10 +84,21 @@ header-includes:
 ---
 
 # Introducción
+El presente trabajo de Análisis Exploratorio de Datos tiene como objetivo aplicar todos los conocimientos adquiridos en el transcurso de la asignatura. Para ello, se ha elegido un dataset alineado con nuestros intereses principales: estudiar si existe una correspondencia real entre las prioridades de gasto de los países y las necesidades epidemiológicas de la población.
 
-Aquí escribiremos la introducción del trabajo
+En el contexto político y sociosanitario en el que vivimos actualmente, se hace cada vez más notable la variabilidad en las inversiones realizadas en diferentes regiones a nivel mundial, y ante esta aparente dispersión, surge la curiosidad de determinar si las condiciones demográficas, epidemiológicas y sanitarias de los países, están relacionadas con los principales gastos del país. En particular, se ha acotado esta búsqueda centrándose en el gasto en defensa y el gasto en salud, pues ambos tienen el potencial de evidenciar claramente donde se sitúan las preocupaciones gubernamentales en lo que respecta a la seguridad de los ciudadanos. 
 
-PREGUNTA CLAVE: ¿Existe una correspondencia real entre las prioridades de gasto de los gobiernos y las necesidades epidemiológicas de su población?
+El estudio sigue la estructura propia de un AED. En primer lugar, se muestran los materiales y métodos empleados, haciendo hincapié en el conjunto de datos que se ha elegido y el preprocesado realizado. Seguidamente, en resultados, se muestran los test estadísticos y gráficas principales que proporcionan información relevante para poder responder a las preguntas del trabajo. Para ello, se ha dividido en 4 bloques que contestan respectivamente a cada subpregunta. Finalmente, en las conclusiones se pondrán en común los principales hallazgos para contestar a nuestra pregunta inicial. 
+
+- **Pregunta inicial**: ¿Existe una correspondencia real entre las prioridades del gasto de los países y las necesidades epidemiológicas de la población?
+
+- **Subpregunta 1**: ¿Cómo está distribuida la riqueza a nivel mundial? ¿Existe alguna relación entre localización geográfica y situación económica?
+
+- **Subpregunta 2**: ¿Qué porcentaje de la economía del país se destina a salud? ¿Y a defensa? ¿Se repite una tendencia entre las diferentes regiones y grupos de diferentes ingresos?
+
+- **Subpregunta 3**: ¿Cuáles son las principales preocupaciones sanitarias de las diferentes regiones?
+
+
 
 # Materiales y Métodos
 
