@@ -73,6 +73,7 @@ appendix: appendix.tex
 endnotes: false
 output: 
   rticles::mdpi_article:
+    latex_engine: xelatex
     extra_dependencies: longtable
 header-includes:
   - |
