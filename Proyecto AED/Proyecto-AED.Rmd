@@ -1,0 +1,491 @@
+---
+title: Proyecto Análisis Exploratorio de Datos. Grupo C.
+author:
+  - name: Fran Jiménez Jiménez
+    affil: 1,*
+    email: franjiji@alumni.uv.es
+  - name: Carla Ortega Fernández
+    affil: 1,*
+    email: orfercar@alumni.uv.es
+  - name: Alejandra Vinjoy Lliso
+    affil: 1,*
+    email: avinlli@alumni.uv.es
+affiliation:
+  - num: 1
+    address: |
+      Escola Tècnica Superior d'Enginyería (ETSE) - 
+      Avinguda de la Universitat, S/N, 46100 Burjassot, Valencia
+correspondence: |
+  franjiji@alumni.uv.es; orfercar@alumni.uv.es; avinlli@alumni.uv.es
+# document options
+type: article
+# front matter
+simplesummary: |
+  A Simple summary goes here.
+abstract: |
+  A single paragraph of about 200 words maximum. For research articles, 
+  abstracts should give a pertinent overview of the work. We strongly encourage
+  authors to use the following style of structured abstracts, but without 
+  headings: 1) Background: Place the question addressed in a broad context and
+  highlight the purpose of the study; 2) Methods: Describe briefly the main
+  methods or treatments applied; 3) Results: Summarize the article's main 
+  findings; and 4) Conclusion: Indicate the main conclusions or interpretations. 
+  The abstract should be an objective representation of the article, it must not 
+  contain results which are not presented and substantiated in the main text and 
+  should not exaggerate the main conclusions.
+# back matter
+keywords: |
+  keyword 1; keyword 2; keyword 3 (list three to ten pertinent keywords specific 
+  to the article, yet reasonably common within the subject discipline.).
+acknowledgement: |
+  All sources of funding of the study should be disclosed. Please clearly 
+  indicate grants that you have received in support of your research work. 
+  Clearly state if you received funds for covering the costs to publish in open 
+  access.
+authorcontributions: |
+  For research articles with several authors, a short paragraph specifying their 
+  individual contributions must be provided. The following statements should be 
+  used ``X.X. and Y.Y. conceive and designed the experiments; X.X. performed the 
+  experiments; X.X. and Y.Y. analyzed the data; W.W. contributed 
+  reagents/materials/analysis tools; Y.Y. wrote the paper.'' Authorship must be
+  limited to those who have contributed substantially to the work reported.
+funding: |
+  Please add: ``This research received no external funding'' or ``This research 
+  was funded by NAME OF FUNDER grant number XXX.'' and  and ``The APC was funded 
+  by XXX''. Check carefully that the details given are accurate and use the 
+  standard spelling of funding agency names at 
+  \url{https://search.crossref.org/funding}, any errors may affect your future 
+  funding.
+dataavailability: |
+  We encourage all authors of articles published in MDPI journals to share 
+  their research data. In this section, please provide details regarding where 
+  data supporting reported results can be found, including links to publicly 
+  archived datasets analyzed or generated during the study. Where no new data 
+  were created, or where data is unavailable due to privacy or ethical 
+  re-strictions, a statement is still required. Suggested Data Availability 
+  Statements are available in section “MDPI Research Data Policies” at 
+  \url{https://www.mdpi.com/ethics}.
+supplementary: |
+ The following supporting information can be downloaded at:  
+ \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title.
+bibliography: mybibfile.bib
+appendix: appendix.tex
+endnotes: false
+output: 
+  rticles::mdpi_article:
+    extra_dependencies: longtable
+header-includes:
+  - |
+    \makeatletter
+    \providecommand{\pandocbounded}[1]{#1}
+    \makeatother
+  - \AtBeginEnvironment{Shaded}{\scriptsize} # Cambia \small por \footnotesize si lo quieres aún más pequeño
+  - \AtBeginEnvironment{verbatim}{\scriptsize} # Esto reduce la letra de la SALIDA del código
+---
+
+# Introducción
+
+Aquí escribiremos la introducción del trabajo
+
+PREGUNTA CLAVE: ¿Existe una correspondencia real entre las prioridades de gasto de los gobiernos y las necesidades epidemiológicas de su población?
+
+# Materiales y Métodos
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(ggplot2)
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+```
+
+## Fuente y obtención de los datos
+
+Los datos utilizados en este trabajo proceden del Banco Mundial, concretamente de la base de datos *World Development Indicators* (WDI). Esta base de datos recopila indicadores tanto económicos como sanitarios o demográficos de países de todo el mundo, lo que nos permitirá realizar comparaciones internacionales.
+
+La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial. Esta base de datos contiene indicadores económicos, sociales y demográficos a nivel mundial, con datos para aproximadamente 200 países y sus regiones desde 1960.
+
+Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son:
+
+- **Esperanza de vida al nacer (total)**: número de años que un recién nacido viviría si los patrones de mortalidad del momento se mantienen a lo largo de vida (años). *Código: SP.DYN.LE00.IN.*
+
+- **PIB per capita**: Producto Interior Bruto, ganancias totales ganadas mediante la producción de bienes y servicioes en un territorio económico durante un periodo contable, y dividido entre la población general (US\$).*Código: NY.GDP.PCAP.CD.*
+
+- **Gasto en salud**: Estimación de los gastos en salud icluyendo los productos y servicios sanitarios consumidos cada año, sin incluir edificios, maquinaria, IT y stocks de vacunas para emergencias (% PIB). *Código: SH.XPD.CHEX.GD.ZS.*
+
+- **Gasto en defensa**: Gasto en defensa respecto al PIB (% PIB). *Código: MS.MIL.XPND.GD.ZS.*
+
+- **Mortalidad infantil**: Número de muertes de bebes de 0 a 12 meses por cada 1000 nacimientos al año (n:1000). *Código: SP.DYN.IMRT.IN*.
+
+- **Acceso al agua**: Personas utilizando los servicios mínimos básicos de agua potable (% población). *Código: SH.H2O.BASW.ZS.*
+
+- **Escolaridad secundaria (total)**: Niños que reciben educación secundaria básica oficial (% neto). *Código: SE.SEC.NENR.*
+
+- **Causa de muerte por enf. agudas**: Personas que han fallecido por enfermedades agudas, que incluyen enfermedades infecciosas y parasitarias, infecciones respiratorias y deficiencias nutricionales (% del total de muertes). *Código: SH.DTH.COMM.ZS*.
+
+- **Causa de muerte por enf. crónicas**: Personas que han fallecido por enfermedades crónicas, que incluyen cáncer, diabetes, trastonos cardiovasculares, digestivos, dermatológicos, musculoesqueléticos y anomalías congenitales (% del total de muertes). *Código: SH.DTH.NCOM.ZS.*
+
+- **Mortalidad por falta de higiene**: Personas que han muerto por el uso de agua en malas condiciones, condiciones sanitarias inseguras y falta de higiene (número de muertes por 100.000 personas). *Código: SH.STA.WASH.P5.*
+
+- **Fertilidad**: Número de niños que daría a luz una mujer si viviese hasta el final de sus años fértiles en el momento temporal captado (nacimientos por mujer). *Código: SP.DYN.TFRT.IN.*
+
+- **Embarazos adolescentes**: Ratio de fertilidad adolescente, número de nacimientos por cada 1000 mujeres con una edad entre 15 y 19 años (nacimientos por 1000 adolescentes). *Código: SP.ADO.TFRT*.
+YE
+- **Población**: Número de residentes del país estimados a mitad del año (#personas). *Código: SP.POP.TOTL.*
+
+- **Area**: Superfície total del país potencialmente habitable, excluyendo el área ocupada por agua (ríos y lagos), y zonas exclusivamente económicas/laborales ($km^2$). *Código: AG.LND.TOTL.K2.*
+
+- **Mortalidad por contaminación del aire**: Número de muertes por transtornos derivados de la inhalación de partículas contaminantes presentes en el aire (muertes por 100.000 habitantes). *Código: CC.SH.AIRP.AMB.*
+
+- **Inmunización**: Número de niños inmunizados completamente entre 15 y 23 meses (%). *Código: HF.IMM.FULL.*
+
+De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración inicial de los datos, puesto que son los años más recientes y de los que potencialmente se cuente con más cantidad de datos actualizados.
+
+```{r, echo = TRUE}
+# Datos cargados de WDI sucios:
+
+```
+
+
+## Selección de la muestra
+
+Dado que los datos descargados eran extremadamente abundantes (2476 observaciones de 29 variables), con '3 dimensiones' (temporal, indicador y países), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%.
+
+```{r, echo = TRUE}
+# Cargamos la cohorte 2019 de datos sucios:
+
+# Visualizamos un sumario de los datos:
+
+```
+
+
+Tras este análisis exploratorio (documento `Exploración_inicial.Rmd`), se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional creada a partir de la población y el área del país). El resto de variables fueron descartadas.
+
+```{r, echo = TRUE}
+# Cargamos los datos resultantes tras la imputación: 
+load(file = './results/datos_cohorte_2019.RData')
+# Visualizamos un sumario de los datos tras la limpieza:
+
+```
+
+# Resultados
+
+A continuación se muestran los resultados del estudio, divididos en 4 bloques, que están organizados de modo que permitan responder a la pregunta principal del trabajo.
+
+- Bloque 1. **Contexto socioeconómico de los países**.
+
+- Bloque 2. **Comparación del gasto en salud y en defensa de los países**.
+
+- Bloque 3. **Necesidades sanitarias por países**.
+
+- Bloque 4. **Agregación final: correspondencia entre el gasto público y las necesidades de los ciudadanos del país**.
+
+## Bloque 1. Contexto socioeconómico.
+
+El objetivo es analizar el PIB por cápita de los diferentes países, agrupándolos atendiendo a la variable 'income'. Asimismo, se estudiará a las regiones a las que pertenece cada país, por grupos, para determinar si existe alguna relación entre situación económica y localización geográfica. Finalmente, se incorporará el concepto de densidad demográfica para estudiar si existe una relación entre esta y el PIB por cápita del país.
+
+```{r, echo = TRUE, fig.width = 5, fig.height= 3.5}
+# 1. Relación entre región, PIB per cápita y el 'income':
+
+# Las variables región e income son categóricas, y el PIB es numérica. Vamos a representar la 
+# región vs. income en un gráfico de barras apiladas y el PIB per capita vs. región mediante
+# boxplots. 
+
+datos_cohorte_2019$income<-factor(datos_cohorte_2019$income,levels=c('Low income', 'Lower middle income', 'Upper middle income', 'High income'))
+
+# 1.1. Región vs. income:
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15),fill = income)) +
+  geom_bar(position = 'fill', color = 'black', alpha = 0.8) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(title = 'Distribución porcentual de ingresos por región',
+       subtitle = 'Proporción de niveles de renta en cada área geográfica',
+       x = 'Región geográfica',
+       y = 'Porcentaje (%)',
+       fill = 'Nivel de ingresos') + 
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),legend.position = 'bottom',
+        legend.key.size = unit(5, 'pt'), legend.text = element_text(size = 6),
+        legend.title = element_text(size = 7)) + coord_flip()
+
+# Hacemos un test chi2 para ver si existe una asociación estadísticamente significativa entre 
+# el income y la región:
+
+t_contingencia <- table(datos_cohorte_2019$region,datos_cohorte_2019$income)
+resultado_chi2 <- chisq.test(t_contingencia,simulate.p.value = TRUE, B = 10000)
+resultado_chi2
+
+# 1.2. Región vs. PIB per cápita:
+ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15),y = gdp_per_capita,
+                               fill = region)) +
+  # Boxplot:
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  # Añadimos la media:
+  stat_summary(fun = mean, geom = 'point', shape = 18,size = 3, color = 'darkred',
+               aes(group = region)) +
+  # Escala logarítmica:
+  scale_y_log10(labels = scales::dollar_format(prefix = '$'),
+                breaks = c(100, 1000, 10000, 100000)) +
+  # Paleta de colores:
+  scale_fill_brewer(palette = 'Set2') + 
+  # Etiquetas:
+  labs(title = 'Distribución del PIB per cápita',
+    subtitle = 'Diferenciación por región',
+    x = 'Región',
+    y = 'PIB per cápita (US$, escala log10)',
+    fill = 'Región') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') + coord_flip()
+
+# 2. Comparación de la densidad demográfica con el PIB por cápita:
+
+# Para ello se realizará un scatter plot, usando una escala logarítmica en ambos ejes (pues la
+# densidad de población también se encuentra desbalanceada)
+
+ggplot(datos_cohorte_2019, aes(x = gdp_per_capita, y = pop_per_area, colour = income)) +
+  geom_point(alpha = 0.75) + 
+  scale_y_log10(labels = scales::label_comma(), breaks = c(1, 10, 100, 1000, 10000)) +
+  scale_x_log10(labels = scales::dollar_format(prefix = '$'),breaks = c(500, 100, 1000, 10000)) +
+  scale_fill_brewer(palette = 'Set2', name = 'Nivel de ingresos') +
+  labs(title = 'Densidad demográfica vs. PIB per cápita',
+       subtitle = 'Escala logarítmica base 10',
+       x = "PIB per cápita (US$, escala logarítmica)",
+       y = "hab/km², escala logarítmica", colour='Nivel de ingresos') + coord_flip()+
+  theme(legend.position = 'bottom', legend.text = element_text(size = 6),
+        legend.title = element_text(size = 7))
+```
+
+
+## Bloque 2. Inversión en salud y defensa. 
+
+El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos. 
+
+
+```{r, echo = TRUE, fig.width =5, fig.height= 3.5}
+
+# Unimos las variables de gasto sanitario y militar, creando una columna que identifica el tipo 
+# de gasto y otra que recoge los valores correspondientes.
+
+datos_gastos<-datos_cohorte_2019 %>%
+  select(region,income, gasto_salud_gdp,gasto_defensa_gdp) %>%
+  pivot_longer(.,names_to = 'Tipo de gasto' ,values_to = 'Gasto (%PIB)',
+               cols=c(gasto_salud_gdp , gasto_defensa_gdp) )%>%
+  mutate(`Tipo de gasto`=recode(
+    `Tipo de gasto` , gasto_salud_gdp='Gasto en salud', gasto_defensa_gdp='Gasto en defensa'))
+
+
+
+# 1. Comparación entre el gasto en defensa, gasto en sanidad según la región:
+
+# El objetivo de este análisis es comparar la distribución del gasto sanitario y del gasto en
+# defensa entre las distintas regiones geográficas.
+
+# Para ello, también se utilizarán boxplots para poder identificar posibles diferencias regionales
+# en los patrones de gasto y analizar qué proporción del PIB destinan los países de cada región 
+# a ambos ámbitos.
+
+
+ggplot(datos_gastos, aes(x=str_wrap(region,width=15),y=`Gasto (%PIB)`, fill=region))+
+  geom_boxplot(alpha=0.7,outlier.shape = 21,outlier.size = 1)+
+  stat_summary(fun=mean,geom='point', shape=18, size=2, color='darkred', aes(group=region))+
+  facet_wrap(~`Tipo de gasto`, ncol=1)+
+  scale_fill_brewer(palette='Set2')+
+  labs(
+    title = 'Comparación del gasto sanitario y militar',
+    subtitle = 'Distribución por regiones',
+    x = 'Región',
+    y = 'Gasto (% del PIB)'
+  ) +
+  theme(axis.text.y = element_text(angle = 0,hjust = 0.5,size = 4,face = 'bold'),
+        legend.position = 'none',panel.grid.minor = element_blank()) + coord_flip()
+
+# 2. Relación entre el gasto sanitario y el gasto en defensa.
+
+# Representamos la relación entre ambos tipos de gastos mediante un scatter plot.
+
+# Eje X: gasto en salud (% del PIB)
+# Eje Y: gasto en defensa (% del PIB)
+# Nivel de ingresos por color
+
+ggplot(datos_cohorte_2019, aes(x = gasto_salud_gdp, y = gasto_defensa_gdp, color = income)) +
+  geom_point(alpha = 0.75) +
+  scale_color_brewer(palette = "Set2", name = "Nivel de ingresos") +
+  labs(
+    title = "Relación entre el gasto sanitario y militar por nivel de ingresos",
+    x = "Gasto sanitario (% del PIB)",
+    y = "Gasto en defensa (% del PIB)",
+    color = "Nivel de ingresos"
+  ) +
+  geom_abline(color='darkred')+
+  coord_flip()+
+  theme(legend.position = 'bottom', legend.title = element_text(size=7), legend.text = element_text(size=6), title = element_text(size=9, face='bold'))
+
+#ggsave("./results/Relacion_gastos.pdf")
+```
+
+
+## Bloque 3. Necesidades sanitarias.
+
+El objetivo de este bloque es analizar las necesidades sanitarias de los diferentes países, estudiando cómo varían en función de su nivel de ingresos y de su región geográfica. Para ello, se utilizarán indicadores relacionados con la esperanza de vida, la mortalidad infantil, las condiciones de higiene y el acceso al agua potable. Además, se estudiará la distribución de las principales causas de mortalidad, diferenciando entre enfermedades agudas y crónicas. 
+
+De este modo, se pretende identificar las principales desigualdades sanitarias existentes entre países y determinar si estas están relacionadas con su situación socioeconómica o geográfica.
+
+```{r, echo = TRUE, fig.width = 5, fig.height= 3.5}
+# BLOQUE 3. NECESIDADES SANITARIAS
+# Indicadores generales de salud según región.
+
+# Esperanza de vida:
+ggplot(datos_cohorte_2019,
+       aes(x = stringr::str_wrap(region, width = 15),y = esperanza_vida, fill = region)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la esperanza de vida',
+    subtitle = 'Diferenciación por región geográfica',
+    x = 'Región',
+    y = 'Esperanza de vida (años)'
+  ) +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),legend.position = 'none') +
+  coord_flip()
+
+# Mortalidad infantil:
+ggplot(datos_cohorte_2019,
+       aes(x = stringr::str_wrap(region, width = 15),y = mortalidad_infantil, fill = region)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+  stat_summary(fun = mean, geom = 'point',shape = 18, size = 3, color = 'darkred') +
+  scale_fill_brewer(palette = 'Set2') +
+  labs(
+    title = 'Distribución de la mortalidad infantil',
+    subtitle = 'Diferenciación por región geográfica',
+    x = 'Región',
+    y = 'Muertes por cada 1000 nacimientos'
+  ) +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'),legend.position = 'none') +
+  coord_flip()
+```
+
+
+## Correspondencia entre gasto público y necesidades
+
+
+
+```{r, echo = TRUE, fig.width = 5, fig.height= 4}
+# 4. Comparación de las diferentes causas de mortalidad
+
+# En estas gráficas veremos las diferencias en la distribución de la mortalidad por enfermedades
+# agudas y crónicas, comparando los países según su nivel de ingresos. 
+# Esto permitirá identificar posibles desigualdades entre países y regiones en los patrones de
+# mortalidad.
+
+# Unimos las variables de causa_muerte_agudas y causa_muerte_cronicas, creando una columna que
+# identifica el tipo de enfermedad y otra que recoge los valores correspondientes al procetaje 
+# de mortalidad. 
+
+datos_mortalidad <- datos_cohorte_2019 %>%
+  select(income, region, causa_muerte_agudas, causa_muerte_cronicas) %>%
+ pivot_longer(cols = c(causa_muerte_agudas, causa_muerte_cronicas),
+              names_to = 'Tipo de enfermedad', values_to = 'Mortalidad (%)') %>%
+ mutate(
+   `Tipo de enfermedad` = recode(
+     `Tipo de enfermedad`, causa_muerte_agudas = 'Enfermedades agudas',
+     causa_muerte_cronicas = 'Enfermedades crónicas'))
+
+# Comparación según income:
+ggplot(datos_mortalidad, aes(x = income,y = `Mortalidad (%)`, fill = `Tipo de enfermedad`)) +
+ geom_boxplot(alpha = 0.7,outlier.shape = 21, outlier.size = 1) +
+ scale_fill_brewer(palette = 'Set2') +
+  facet_grid(
+    . ~ income, scales = 'free_x',
+  space = 'free_x'
+  ) +
+ labs(
+   title = 'Distribución de las causas de mortalidad',
+   subtitle = 'Comparación entre enfermedades agudas y crónicas',
+   x = 'Nivel de ingresos del país',
+   y = 'Porcentaje del total de muertes',
+   fill = 'Tipo de enfermedad'
+ ) +
+ theme(axis.text.x = element_blank(),legend.position = 'bottom',
+       legend.text = element_text(size = 6),legend.title = element_text(size = 7),
+       panel.grid.minor = element_blank(),strip.text = element_text(size=7))
+
+```
+
+# Bloque 4. Correspondencia entre gasto público y necesidades
+
+En este último bloque, veremos si existe una correspondencia entre el gasto público
+
+```{r, echo = TRUE, fig.width = 5, fig.height= 3.5}
+# Comparación final entre el gasto sanitario y las necesidades de los países.
+
+# Para analizar si el gasto destinado a salud se corresponde con las necesidades sanitarias de
+# cada país, elaboramos un gráfico de dispersión (scatter plot). En el eje X representaremos el
+# gasto en salud y en el eje Y un índice compuesto de necesidades sanitarias.
+
+# Cálculo del índice de necesidades:
+# En primer lugar, estandarizamos las variables seleccionadas para que todas tengan una escala
+# comparable y puedan combinarse en un único indicador. Posteriormente, ajustamos el sentido de
+# las variables según su relación con las necesidades sanitarias. Finalmente, calculamos la media
+# de las variables. Un valor más elevado del índice indicará una mayor necesidad sanitaria
+# relativa del país.
+
+datos_correspondencia <- datos_cohorte_2019 %>%
+ mutate(
+   indice_necesidades = rowMeans(cbind(
+       scale(mortalidad_infantil),
+       scale(mortalidad_higiene),
+       scale(fertilidad),
+       scale(causa_muerte_agudas),
+       scale(causa_muerte_cronicas)
+       -scale(esperanza_vida),
+       -scale(acceso_agua)
+     ),
+     na.rm = TRUE
+   )
+ )
+
+ggplot(datos_correspondencia, aes(x = indice_necesidades, y = gasto_salud_gdp)) +
+ geom_point(aes(color=income)) +
+  geom_smooth(color='darkred',fill='darkred')+
+ scale_colour_brewer(palette = "Set2") +
+ labs(title = "Comparación gasto sanitario vs. necesidades sanitarias",
+   subtitle = "Por niveles de ingresos",
+   x = "Índice de necesidades sanitarias",
+   y = "Gasto sanitario (% del PIB)",
+   colour = "Nivel de ingresos"
+ ) +
+ theme(legend.position = 'bottom', legend.text = element_text(size = 6),
+        legend.title = element_text(size = 7))
+```
+
+```{r, fig.width=4, fig.height=4}
+if (!require("GGally")) install.packages("GGally")
+library(GGally)
+
+datos_corr <- datos_cohorte_2019 %>%
+  select(
+    gasto_salud_gdp,
+    esperanza_vida,
+    fertilidad,
+    mortalidad_infantil,
+    acceso_agua,
+    mortalidad_higiene
+  )
+
+# Correlación entre variables
+cor(datos_corr, use = "pairwise.complete.obs")
+
+# Gráfica
+ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 2)),  mapping = aes(colour = datos_cohorte_2019$income, alpha = 0.5))+
+  theme(strip.text = element_text(size=4), axis.text = element_text(size=5))
+#ggsave('./results/Correlaciones_necesidades.pdf')
+```
+
+
+# Discusión
+
+Aquí interpretaremos los resultados
+
+# Conclusiones
+
+Conclusiones principales del estudio
