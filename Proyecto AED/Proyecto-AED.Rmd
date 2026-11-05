@@ -1,76 +1,33 @@
 ---
-title: Proyecto Análisis Exploratorio de Datos. Grupo C.
+title: "Análisis Exploratorio de Datos: Relación entre Gasto Público y Necesidades Sanitarias Globales"
 author:
   - name: Fran Jiménez Jiménez
-    affil: 1,*
-    email: franjiji@alumni.uv.es
+    affil: 1
   - name: Carla Ortega Fernández
-    affil: 1,*
-    email: orfercar@alumni.uv.es
+    affil: 1
   - name: Alejandra Vinjoy Lliso
-    affil: 1,*
-    email: avinlli@alumni.uv.es
+    affil: 1
 affiliation:
   - num: 1
-    address: |
-      Escola Tècnica Superior d'Enginyería (ETSE) - 
-      Avinguda de la Universitat, S/N, 46100 Burjassot, Valencia
+    address: "Máster en Ciencia de Datos, Escola Tècnica Superior d'Enginyeria (ETSE), Universitat de València, Burjassot, València"
 correspondence: |
   franjiji@alumni.uv.es; orfercar@alumni.uv.es; avinlli@alumni.uv.es
-# document options
+authorcitation: "Jiménez, F.; Ortega, C.; Vinjoy, A."
+journal: notspecified
 type: article
-# front matter
+status: submit
 simplesummary: |
-  A Simple summary goes here.
+  Trabajo académico de análisis exploratorio sobre las prioridades de gasto público y las necesidades sanitarias internacionales utilizando datos del Banco Mundial (cohorte 2019).
 abstract: |
-  A single paragraph of about 200 words maximum. For research articles, 
-  abstracts should give a pertinent overview of the work. We strongly encourage
-  authors to use the following style of structured abstracts, but without 
-  headings: 1) Background: Place the question addressed in a broad context and
-  highlight the purpose of the study; 2) Methods: Describe briefly the main
-  methods or treatments applied; 3) Results: Summarize the article's main 
-  findings; and 4) Conclusion: Indicate the main conclusions or interpretations. 
-  The abstract should be an objective representation of the article, it must not 
-  contain results which are not presented and substantiated in the main text and 
-  should not exaggerate the main conclusions.
-# back matter
+  Este estudio analiza la correspondencia entre las prioridades de gasto público (salud y defensa) y la realidad epidemiológica de 218 países en 2019, empleando técnicas de AED, imputación por medianas de ingresos y pruebas de asociación estadística. Los resultados revelan una marcada polarización epidemiológica y un desajuste estructural entre la necesidad sanitaria y el esfuerzo inversor relativo de los estados.
 keywords: |
-  keyword 1; keyword 2; keyword 3 (list three to ten pertinent keywords specific 
-  to the article, yet reasonably common within the subject discipline.).
+  Análisis Exploratorio de Datos; Banco Mundial; Gasto Sanitario; Desigualdad Global; RStudio
 acknowledgement: |
-  All sources of funding of the study should be disclosed. Please clearly 
-  indicate grants that you have received in support of your research work. 
-  Clearly state if you received funds for covering the costs to publish in open 
-  access.
-authorcontributions: |
-  For research articles with several authors, a short paragraph specifying their 
-  individual contributions must be provided. The following statements should be 
-  used ``X.X. and Y.Y. conceive and designed the experiments; X.X. performed the 
-  experiments; X.X. and Y.Y. analyzed the data; W.W. contributed 
-  reagents/materials/analysis tools; Y.Y. wrote the paper.'' Authorship must be
-  limited to those who have contributed substantially to the work reported.
-funding: |
-  Please add: ``This research received no external funding'' or ``This research 
-  was funded by NAME OF FUNDER grant number XXX.'' and  and ``The APC was funded 
-  by XXX''. Check carefully that the details given are accurate and use the 
-  standard spelling of funding agency names at 
-  \url{https://search.crossref.org/funding}, any errors may affect your future 
-  funding.
+  Trabajo realizado para la asignatura de Análisis Exploratorio de Datos del Máster en Ciencia de Datos de la Universitat de València.
 dataavailability: |
-  We encourage all authors of articles published in MDPI journals to share 
-  their research data. In this section, please provide details regarding where 
-  data supporting reported results can be found, including links to publicly 
-  archived datasets analyzed or generated during the study. Where no new data 
-  were created, or where data is unavailable due to privacy or ethical 
-  re-strictions, a statement is still required. Suggested Data Availability 
-  Statements are available in section “MDPI Research Data Policies” at 
-  \url{https://www.mdpi.com/ethics}.
-supplementary: |
- The following supporting information can be downloaded at:  
- \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title.
-bibliography: mybibfile.bib
-appendix: appendix.tex
-endnotes: false
+  Los datos analizados proceden de la base World Development Indicators (WDI) del Banco Mundial, accesibles mediante el paquete WDI de R.
+conflictsofinterest: |
+  Los autores declaran la ausencia de conflictos de interés.
 output: 
   rticles::mdpi_article:
     latex_engine: xelatex
@@ -80,26 +37,31 @@ header-includes:
     \makeatletter
     \providecommand{\pandocbounded}[1]{#1}
     \makeatother
-  - \AtBeginEnvironment{Shaded}{\scriptsize} # Cambia \small por \footnotesize si lo quieres aún más pequeño
-  - \AtBeginEnvironment{verbatim}{\scriptsize} # Esto reduce la letra de la SALIDA del código
+  - \AtBeginEnvironment{Shaded}{\scriptsize} 
+  - \AtBeginEnvironment{verbatim}{\scriptsize} 
 ---
 
 # Introducción
-El presente trabajo de Análisis Exploratorio de Datos tiene como objetivo aplicar todos los conocimientos adquiridos en el transcurso de la asignatura. Para ello, se ha elegido un dataset alineado con nuestros intereses principales: estudiar si existe una correspondencia real entre las prioridades de gasto de los países y las necesidades epidemiológicas de la población.
 
-En el contexto político y sociosanitario en el que vivimos actualmente, se hace cada vez más notable la variabilidad en las inversiones realizadas en diferentes regiones a nivel mundial, y ante esta aparente dispersión, surge la curiosidad de determinar si las condiciones demográficas, epidemiológicas y sanitarias de los países, están relacionadas con los principales gastos del país. En particular, se ha acotado esta búsqueda centrándose en el gasto en defensa y el gasto en salud, pues ambos tienen el potencial de evidenciar claramente donde se sitúan las preocupaciones gubernamentales en lo que respecta a la seguridad de los ciudadanos. 
+En el presente trabajo se aplican los conocimientos adquiridos en la asignatura de Análisis Exploratorio de Datos (AED) a un problema de interés socioeconómico y sanitario: analizar si las prioridades presupuestarias de los países reflejan las necesidades reales de su población.
 
-El estudio sigue la estructura propia de un AED. En primer lugar, se muestran los materiales y métodos empleados, haciendo hincapié en el conjunto de datos que se ha elegido y el preprocesado realizado. Seguidamente, en resultados, se muestran los test estadísticos y gráficas principales que proporcionan información relevante para poder responder a las preguntas del trabajo. Para ello, se ha dividido en 4 bloques que contestan respectivamente a cada subpregunta. Finalmente, en las conclusiones se pondrán en común los principales hallazgos para contestar a nuestra pregunta inicial. 
+En un contexto global caracterizado por importantes desigualdades económicas, demográficas y sanitarias, los gobiernos deben distribuir recursos limitados entre distintas áreas estratégicas. Entre ellas, la salud y la defensa constituyen dos ámbitos especialmente relevantes, ya que representan distintas formas de garantizar el bienestar y la seguridad de los ciudadanos. Sin embargo, surge la cuestión de si la magnitud de estas inversiones responde realmente a las características epidemiológicas y sanitarias de cada país o si existen otros factores que condicionan dichas decisiones.
 
-- **Pregunta inicial**: ¿Existe una correspondencia real entre las prioridades del gasto de los países y las necesidades epidemiológicas de la población?
+Con el objetivo de abordar esta problemática, se analizará un conjunto de indicadores económicos, sanitarios y demográficos de países de distintas regiones del mundo. A través de técnicas de análisis exploratorio, visualización de datos y contrastes estadísticos, se buscará identificar patrones de distribución de la riqueza, diferencias en las prioridades de gasto y posibles relaciones entre la situación sanitaria de la población y las decisiones de inversión pública.
 
-- **Subpregunta 1**: ¿Cómo está distribuida la riqueza a nivel mundial? ¿Existe alguna relación entre localización geográfica y situación económica?
+El estudio se articula en torno a la siguiente pregunta principal:
 
-- **Subpregunta 2**: ¿Qué porcentaje de la economía del país se destina a salud? ¿Y a defensa? ¿Se repite una tendencia entre las diferentes regiones y grupos de diferentes ingresos?
+Existe una correspondencia entre las prioridades de gasto de los países y las necesidades epidemiológicas de su población?
 
-- **Subpregunta 3**: ¿Cuáles son las principales preocupaciones sanitarias de las diferentes regiones?
+Para responderla, el análisis se estructura en diferentes bloques:
 
+- **Distribución de la riqueza**: estudiar cómo se distribuye la riqueza a nivel mundial y si existen patrones asociados a la localización geográfica.
 
+- **Prioridades de gasto**: analizar el peso relativo del gasto en salud y defensa, así como las diferencias existentes entre regiones y grupos de ingresos.
+
+- **Necesidades sanitarias**: identificar los principales problemas de salud que afectan a las distintas regiones y evaluar su relación con los patrones de inversión observados.
+
+Finalmente, los resultados obtenidos se integrarán en una discusión conjunta que permitirá valorar si las decisiones de gasto público se encuentran alineadas con las necesidades epidemiológicas de la población.
 
 # Materiales y Métodos
 
@@ -124,9 +86,9 @@ library(VIM)
 
 ## Fuente y obtención de los datos
 
-Los datos utilizados en este trabajo proceden del Banco Mundial, concretamente de la base de datos *World Development Indicators* (WDI). Esta base de datos recopila indicadores tanto económicos como sanitarios o demográficos de países de todo el mundo, lo que nos permitirá realizar comparaciones internacionales.
+Los datos utilizados en este trabajo proceden del Banco Mundial, concretamente de la base de datos *World Development Indicators* (WDI), la cual recopila indicadores tanto económicos como sanitarios o demográficos de países de todo el mundo.
 
-La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial. Esta base de datos contiene indicadores económicos, sociales y demográficos a nivel mundial, con datos para aproximadamente 200 países y sus regiones desde 1960.
+La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial. Esta base de datos contiene diversos indicadores, con datos para aproximadamente 200 países desde 1960.
 
 Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son:
 
@@ -152,8 +114,8 @@ Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegid
 
 - **Fertilidad**: Número de niños que daría a luz una mujer si viviese hasta el final de sus años fértiles en el momento temporal captado (nacimientos por mujer). *Código: SP.DYN.TFRT.IN.*
 
-- **Embarazos adolescentes**: Ratio de fertilidad adolescente, número de nacimientos por cada 1000 mujeres con una edad entre 15 y 19 años (nacimientos por 1000 adolescentes). *Código: SP.ADO.TFRT*.
-YE
+- **Embarazos adolescentes**: Ratio de fertilidad adolescente, número de nacimientos por cada 1000 mujeres con una edad entre 15 y 19 años (nacimientos por 1000 adolescentes). *Código: SP.ADO.TFRT*. YE
+
 - **Población**: Número de residentes del país estimados a mitad del año (#personas). *Código: SP.POP.TOTL.*
 
 - **Area**: Superfície total del país potencialmente habitable, excluyendo el área ocupada por agua (ríos y lagos), y zonas exclusivamente económicas/laborales ($km^2$). *Código: AG.LND.TOTL.K2.*
@@ -162,7 +124,7 @@ YE
 
 - **Inmunización**: Número de niños inmunizados completamente entre 15 y 23 meses (%). *Código: HF.IMM.FULL.*
 
-De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración inicial de los datos, puesto que son los años más recientes y que contienen más registros completos. En el archivo Carga_datos_WDI.Rmd se detalla paso a paso el procedimiento seguido para manipular los datos. 
+De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración, puesto que son los más recientes y que contienen más registros completos. En el archivo `Carga_datos_WDI.Rmd` se detalla paso a paso el procedimiento seguido para manipular los datos.
 
 ```{r, echo = FALSE}
 indicadores <- c(
@@ -176,7 +138,6 @@ indicadores <- c(
   inmunizacion = 'HF.IMM.FULL',population = 'SP.POP.TOTL',area = 'AG.LND.TOTL.K2')
 ```
 
-
 ```{r, echo = TRUE}
 # Carga de los datos tras predefinir las variables de interés: 
 datos_salud <- WDI(country = "all",indicator = indicadores, start = 2015, end = 2022, 
@@ -184,10 +145,9 @@ datos_salud <- WDI(country = "all",indicator = indicadores, start = 2015, end = 
   filter(region != "Aggregates")
 ```
 
-
 ## Selección de la muestra
 
-Dado que los datos descargados eran extremadamente abundantes (2476 observaciones de 29 variables), con '3 dimensiones' (temporal, indicador y países), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%.
+Dado que los datos descargados eran abundantes (2476 observaciones de 29 variables, 29 indicadores para 218 países y 7 años), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%.
 
 ```{r, echo = TRUE}
 # Búsqueda de datos faltantes y cribado de variables:
@@ -206,7 +166,6 @@ cobertura_por_anyo <- aggregate(datos_salud[variables_aed_init],
                                 FUN = function(x) sum(!is.na(x)))
 ```
 
-
 Tras este análisis exploratorio, se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional creada a partir de la población y el área del país). El resto de variables fueron descartadas.
 
 ```{r, echo = FALSE}
@@ -214,7 +173,8 @@ variables_interes <- c('country', 'income', 'region', 'year', 'esperanza_vida','
                        'fertilidad_adolescente', 'population','area', variables_aed_init)
 ```
 
-A partir del dataset generado se aplicó un preprocesado de los datos para estudiar la presencia de datos anómalos y datos faltantes. Además, también se realizaron análisis estadísticos univariantes y bivariantes para caracterizar cada variable y contar con una base rigurosa para la visualización posterior. En el archivo Análisis_Exploratorio_inicial.Rmd se detalla paso a paso este proceso. 
+A partir del dataset generado se aplicó un preprocesado de los datos para estudiar la presencia de inconsistencias. Además, también se realizaron análisis estadísticos univariantes y bivariantes para caracterizar cada variable y contar con una base rigurosa para la visualización posterior. En el archivo `Análisis_Exploratorio_inicial.Rmd` se detalla paso a paso este proceso.
+
 ```{r}
 datos_cohorte_2019_raw <- subset(datos_salud, year == 2019, select = variables_interes)
 ```
@@ -234,12 +194,14 @@ sumario <- data.frame(
     } else {NA}}))
 rownames(sumario) <- NULL
 ```
+
 Visualizamos mediante un sumario las características del 'raw data'.
+
 ```{r}
 head(sumario[6:8,])
 ```
 
-Ante la presencia de datos faltantes, se aplicó una imputación KNN por grupos de income sobre las variables con datos faltantes, para poder trabajar con ellas. En cuanto a los datos anómalos, se estudiaron con los métodos Boxplot, Hampel y Sigma3, pero la estrategia final fue dejarlos en cuanto que en este contexto aportan información relevante para el análisis. 
+Ante la presencia de datos faltantes, se aplicó una imputación KNN sobre las variables con datos faltantes, para poder trabajar con ellas. En cuanto a los datos anómalos, se estudiaron con los métodos Boxplot, Hampel y Sigma3, pero la estrategia final fue dejarlos en cuanto que en este contexto aportan información relevante para el análisis.
 
 ```{r, echo = TRUE}
 # Suma de valores faltantes por variable:
@@ -262,7 +224,7 @@ for (indicador in imputar_ind){
 datos_cohorte_2019$pop_per_area <- datos_cohorte_2019$population / datos_cohorte_2019$area
 ```
 
-Finalmente, obtuvimos los estadísticos de posición y valor principales para las variables numéricas, siendo: 
+Finalmente, se obtuvieron los estadísticos de posición y valor principales para las variables numéricas, siendo:
 
 ```{r, echo = FALSE}
 ind_explor_est <- c('esperanza_vida', 'fertilidad', 'fertilidad_adolescente','pop_per_area',
@@ -287,14 +249,6 @@ head(tabla_resumen_global[11:14,])
 # Resultados
 
 A continuación se muestran los resultados del estudio, divididos en 4 bloques, que están organizados de modo que permitan responder a la pregunta principal del trabajo.
-
-- Bloque 1. **Contexto socioeconómico de los países**.
-
-- Bloque 2. **Comparación del gasto en salud y en defensa de los países**.
-
-- Bloque 3. **Necesidades sanitarias por países**.
-
-- Bloque 4. **Agregación final: correspondencia entre el gasto público y las necesidades de los ciudadanos del país**.
 
 ## Bloque 1. Contexto socioeconómico.
 
@@ -370,11 +324,9 @@ ggplot(datos_cohorte_2019, aes(x = gdp_per_capita, y = pop_per_area, colour = in
         legend.title = element_text(size = 7))
 ```
 
+## Bloque 2. Inversión en salud y defensa.
 
-## Bloque 2. Inversión en salud y defensa. 
-
-El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos. 
-
+El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos.
 
 ```{r, echo = TRUE, fig.width =5, fig.height= 4}
 
@@ -416,8 +368,6 @@ ggplot(datos_gastos, aes(x=str_wrap(region,width=15),y=`Gasto (%PIB)`, fill=regi
 
 Se observa que, en general, el gasto en salud es claramente superior al gasto en defensa en la mayoría de las regiones. Además, el gasto sanitario presenta una mayor variabilidad entre países, mientras que el gasto en defensa suele concentrarse en valores más bajos y homogéneos.
 
-
-
 ```{r, echo = TRUE, fig.width =5, fig.height= 4}
 
 # 2. Relación entre el gasto sanitario y el gasto en defensa.
@@ -448,11 +398,9 @@ La bisectriz representa los puntos donde el porcentaje de gasto en sanidad serí
 
 Además, los puntos aparecen bastante dispersos, por lo que no se aprecia una relación clara ni fuerte entre ambos gastos, aunque el gasto sanitario tiende a ser superior al militar en la mayoría de los casos.
 
-
-
 ## Bloque 3. Necesidades sanitarias.
 
-El objetivo de este bloque es analizar las necesidades sanitarias de los diferentes países, estudiando cómo varían en función de su nivel de ingresos y de su región geográfica. Para ello, se utilizarán indicadores relacionados con la esperanza de vida, la mortalidad infantil, las condiciones de higiene y el acceso al agua potable. Además, se estudiará la distribución de las principales causas de mortalidad, diferenciando entre enfermedades agudas y crónicas. 
+El objetivo de este bloque es analizar las necesidades sanitarias de los diferentes países, estudiando cómo varían en función de su nivel de ingresos y de su región geográfica. Para ello, se utilizarán indicadores relacionados con la esperanza de vida, la mortalidad infantil, las condiciones de higiene y el acceso al agua potable. Además, se estudiará la distribución de las principales causas de mortalidad, diferenciando entre enfermedades agudas y crónicas.
 
 De este modo, se pretende identificar las principales desigualdades sanitarias existentes entre países y determinar si estas están relacionadas con su situación socioeconómica o geográfica.
 
@@ -491,13 +439,11 @@ ggplot(datos_cohorte_2019,
 
 Observamos que las dos gráficas muestran importantes desigualdades sanitarias entre las regiones geográficas.
 
-África subsahariana presenta la situación más desfavorable, con la menor esperanza de vida y la mayor mortalidad infantil. 
+África subsahariana presenta la situación más desfavorable, con la menor esperanza de vida y la mayor mortalidad infantil.
 
-Por otra parte, Europa y Asia Central y América del Norte registran las mayores esperanzas de vida y tasas de mortalidad infantil muy reducidas. 
+Por otra parte, Europa y Asia Central y América del Norte registran las mayores esperanzas de vida y tasas de mortalidad infantil muy reducidas.
 
 Por tanto, se aprecia una relación inversa entre ambos indicadores: las regiones con mayor mortalidad infantil tienden a presentar una menor esperanza de vida, reflejando importantes desigualdades existentes en las condiciones sanitarias y de salud entre países y regiones.
-
-
 
 ## Correspondencia entre gasto público y necesidades
 
@@ -542,8 +488,6 @@ ggplot(datos_mortalidad, aes(x = income,y = `Mortalidad (%)`, fill = `Tipo de en
 ```
 
 La gráfica deja claro que, a medida que aumenta el nivel de ingresos de un país, las enfermedades crónicas prevalecen sobre las agudas. En los países más ricos, las muertes por enfermedades crónicas representan prácticamente el total, lo que refleja una transición epidemiológica asociada al desarrollo económico y al envejecimiento de la población, visto también anteriormente.
-
-
 
 # Bloque 4. Correspondencia entre gasto público y necesidades
 
@@ -591,13 +535,9 @@ ggplot(datos_correspondencia, aes(x = indice_necesidades, y = gasto_salud_gdp)) 
         legend.title = element_text(size = 7), title = element_text(size=9,   face='bold'))
 ```
 
-La gráfica muestra que no existe una relación fuerte entre las necesidades sanitarias y el gasto sanitario (como porcentaje) del PIB. Aunque la tendencia general desciende ligeramente para valores negativos del índice, que indican una menor necesidad de inversión sanitaria, y luego se estabiliza e incluso aumenta levemente para valores positivos, la gran dispersión de los puntos indica que países con necesidades similares pueden destinar porcentajes muy diferentes de su PIB a sanidad. 
+La gráfica muestra que no existe una relación fuerte entre las necesidades sanitarias y el gasto sanitario (como porcentaje) del PIB. Aunque la tendencia general desciende ligeramente para valores negativos del índice, que indican una menor necesidad de inversión sanitaria, y luego se estabiliza e incluso aumenta levemente para valores positivos, la gran dispersión de los puntos indica que países con necesidades similares pueden destinar porcentajes muy diferentes de su PIB a sanidad.
 
 Además, los países de ingresos altos tienden a concentrarse en valores negativos o cercanos a cero del índice (menor necesidad de una mayor inversión), mientras que los de ingresos bajos presentan una mayor variabilidad y mayores necesidades de inversión.
-
-
-
-
 
 ```{r, fig.width=4, fig.height=4}
 if (!require("GGally")) install.packages("GGally")
@@ -622,12 +562,9 @@ ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 2)),  mapping =
 #ggsave('./results/Correlaciones_necesidades.pdf')
 ```
 
-La matriz de correlaciones permite evaluar la intensidad de la relación entre las variables. Los valores de correlación cercanos a 1 o -1 indican una relación fuerte (positiva o negativa, respectivamente), mientras que los valores cercanos a 0 sugieren una relación débil o inexistente. En general, se observan numerosas correlaciones altas en valor absoluto, lo que indica que las variables están estrechamente relacionadas entre sí. 
+La matriz de correlaciones permite evaluar la intensidad de la relación entre las variables. Los valores de correlación cercanos a 1 o -1 indican una relación fuerte (positiva o negativa, respectivamente), mientras que los valores cercanos a 0 sugieren una relación débil o inexistente. En general, se observan numerosas correlaciones altas en valor absoluto, lo que indica que las variables están estrechamente relacionadas entre sí.
 
 Esto sugiere que los indicadores sanitarios, demográficos y de desarrollo evolucionan, por lo general, de forma conjunta, reflejando diferentes aspectos de una misma realidad socioeconómica.
-
-
-
 
 # Discusión
 
