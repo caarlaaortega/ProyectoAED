@@ -340,7 +340,7 @@ El objetivo de este bloque es analizar las necesidades sanitarias de los diferen
 
 De este modo, se pretende identificar las principales desigualdades sanitarias existentes entre países y determinar si estas están relacionadas con su situación socioeconómica o geográfica.
 
-```{r, echo = TRUE, fig.width = 5, fig.height= 3.5}
+```{r, echo = TRUE, fig.width = 5, fig.height= 4}
 # BLOQUE 3. NECESIDADES SANITARIAS
 # Indicadores generales de salud según región.
 
@@ -351,12 +351,11 @@ ggplot(datos_cohorte_2019,
   stat_summary(fun = mean, geom = 'point',shape = 18, size = 3, color = 'darkred') +
   scale_fill_brewer(palette = 'Set2') +
   labs(
-    title = 'Distribución de la esperanza de vida',
-    subtitle = 'Diferenciación por región geográfica',
+    title = 'Esperanza de vida según la región geográfica',
     x = 'Región',
     y = 'Esperanza de vida (años)'
   ) +
-  theme(axis.text.y = element_text(size = 7, face = 'bold'),legend.position = 'none') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'none', title = element_text(size=9,   face='bold')) +
   coord_flip()
 
 # Mortalidad infantil:
@@ -366,22 +365,28 @@ ggplot(datos_cohorte_2019,
   stat_summary(fun = mean, geom = 'point',shape = 18, size = 3, color = 'darkred') +
   scale_fill_brewer(palette = 'Set2') +
   labs(
-    title = 'Distribución de la mortalidad infantil',
-    subtitle = 'Diferenciación por región geográfica',
+    title = 'Mortalidad infantil según la región geográfica',
     x = 'Región',
     y = 'Muertes por cada 1000 nacimientos'
   ) +
-  theme(axis.text.y = element_text(size = 7, face = 'bold'),legend.position = 'none') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'none', title = element_text(size=9,   face='bold')) +
   coord_flip()
 ```
+
+Observamos que las dos gráficas muestran importantes desigualdades sanitarias entre las regiones geográficas.
+
+África subsahariana presenta la situación más desfavorable, con la menor esperanza de vida y la mayor mortalidad infantil. 
+
+Por otra parte, Europa y Asia Central y América del Norte registran las mayores esperanzas de vida y tasas de mortalidad infantil muy reducidas. 
+
+Por tanto, se aprecia una relación inversa entre ambos indicadores: las regiones con mayor mortalidad infantil tienden a presentar una menor esperanza de vida, reflejando importantes desigualdades existentes en las condiciones sanitarias y de salud entre países y regiones.
+
 
 
 ## Correspondencia entre gasto público y necesidades
 
-
-
 ```{r, echo = TRUE, fig.width = 5, fig.height= 4}
-# 4. Comparación de las diferentes causas de mortalidad
+# Comparación de las diferentes causas de mortalidad
 
 # En estas gráficas veremos las diferencias en la distribución de la mortalidad por enfermedades
 # agudas y crónicas, comparando los países según su nivel de ingresos. 
@@ -410,17 +415,19 @@ ggplot(datos_mortalidad, aes(x = income,y = `Mortalidad (%)`, fill = `Tipo de en
   space = 'free_x'
   ) +
  labs(
-   title = 'Distribución de las causas de mortalidad',
-   subtitle = 'Comparación entre enfermedades agudas y crónicas',
+   title = 'Causas de mortalidad: enfermedades agudas vs crónicas',
    x = 'Nivel de ingresos del país',
    y = 'Porcentaje del total de muertes',
    fill = 'Tipo de enfermedad'
  ) +
  theme(axis.text.x = element_blank(),legend.position = 'bottom',
-       legend.text = element_text(size = 6),legend.title = element_text(size = 7),
-       panel.grid.minor = element_blank(),strip.text = element_text(size=7))
+       legend.text = element_text(size = 5), legend.title = element_text(size = 7), title = element_text(size=9,   face='bold'), panel.grid.minor = element_blank(),strip.text = element_text(size=7))
 
 ```
+
+La gráfica deja claro que, a medida que aumenta el nivel de ingresos de un país, las enfermedades crónicas prevalecen sobre las agudas. En los países más ricos, las muertes por enfermedades crónicas representan prácticamente el total, lo que refleja una transición epidemiológica asociada al desarrollo económico y al envejecimiento de la población, visto también anteriormente.
+
+
 
 # Bloque 4. Correspondencia entre gasto público y necesidades
 
@@ -459,15 +466,22 @@ ggplot(datos_correspondencia, aes(x = indice_necesidades, y = gasto_salud_gdp)) 
  geom_point(aes(color=income)) +
   geom_smooth(color='darkred',fill='darkred')+
  scale_colour_brewer(palette = "Set2") +
- labs(title = "Comparación gasto sanitario vs. necesidades sanitarias",
-   subtitle = "Por niveles de ingresos",
+ labs(title = "Gasto sanitario vs. necesidades sanitarias segun income",
    x = "Índice de necesidades sanitarias",
    y = "Gasto sanitario (% del PIB)",
    colour = "Nivel de ingresos"
  ) +
- theme(legend.position = 'bottom', legend.text = element_text(size = 6),
-        legend.title = element_text(size = 7))
+ theme(legend.position = 'bottom', legend.text = element_text(size = 5),
+        legend.title = element_text(size = 7), title = element_text(size=9,   face='bold'))
 ```
+
+La gráfica muestra que no existe una relación fuerte entre las necesidades sanitarias y el gasto sanitario (como porcentaje) del PIB. Aunque la tendencia general desciende ligeramente para valores negativos del índice, que indican una menor necesidad de inversión sanitaria, y luego se estabiliza e incluso aumenta levemente para valores positivos, la gran dispersión de los puntos indica que países con necesidades similares pueden destinar porcentajes muy diferentes de su PIB a sanidad. 
+
+Además, los países de ingresos altos tienden a concentrarse en valores negativos o cercanos a cero del índice (menor necesidad de una mayor inversión), mientras que los de ingresos bajos presentan una mayor variabilidad y mayores necesidades de inversión.
+
+
+
+
 
 ```{r, fig.width=4, fig.height=4}
 if (!require("GGally")) install.packages("GGally")
@@ -491,6 +505,12 @@ ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 2)),  mapping =
   theme(strip.text = element_text(size=4), axis.text = element_text(size=5))
 #ggsave('./results/Correlaciones_necesidades.pdf')
 ```
+
+La matriz de correlaciones permite evaluar la intensidad de la relación entre las variables. Los valores de correlación cercanos a 1 o −1 indican una relación fuerte (positiva o negativa, respectivamente), mientras que los valores cercanos a 0 sugieren una relación débil o inexistente. En general, se observan numerosas correlaciones altas en valor absoluto, lo que indica que las variables están estrechamente relacionadas entre sí. 
+
+Esto sugiere que los indicadores sanitarios, demográficos y de desarrollo evolucionan, por lo general, de forma conjunta, reflejando diferentes aspectos de una misma realidad socioeconómica.
+
+
 
 
 # Discusión
