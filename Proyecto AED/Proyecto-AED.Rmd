@@ -103,11 +103,22 @@ El estudio sigue la estructura propia de un AED. En primer lugar, se muestran lo
 # Materiales y Métodos
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
+if (!require("GGally")) install.packages("GGally")
+if (!require("ggplot2")) install.packages("ggplot2")
+if (!require("stringr")) install.packages("stringr")
+if (!require("dplyr")) install.packages("dplyr")
+if (!require("tidyr")) install.packages("tidyr")
+if (!require("tidyverse")) install.packages("tidyverse")
+if (!require("WDI")) install.packages("WDI")
+if (!require("VIM")) install.packages("VIM")
+library(WDI)
 library(ggplot2)
 library(stringr)
 library(dplyr)
 library(tidyr)
 library(tidyverse)
+library(GGally)
+library(VIM)
 ```
 
 ## Fuente y obtención de los datos
@@ -150,11 +161,26 @@ YE
 
 - **Inmunización**: Número de niños inmunizados completamente entre 15 y 23 meses (%). *Código: HF.IMM.FULL.*
 
-De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración inicial de los datos, puesto que son los años más recientes y de los que potencialmente se cuente con más cantidad de datos actualizados.
+De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración inicial de los datos, puesto que son los años más recientes y que contienen más registros completos. En el archivo Carga_datos_WDI.Rmd se detalla paso a paso el procedimiento seguido para manipular los datos. 
+
+```{r, echo = FALSE}
+indicadores <- c(
+  esperanza_vida = "SP.DYN.LE00.IN", gdp_per_capita = "NY.GDP.PCAP.CD",       
+  gasto_salud_gdp = "SH.XPD.CHEX.GD.ZS", gasto_defensa_gdp = 'MS.MIL.XPND.GD.ZS', 
+  mortalidad_infantil = "SP.DYN.IMRT.IN", acceso_agua = "SH.H2O.BASW.ZS",          
+  escolaridad_secundaria = "SE.SEC.NENR", causa_muerte_agudas = 'SH.DTH.COMM.ZS', 
+  causa_muerte_cronicas = 'SH.DTH.NCOM.ZS', mortalidad_cronicas = 'SH.DYN.NCOM.ZS', 
+  mortalidad_higiene = 'SH.STA.WASH.P5', mortalidad_aire = 'CC.SH.AIRP.AMB', 
+  fertilidad = 'SP.DYN.TFRT.IN', fertilidad_adolescente = 'SP.ADO.TFRT', 
+  inmunizacion = 'HF.IMM.FULL',population = 'SP.POP.TOTL',area = 'AG.LND.TOTL.K2')
+```
+
 
 ```{r, echo = TRUE}
-# Datos cargados de WDI sucios:
-
+# Carga de los datos tras predefinir las variables de interés: 
+datos_salud <- WDI(country = "all",indicator = indicadores, start = 2015, end = 2022, 
+                   extra = TRUE ) %>% 
+  filter(region != "Aggregates")
 ```
 
 
@@ -163,20 +189,98 @@ De todo el registro de años con los que se cuenta en el dataset del Banco Mundi
 Dado que los datos descargados eran extremadamente abundantes (2476 observaciones de 29 variables), con '3 dimensiones' (temporal, indicador y países), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%.
 
 ```{r, echo = TRUE}
-# Cargamos la cohorte 2019 de datos sucios:
-
-# Visualizamos un sumario de los datos:
-
+# Búsqueda de datos faltantes y cribado de variables:
+datos_faltantes <- function(variable){
+  filtrados <- datos_salud[!is.na(datos_salud[[variable]]), c('country', 'year', variable)]
+  p <- length(unique(filtrados$country))/217
+  return (p)}
+# Las variables que deben estudiarse en profundidad son: 
+variables_aed_init <- c('gdp_per_capita', 'gasto_salud_gdp', 'gasto_defensa_gdp',
+                        'mortalidad_infantil','acceso_agua', 'causa_muerte_agudas',
+                        'causa_muerte_cronicas', 'mortalidad_higiene')
+# Resumen de la presencia de datos por variable y por año. El objetivo es ver para 
+# qué años tiene esa variable, en cada país, un valor. 
+cobertura_por_anyo <- aggregate(datos_salud[variables_aed_init], 
+                                by = list(year = datos_salud$year),
+                                FUN = function(x) sum(!is.na(x)))
 ```
 
 
-Tras este análisis exploratorio (documento `Exploración_inicial.Rmd`), se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional creada a partir de la población y el área del país). El resto de variables fueron descartadas.
+Tras este análisis exploratorio, se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional creada a partir de la población y el área del país). El resto de variables fueron descartadas.
+
+```{r, echo = FALSE}
+variables_interes <- c('country', 'income', 'region', 'year', 'esperanza_vida','fertilidad',
+                       'fertilidad_adolescente', 'population','area', variables_aed_init)
+```
+
+A partir del dataset generado se aplicó un preprocesado de los datos para estudiar la presencia de datos anómalos y datos faltantes. Además, también se realizaron análisis estadísticos univariantes y bivariantes para caracterizar cada variable y contar con una base rigurosa para la visualización posterior. En el archivo Análisis_Exploratorio_inicial.Rmd se detalla paso a paso este proceso. 
+```{r}
+datos_cohorte_2019_raw <- subset(datos_salud, year == 2019, select = variables_interes)
+```
+
+```{r, echo = FALSE}
+# Sumario para analizar inicialmente los datos raw:
+sumario <- data.frame(
+  variable    = names(datos_cohorte_2019_raw),
+  type        = sapply(datos_cohorte_2019_raw, function(x) class(x)[1]),
+  levels      = sapply(datos_cohorte_2019_raw, function(x) length(unique(x))),
+  missFrac    = round(sapply(datos_cohorte_2019_raw, function(x) sum(is.na(x))) / nrow(datos_cohorte_2019_raw), 4),
+  outlierFrac = sapply(datos_cohorte_2019_raw, function(x) {
+    if (is.numeric(x)) {
+      n_validos <- sum(!is.na(x))
+      n_anomalos <- sum(abs(x - mean(x, na.rm = TRUE)) > 3 * sd(x, na.rm = TRUE), na.rm = TRUE)
+      round(n_anomalos / n_validos, 4)
+    } else {NA}}))
+rownames(sumario) <- NULL
+```
+Visualizamos mediante un sumario las características del 'raw data'.
+```{r}
+head(sumario[6:8,])
+```
+
+Ante la presencia de datos faltantes, se aplicó una imputación KNN por grupos de income sobre las variables con datos faltantes, para poder trabajar con ellas. En cuanto a los datos anómalos, se estudiaron con los métodos Boxplot, Hampel y Sigma3, pero la estrategia final fue dejarlos en cuanto que en este contexto aportan información relevante para el análisis. 
 
 ```{r, echo = TRUE}
-# Cargamos los datos resultantes tras la imputación: 
-load(file = './results/datos_cohorte_2019.RData')
-# Visualizamos un sumario de los datos tras la limpieza:
+# Suma de valores faltantes por variable:
+valores_na <- sapply(datos_cohorte_2019_raw,function(x) sum(is.na(x)))
+```
 
+```{r, echo = FALSE}
+datos_cohorte_2019 <- datos_cohorte_2019_raw
+imputar_ind <- c('gdp_per_capita', 'gasto_salud_gdp', 'gasto_defensa_gdp','esperanza_vida',
+                 'area', 'fertilidad','fertilidad_adolescente', 'population',
+                 'mortalidad_higiene', 'mortalidad_infantil','acceso_agua',
+                 'causa_muerte_agudas','causa_muerte_cronicas')
+```
+
+```{r, echo = TRUE}
+# Se definen en la lista imputar_ind las variables con datos faltantes y se aplica KNN:
+for (indicador in imputar_ind){
+  datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = indicador, k = 10, imp_var = FALSE)}
+# Definimos una nueva variable de interés con los datos ya limpios:
+datos_cohorte_2019$pop_per_area <- datos_cohorte_2019$population / datos_cohorte_2019$area
+```
+
+Finalmente, obtuvimos los estadísticos de posición y valor principales para las variables numéricas, siendo: 
+
+```{r, echo = FALSE}
+ind_explor_est <- c('esperanza_vida', 'fertilidad', 'fertilidad_adolescente','pop_per_area',
+                    'gdp_per_capita', 'gasto_salud_gdp','gasto_defensa_gdp',
+                    'mortalidad_infantil', 'acceso_agua','causa_muerte_agudas',
+                    'causa_muerte_cronicas','mortalidad_higiene')
+tabla_resumen_global <- datos_cohorte_2019 %>%
+  select(income, all_of(ind_explor_est)) %>%
+  pivot_longer(cols = -income, names_to = "indicador", values_to = "valor") %>%
+  group_by(income, indicador) %>%
+  summarise(
+    n       = sum(!is.na(valor)),
+    media   = round(mean(valor, na.rm = TRUE), 2),
+    sd      = round(sd(valor, na.rm = TRUE), 2),
+    mediana = round(median(valor, na.rm = TRUE), 2),
+    IQR     = round(IQR(valor, na.rm = TRUE), 2),
+    .groups = "drop"
+  )
+head(tabla_resumen_global[11:14,])
 ```
 
 # Resultados
