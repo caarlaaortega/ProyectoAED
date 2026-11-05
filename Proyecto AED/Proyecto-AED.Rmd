@@ -376,7 +376,7 @@ ggplot(datos_cohorte_2019, aes(x = gdp_per_capita, y = pop_per_area, colour = in
 El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos. 
 
 
-```{r, echo = TRUE, fig.width =5, fig.height= 3.5}
+```{r, echo = TRUE, fig.width =5, fig.height= 4}
 
 # Unimos las variables de gasto sanitario y militar, creando una columna que identifica el tipo 
 # de gasto y otra que recoge los valores correspondientes.
@@ -406,13 +406,19 @@ ggplot(datos_gastos, aes(x=str_wrap(region,width=15),y=`Gasto (%PIB)`, fill=regi
   facet_wrap(~`Tipo de gasto`, ncol=1)+
   scale_fill_brewer(palette='Set2')+
   labs(
-    title = 'Comparación del gasto sanitario y militar',
-    subtitle = 'Distribución por regiones',
+    title = 'Comparación del gasto sanitario y militar según la región',
     x = 'Región',
     y = 'Gasto (% del PIB)'
   ) +
   theme(axis.text.y = element_text(angle = 0,hjust = 0.5,size = 4,face = 'bold'),
-        legend.position = 'none',panel.grid.minor = element_blank()) + coord_flip()
+        legend.position = 'none', panel.grid.minor = element_blank(), title = element_text(size=9,   face='bold')) + coord_flip()
+```
+
+Se observa que, en general, el gasto en salud es claramente superior al gasto en defensa en la mayoría de las regiones. Además, el gasto sanitario presenta una mayor variabilidad entre países, mientras que el gasto en defensa suele concentrarse en valores más bajos y homogéneos.
+
+
+
+```{r, echo = TRUE, fig.width =5, fig.height= 4}
 
 # 2. Relación entre el gasto sanitario y el gasto en defensa.
 
@@ -433,10 +439,15 @@ ggplot(datos_cohorte_2019, aes(x = gasto_salud_gdp, y = gasto_defensa_gdp, color
   ) +
   geom_abline(color='darkred')+
   coord_flip()+
-  theme(legend.position = 'bottom', legend.title = element_text(size=7), legend.text = element_text(size=6), title = element_text(size=9, face='bold'))
+  theme(legend.position = 'bottom', legend.title = element_text(size=7), legend.text = element_text(size=5), title = element_text(size=9, face='bold'))
 
 #ggsave("./results/Relacion_gastos.pdf")
 ```
+
+La bisectriz representa los puntos donde el porcentaje de gasto en sanidad sería igual al porcentaje de gasto en defensa. Se observa que la mayoría de los países están por encima de la bisectriz, lo que indica que dedican una mayor proporción de su PIB a sanidad que a defensa. Por otro lado, la mayoría de puntos que aparecen por debajo de la bisectriz son de del grupo High income, denotando países donde se invierte mucho en defensa, cómo podrían ser Estados Unidos o Israel, entre otros.
+
+Además, los puntos aparecen bastante dispersos, por lo que no se aprecia una relación clara ni fuerte entre ambos gastos, aunque el gasto sanitario tiende a ser superior al militar en la mayoría de los casos.
+
 
 
 ## Bloque 3. Necesidades sanitarias.
@@ -611,7 +622,7 @@ ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 2)),  mapping =
 #ggsave('./results/Correlaciones_necesidades.pdf')
 ```
 
-La matriz de correlaciones permite evaluar la intensidad de la relación entre las variables. Los valores de correlación cercanos a 1 o −1 indican una relación fuerte (positiva o negativa, respectivamente), mientras que los valores cercanos a 0 sugieren una relación débil o inexistente. En general, se observan numerosas correlaciones altas en valor absoluto, lo que indica que las variables están estrechamente relacionadas entre sí. 
+La matriz de correlaciones permite evaluar la intensidad de la relación entre las variables. Los valores de correlación cercanos a 1 o -1 indican una relación fuerte (positiva o negativa, respectivamente), mientras que los valores cercanos a 0 sugieren una relación débil o inexistente. En general, se observan numerosas correlaciones altas en valor absoluto, lo que indica que las variables están estrechamente relacionadas entre sí. 
 
 Esto sugiere que los indicadores sanitarios, demográficos y de desarrollo evolucionan, por lo general, de forma conjunta, reflejando diferentes aspectos de una misma realidad socioeconómica.
 
