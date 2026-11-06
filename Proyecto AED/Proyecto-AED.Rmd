@@ -19,7 +19,7 @@ status: submit
 simplesummary: |
   Trabajo académico de análisis exploratorio sobre las prioridades de gasto público y las necesidades sanitarias internacionales utilizando datos del Banco Mundial (cohorte 2019).
 abstract: |
-  Este estudio analiza la correspondencia entre las prioridades de gasto público (salud y defensa) y la realidad epidemiológica de 218 países en 2019, empleando técnicas de AED, imputación por medianas de ingresos y pruebas de asociación estadística. Los resultados revelan una marcada polarización epidemiológica y un desajuste estructural entre la necesidad sanitaria y el esfuerzo inversor relativo de los estados.
+  Este estudio analiza la correspondencia entre las prioridades de gasto público (salud y defensa) y la realidad epidemiológica de 218 países en 2019, empleando técnicas de AED, imputación por knn y pruebas de asociación estadística. Los resultados revelan una marcada polarización epidemiológica y un desajuste estructural entre la necesidad sanitaria y el esfuerzo inversor relativo de los estados.
 keywords: |
   Análisis Exploratorio de Datos; Banco Mundial; Gasto Sanitario; Desigualdad Global; RStudio
 acknowledgement: |
@@ -90,39 +90,7 @@ Los datos utilizados en este trabajo proceden del Banco Mundial, concretamente d
 
 La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial. Esta base de datos contiene diversos indicadores, con datos para aproximadamente 200 países desde 1960.
 
-Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son:
-
-- **Esperanza de vida al nacer** (años)
-
-- **PIB per capita** (US\$)
-
-- **Gasto en salud** (% PIB)
-
-- **Gasto en defensa** (% PIB)
-
-- **Mortalidad infantil** (n:1000)
-
-- **Acceso al agua** (% población)
-
-- **Escolaridad secundaria** (total)
-
-- **Causa de muerte por enf. agudas**(% del total de muertes)
-
-- **Causa de muerte por enf. crónicas** (% del total de muertes)
-
-- **Mortalidad por falta de higiene** (n:100.000)
-
-- **Fertilidad** (nacimientos/mujer)
-
-- **Embarazos adolescentes**
-
-- **Población**
-
-- **Area** ($km^2$)
-
-- **Mortalidad por contaminación del aire** (muertes:100.000)
-
-- **Inmunización** (% bebes)
+Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son: **Esperanza de vida al nacer** (años), **PIB per capita** (US\$), **Gasto en salud** (% PIB), **Gasto en defensa** (% PIB), **Mortalidad infantil** (n:1000), **Acceso al agua** (% población), **Escolaridad secundaria** (total), **Causa de muerte por enf. agudas**(% del total de muertes), **Causa de muerte por enf. crónicas** (% del total de muertes), **Mortalidad por falta de higiene** (n:100.000), **Fertilidad** (nacimientos/mujer), **Embarazos adolescentes**, **Población**, **Area** ($km^2$), **Mortalidad por contaminación del aire** (muertes:100.000), **Inmunización** (% bebes).
 
 De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración, puesto que son los más recientes y que contienen más registros completos. En el archivo `Carga_datos_WDI.Rmd` se detalla paso a paso el procedimiento seguido para manipular los datos.
 
@@ -199,7 +167,7 @@ sumario <- data.frame(
 rownames(sumario) <- NULL
 ```
 
-Visualizamos mediante un sumario las características del 'raw data'.
+Visualizamos mediante un sumario las características del 'raw data', incluyendo el nombre de la variable, su tipo, el número de niveles, la fracción de valores faltantes y de outliers detectados mediante el método 3 sigma.
 
 ```{r}
 print(sumario[6:12,])
@@ -210,7 +178,7 @@ Ante la presencia de datos faltantes, se aplicó una imputación KNN sobre las v
 ```{r, echo = TRUE}
 # Suma de valores faltantes por variable:
 valores_na <- sapply(datos_cohorte_2019_raw,function(x) sum(is.na(x)))
-cat('Número de valores faltantes en total:',sum(valores_na))
+cat('Número total de valores faltantes:',sum(valores_na))
 ```
 
 ```{r, echo = FALSE}
@@ -228,7 +196,7 @@ for (indicador in imputar_ind){
 # Definimos una nueva variable de interés con los datos ya limpios:
 datos_cohorte_2019$pop_per_area <- datos_cohorte_2019$population / datos_cohorte_2019$area
 valores_na <- sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
-cat('Número de valores faltantes en total:',sum(valores_na))
+cat('Número total de valores faltantes:',sum(valores_na))
 ```
 
 Finalmente, se obtuvieron los estadísticos de posición y valor principales para las variables numéricas, siendo:
@@ -293,20 +261,29 @@ En esta primera gráfica se analiza la distribución de los niveles de ingresos 
 Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos.
 
 ```{r, echo = TRUE, fig.width = 5, fig.height= 4}
-# Distribución del PIB por región
-ggplot(datos_cohorte_2019, 
-       aes(x = str_wrap(region, width=15),y = gdp_per_capita,fill = region)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
-  stat_summary(fun = mean, geom = 'point', shape = 18,size = 3, color = 'darkred',
-               aes(group = region)) +
-  scale_y_log10(labels = scales::dollar_format(prefix = '$'), 
-                breaks = c(100,300 ,1000,3000,10000, 100000)) + 
-  scale_fill_brewer(palette = 'Set2') + 
-  labs(title = 'Distribución del PIB per cápita por región', x = 'Región',
-    y = 'PIB per cápita (US$, escala log10)', fill = 'Región') +
-  theme(title = element_text(size=9, face='bold'), 
-        axis.text.y = element_text(size = 7, face = 'bold'),
-        legend.position = 'none') + coord_flip()
+# Como hay gráficas que se asemejan en morfología (boxplots por regiones), definimos:
+plot_boxplot_region <- function(data, y_var, 
+                                titulo, y_label, log_scale = FALSE, breaks_log = NULL) {
+  
+  p <- ggplot(data, aes(x = stringr::str_wrap(region, width = 15), 
+                        y = {{ y_var }}, fill = region)) +
+    geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
+    stat_summary(fun = mean, geom = 'point', shape = 18, size = 3, color = 'darkred') +
+    scale_fill_brewer(palette = 'Set2') +
+    labs(title = titulo, x = 'Región', y = y_label, fill = 'Región') +
+    theme(title = element_text(size = 9, face = 'bold'), 
+          axis.text.y = element_text(size = 7,face = 'bold'),legend.position = 'none',
+          legend.key.size = unit(3,'pt')) +
+    coord_flip()
+  if (log_scale) { # para los que requieren escala logarítmica
+    p <- p + scale_y_log10(labels = scales::dollar_format(prefix = '$'),breaks = breaks_log)}
+  return(p)}
+
+# Distribución del PIB por región (con escala logarítmica)
+plot_boxplot_region(data = datos_cohorte_2019,y_var = gdp_per_capita,
+  titulo = 'Distribución del PIB per cápita por región',
+  y_label = 'PIB per cápita (US$, escala log10)',log_scale = TRUE,
+  breaks_log = c(100, 300, 1000, 3000, 10000, 100000))
 ```
 
 En este boxplot pretendemos ver la distribucuón del PIB per cápita segun la region.
@@ -404,26 +381,13 @@ De este modo, se pretende identificar las principales desigualdades sanitarias e
 ```{r, echo = TRUE, fig.width = 5, fig.height= 4}
 # BLOQUE 3. NECESIDADES SANITARIAS
 # Indicadores generales de salud según región.
-# Esperanza de vida:
-ggplot(datos_cohorte_2019,
-       aes(x = stringr::str_wrap(region, width = 15),y = esperanza_vida, fill = region)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
-  stat_summary(fun = mean, geom = 'point',shape = 18, size = 3, color = 'darkred') +
-  scale_fill_brewer(palette = 'Set2') +
-  labs(title = 'Esperanza de vida según la región geográfica',x = 'Región',
-    y = 'Esperanza de vida (años)') +
-  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'none',
-        title = element_text(size=9,   face='bold')) + coord_flip()
-# Mortalidad infantil:
-ggplot(datos_cohorte_2019,
-       aes(x = stringr::str_wrap(region, width = 15),y = mortalidad_infantil, fill = region)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
-  stat_summary(fun = mean, geom = 'point',shape = 18, size = 3, color = 'darkred') +
-  scale_fill_brewer(palette = 'Set2') +
-  labs(title = 'Mortalidad infantil según la región geográfica',x = 'Región',
-    y = 'Muertes por cada 1000 nacimientos') +
-  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'none', 
-        title = element_text(size=9,   face='bold')) + coord_flip()
+# Esperanza de vida según la región geográfica
+plot_boxplot_region(data = datos_cohorte_2019,y_var = esperanza_vida,
+  titulo = 'Esperanza de vida por región',y_label = 'Esperanza de vida (años)')
+
+# Mortalidad infantil según la región geográfica
+plot_boxplot_region(data = datos_cohorte_2019,y_var = mortalidad_infantil,
+  titulo = 'Mortalidad infantil por región',y_label = 'Muertes por cada 1000 nacimientos')
 ```
 
 Observamos que las dos gráficas muestran importantes desigualdades sanitarias entre las regiones geográficas.
@@ -537,3 +501,6 @@ Aquí interpretaremos los resultados
 # Conclusiones
 
 Conclusiones principales del estudio
+
+
+
