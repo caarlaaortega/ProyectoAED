@@ -92,37 +92,37 @@ La obtención de los datos se ha realizado mendiante el paquete WDI de R, que pe
 
 Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son:
 
-- **Esperanza de vida al nacer (total)**: número de años que un recién nacido viviría si los patrones de mortalidad del momento se mantienen a lo largo de vida (años). *Código: SP.DYN.LE00.IN.*
+- **Esperanza de vida al nacer** (años)
 
-- **PIB per capita**: Producto Interior Bruto, ganancias totales ganadas mediante la producción de bienes y servicioes en un territorio económico durante un periodo contable, y dividido entre la población general (US\$).*Código: NY.GDP.PCAP.CD.*
+- **PIB per capita** (US\$)
 
-- **Gasto en salud**: Estimación de los gastos en salud icluyendo los productos y servicios sanitarios consumidos cada año, sin incluir edificios, maquinaria, IT y stocks de vacunas para emergencias (% PIB). *Código: SH.XPD.CHEX.GD.ZS.*
+- **Gasto en salud** (% PIB)
 
-- **Gasto en defensa**: Gasto en defensa respecto al PIB (% PIB). *Código: MS.MIL.XPND.GD.ZS.*
+- **Gasto en defensa** (% PIB)
 
-- **Mortalidad infantil**: Número de muertes de bebes de 0 a 12 meses por cada 1000 nacimientos al año (n:1000). *Código: SP.DYN.IMRT.IN*.
+- **Mortalidad infantil** (n:1000)
 
-- **Acceso al agua**: Personas utilizando los servicios mínimos básicos de agua potable (% población). *Código: SH.H2O.BASW.ZS.*
+- **Acceso al agua** (% población)
 
-- **Escolaridad secundaria (total)**: Niños que reciben educación secundaria básica oficial (% neto). *Código: SE.SEC.NENR.*
+- **Escolaridad secundaria** (total)
 
-- **Causa de muerte por enf. agudas**: Personas que han fallecido por enfermedades agudas, que incluyen enfermedades infecciosas y parasitarias, infecciones respiratorias y deficiencias nutricionales (% del total de muertes). *Código: SH.DTH.COMM.ZS*.
+- **Causa de muerte por enf. agudas**(% del total de muertes)
 
-- **Causa de muerte por enf. crónicas**: Personas que han fallecido por enfermedades crónicas, que incluyen cáncer, diabetes, trastonos cardiovasculares, digestivos, dermatológicos, musculoesqueléticos y anomalías congenitales (% del total de muertes). *Código: SH.DTH.NCOM.ZS.*
+- **Causa de muerte por enf. crónicas** (% del total de muertes)
 
-- **Mortalidad por falta de higiene**: Personas que han muerto por el uso de agua en malas condiciones, condiciones sanitarias inseguras y falta de higiene (número de muertes por 100.000 personas). *Código: SH.STA.WASH.P5.*
+- **Mortalidad por falta de higiene** (n:100.000)
 
-- **Fertilidad**: Número de niños que daría a luz una mujer si viviese hasta el final de sus años fértiles en el momento temporal captado (nacimientos por mujer). *Código: SP.DYN.TFRT.IN.*
+- **Fertilidad** (nacimientos/mujer)
 
-- **Embarazos adolescentes**: Ratio de fertilidad adolescente, número de nacimientos por cada 1000 mujeres con una edad entre 15 y 19 años (nacimientos por 1000 adolescentes). *Código: SP.ADO.TFRT*. YE
+- **Embarazos adolescentes**
 
-- **Población**: Número de residentes del país estimados a mitad del año (#personas). *Código: SP.POP.TOTL.*
+- **Población**
 
-- **Area**: Superfície total del país potencialmente habitable, excluyendo el área ocupada por agua (ríos y lagos), y zonas exclusivamente económicas/laborales ($km^2$). *Código: AG.LND.TOTL.K2.*
+- **Area** ($km^2$)
 
-- **Mortalidad por contaminación del aire**: Número de muertes por transtornos derivados de la inhalación de partículas contaminantes presentes en el aire (muertes por 100.000 habitantes). *Código: CC.SH.AIRP.AMB.*
+- **Mortalidad por contaminación del aire** (muertes:100.000)
 
-- **Inmunización**: Número de niños inmunizados completamente entre 15 y 23 meses (%). *Código: HF.IMM.FULL.*
+- **Inmunización** (% bebes)
 
 De todo el registro de años con los que se cuenta en el dataset del Banco Mundial, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración, puesto que son los más recientes y que contienen más registros completos. En el archivo `Carga_datos_WDI.Rmd` se detalla paso a paso el procedimiento seguido para manipular los datos.
 
@@ -143,6 +143,9 @@ indicadores <- c(
 datos_salud <- WDI(country = "all",indicator = indicadores, start = 2015, end = 2022, 
                    extra = TRUE ) %>% 
   filter(region != "Aggregates")
+# Mostramos 4 países en diferentes años y con unas pocas variables:
+print(datos_salud[c(1,15,28,40),c(1,4,7,8,9)])
+
 ```
 
 ## Selección de la muestra
@@ -177,6 +180,7 @@ A partir del dataset generado se aplicó un preprocesado de los datos para estud
 
 ```{r}
 datos_cohorte_2019_raw <- subset(datos_salud, year == 2019, select = variables_interes)
+print(datos_cohorte_2019_raw[c(1,15,28,40),c(1,4,7,8,9)])
 ```
 
 ```{r, echo = FALSE}
@@ -198,7 +202,7 @@ rownames(sumario) <- NULL
 Visualizamos mediante un sumario las características del 'raw data'.
 
 ```{r}
-head(sumario[6:8,])
+print(sumario[6:12,])
 ```
 
 Ante la presencia de datos faltantes, se aplicó una imputación KNN sobre las variables con datos faltantes, para poder trabajar con ellas. En cuanto a los datos anómalos, se estudiaron con los métodos Boxplot, Hampel y Sigma3, pero la estrategia final fue dejarlos en cuanto que en este contexto aportan información relevante para el análisis.
@@ -206,6 +210,7 @@ Ante la presencia de datos faltantes, se aplicó una imputación KNN sobre las v
 ```{r, echo = TRUE}
 # Suma de valores faltantes por variable:
 valores_na <- sapply(datos_cohorte_2019_raw,function(x) sum(is.na(x)))
+cat('Número de valores faltantes en total:',sum(valores_na))
 ```
 
 ```{r, echo = FALSE}
@@ -222,6 +227,8 @@ for (indicador in imputar_ind){
   datos_cohorte_2019 <- kNN(datos_cohorte_2019, variable = indicador, k = 10, imp_var = FALSE)}
 # Definimos una nueva variable de interés con los datos ya limpios:
 datos_cohorte_2019$pop_per_area <- datos_cohorte_2019$population / datos_cohorte_2019$area
+valores_na <- sapply(datos_cohorte_2019,function(x) sum(is.na(x)))
+cat('Número de valores faltantes en total:',sum(valores_na))
 ```
 
 Finalmente, se obtuvieron los estadísticos de posición y valor principales para las variables numéricas, siendo:
@@ -243,7 +250,7 @@ tabla_resumen_global <- datos_cohorte_2019 %>%
     IQR     = round(IQR(valor, na.rm = TRUE), 2),
     .groups = "drop"
   )
-head(tabla_resumen_global[11:14,])
+print(as.data.frame(tabla_resumen_global[11:14,]))
 ```
 
 # Resultados
@@ -260,71 +267,58 @@ A continuación, se analizará el PIB per cápita de las distintas regiones, con
 
 Por último, se incorporará la variable de densidad demográfica para investigar si existe alguna relación entre la concentración de población de un país y su PIB per cápita.
 
-
 ```{r, echo = TRUE, fig.width = 5, fig.height= 4}
 # Distribución de niveles de ingresos en las diferentes regiones
 datos_cohorte_2019$income<-factor(datos_cohorte_2019$income,levels=c('Low income', 'Lower middle income', 'Upper middle income', 'High income'))
 
 ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15),fill = income)) +
   geom_bar(position = 'fill', color = 'black', alpha = 0.8) +
-  scale_y_continuous(labels = scales::percent) +
-  scale_fill_brewer(palette = 'Set2') +
-  labs(title = 'Distribución porcentual de ingresos por región',
-       x = 'Región geográfica',
-       y = 'Porcentaje (%)',
-       fill = 'Nivel de ingresos') + 
+  scale_y_continuous(labels = scales::percent) + scale_fill_brewer(palette = 'Set2') +
+  labs(title = 'Distribución porcentual de ingresos por región', x = 'Región geográfica',
+       y = 'Porcentaje (%)',fill = 'Nivel de ingresos') + 
   theme(title = element_text(size=9, face='bold'), 
-        axis.text.y = element_text(size = 7, face = 'bold'),
-        legend.position = 'bottom', 
-        legend.title = element_text(size=7), 
-        legend.text = element_text(size=5)) + 
-  coord_flip()
+        axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'bottom', 
+        legend.title = element_text(size=7),legend.text = element_text(size=5),
+        legend.key.size = unit(5, 'pt')) + coord_flip()
 
-# Hacemos un test chi2 para ver si existe una asociación estadísticamente significativa entre 
+# Hacemos un test chi2 para ver si existe una asociación estadísticamente significativa entre
 # el income y la región:
 t_contingencia <- table(datos_cohorte_2019$region,datos_cohorte_2019$income)
 resultado_chi2 <- chisq.test(t_contingencia,simulate.p.value = TRUE, B = 10000)
 resultado_chi2
 ```
+
 En esta primera gráfica se analiza la distribución de los niveles de ingresos según la región. En ella se observa cómo, mientras América del Norte se sitúa en un extremo con la totalidad de sus países en el nivel de ingresos altos, regiones como África Subsahariana y Asia Meridional concentran la mayor parte de su estructura socioeconómica en países de ingresos bajos y medios-bajos.
 
-Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos. 
-
+Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos.
 
 ```{r, echo = TRUE, fig.width = 5, fig.height= 4}
 # Distribución del PIB por región
 ggplot(datos_cohorte_2019, 
        aes(x = str_wrap(region, width=15),y = gdp_per_capita,fill = region)) +
-  # Boxplot:
   geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
-  # Añadimos la media:
-  stat_summary(fun = mean, geom = 'point', shape = 18,size = 3, color = 'darkred', aes(group = region)) +
-  # Escala logarítmica:
+  stat_summary(fun = mean, geom = 'point', shape = 18,size = 3, color = 'darkred',
+               aes(group = region)) +
   scale_y_log10(labels = scales::dollar_format(prefix = '$'), 
-                breaks = c(100,300 ,1000,3000,10000, 100000)) +
-  # Paleta de colores:
+                breaks = c(100,300 ,1000,3000,10000, 100000)) + 
   scale_fill_brewer(palette = 'Set2') + 
-  # Etiquetas:
-  labs(title = 'Distribución del PIB per cápita por región',
-    x = 'Región',
-    y = 'PIB per cápita (US$, escala log10)',
-    fill = 'Región') +
+  labs(title = 'Distribución del PIB per cápita por región', x = 'Región',
+    y = 'PIB per cápita (US$, escala log10)', fill = 'Región') +
   theme(title = element_text(size=9, face='bold'), 
         axis.text.y = element_text(size = 7, face = 'bold'),
-        legend.position = 'none') + 
-  coord_flip()
+        legend.position = 'none') + coord_flip()
 ```
+
 En este boxplot pretendemos ver la distribucuón del PIB per cápita segun la region.
 
-Podemos observar como América del Norte destaca por presentar los niveles de PIB per cápita más elevados, con una mediana superior a los \$50.000 y una baja variabilidad interna. En el extremo opuesto, África Subsahariana y Asia Meridional registran los niveles más bajos. África Subsahariana presenta una mayor dispersión, con valores desde los \$100  hasta los \$10.000, mientras que Asia Meridional muestra una distribución más concentrada, con una mediana inferior a los \$3.000.
+Podemos observar como América del Norte destaca por presentar los niveles de PIB per cápita más elevados, con una mediana superior a los \$50.000 y una baja variabilidad interna. En el extremo opuesto, África Subsahariana y Asia Meridional registran los niveles más bajos. África Subsahariana presenta una mayor dispersión, con valores desde los \$100 hasta los \$10.000, mientras que Asia Meridional muestra una distribución más concentrada, con una mediana inferior a los \$3.000.
 
 Por otro lado, las demás regiones presentan una mayor variabilidad. Europa y Asia Central destaca por tener la mediana más elevada, con un PIB per cápita superior a los \$20.000, aunque también presenta una dispersión considerable entre países. Oriente Medio y Norte de África muestra una distribución muy amplia y una mediana relativamente baja, reflejando importantes desigualdades económicas internas. Por su parte, América Latina y el Caribe presenta una distribución más concentrada, con una mediana cercana a los \$10.000, mientras que Asia Oriental y el Pacífico muestra una mayor dispersión, reflejada en una caja más ancha
 
 ```{r, echo = TRUE, fig.width = 5, fig.height= 4}
 # Comparación de la densidad demográfica con el PIB por cápita:
 ggplot(datos_cohorte_2019, 
-       aes(x = gdp_per_capita, y = pop_per_area, colour = income)) +
-  geom_point(alpha = 0.75) + 
+       aes(x = gdp_per_capita,y = pop_per_area,colour = income)) + geom_point(alpha = 0.75) +
   scale_y_log10(labels = scales::label_comma(), 
                 breaks = c(1, 10, 100, 1000, 10000)) +
   scale_x_log10(labels = scales::dollar_format(prefix = '$'),
@@ -335,11 +329,10 @@ ggplot(datos_cohorte_2019,
        y = "hab/km², escala logarítmica", colour='Nivel de ingresos') + 
   theme(title = element_text(size=9, face='bold'), 
         axis.text.y = element_text(size = 7, face = 'bold'),
-        legend.position = 'bottom', 
-        legend.title = element_text(size=7), 
-        legend.text = element_text(size=5)) +
-  coord_flip()
+        legend.position = 'bottom', legend.title = element_text(size=7), 
+        legend.text = element_text(size=5), legend.key.size = unit(5, 'pt')) + coord_flip()
 ```
+
 En esta última gráfica de este primer bloque podemos observar la distribución de los países según su nivel de ingresos, PIB per cápita y densidad demográfica.
 
 Se aprecia que los países de ingresos altos presentan una mayor variabilidad en su densidad demográfica, incluyendo valores en ambos extremos. A medida que disminuye el nivel de ingresos, las densidades tienden a concentrarse más en valores intermedios. No obstante, se observa una concentración importante de países de todos los niveles de ingresos en el intervalo de 300 a 3.000 habitantes/km², lo que indica que no existe una relación claramente definida entre el nivel de ingresos y la densidad de población.
@@ -352,15 +345,12 @@ El objetivo es analizar qué porcentaje del PIB por cápita se destina a recurso
 
 # Unimos las variables de gasto sanitario y militar, creando una columna que identifica el tipo 
 # de gasto y otra que recoge los valores correspondientes.
-
 datos_gastos<-datos_cohorte_2019 %>%
   select(region,income, gasto_salud_gdp,gasto_defensa_gdp) %>%
   pivot_longer(.,names_to = 'Tipo de gasto' ,values_to = 'Gasto (%PIB)',
                cols=c(gasto_salud_gdp , gasto_defensa_gdp) )%>%
   mutate(`Tipo de gasto`=recode(
     `Tipo de gasto` , gasto_salud_gdp='Gasto en salud', gasto_defensa_gdp='Gasto en defensa'))
-
-
 
 # 1. Comparación entre el gasto en defensa, gasto en sanidad según la región:
 
@@ -371,47 +361,34 @@ datos_gastos<-datos_cohorte_2019 %>%
 # en los patrones de gasto y analizar qué proporción del PIB destinan los países de cada región 
 # a ambos ámbitos.
 
-
 ggplot(datos_gastos, aes(x=str_wrap(region,width=15),y=`Gasto (%PIB)`, fill=region))+
   geom_boxplot(alpha=0.7,outlier.shape = 21,outlier.size = 1)+
   stat_summary(fun=mean,geom='point', shape=18, size=2, color='darkred', aes(group=region))+
-  facet_wrap(~`Tipo de gasto`, ncol=1)+
-  scale_fill_brewer(palette='Set2')+
-  labs(
-    title = 'Comparación del gasto sanitario y militar según la región',
-    x = 'Región',
-    y = 'Gasto (% del PIB)'
-  ) +
+  facet_wrap(~`Tipo de gasto`, ncol=1)+ scale_fill_brewer(palette='Set2')+
+  labs(title = 'Comparación del gasto sanitario y militar según la región', x = 'Región',
+       y = 'Gasto (% del PIB)') +
   theme(axis.text.y = element_text(angle = 0,hjust = 0.5,size = 4,face = 'bold'),
-        legend.position = 'none', panel.grid.minor = element_blank(), title = element_text(size=9,   face='bold')) + coord_flip()
+        legend.position = 'none', panel.grid.minor = element_blank(),
+        title = element_text(size=9,   face='bold')) + coord_flip()
 ```
 
 Se observa que, en general, el gasto en salud es claramente superior al gasto en defensa en la mayoría de las regiones. Además, el gasto sanitario presenta una mayor variabilidad entre países, mientras que el gasto en defensa suele concentrarse en valores más bajos y homogéneos.
 
 ```{r, echo = TRUE, fig.width =5, fig.height= 4}
-
 # 2. Relación entre el gasto sanitario y el gasto en defensa.
-
 # Representamos la relación entre ambos tipos de gastos mediante un scatter plot.
-
 # Eje X: gasto en salud (% del PIB)
 # Eje Y: gasto en defensa (% del PIB)
 # Nivel de ingresos por color
-
 ggplot(datos_cohorte_2019, aes(x = gasto_salud_gdp, y = gasto_defensa_gdp, color = income)) +
   geom_point(alpha = 0.75) +
   scale_color_brewer(palette = "Set2", name = "Nivel de ingresos") +
-  labs(
-    title = "Relación entre el gasto sanitario y militar por nivel de ingresos",
-    x = "Gasto sanitario (% del PIB)",
-    y = "Gasto en defensa (% del PIB)",
-    color = "Nivel de ingresos"
-  ) +
-  geom_abline(color='darkred')+
-  coord_flip()+
-  theme(legend.position = 'bottom', legend.title = element_text(size=7), legend.text = element_text(size=5), title = element_text(size=9, face='bold'))
-
-#ggsave("./results/Relacion_gastos.pdf")
+  labs(title = "Relación entre el gasto sanitario y militar por nivel de ingresos",
+       x = "Gasto sanitario (% del PIB)", y = "Gasto en defensa (% del PIB)", 
+       color = "Nivel de ingresos") + geom_abline(color='darkred')+coord_flip()+
+  theme(legend.position = 'bottom', legend.title = element_text(size=7), 
+        legend.text = element_text(size=5), title = element_text(size=9, face='bold'),
+        legend.key.size = unit(5, 'pt'))
 ```
 
 La bisectriz representa los puntos donde el porcentaje de gasto en sanidad sería igual al porcentaje de gasto en defensa. Se observa que la mayoría de los países están por encima de la bisectriz, lo que indica que dedican una mayor proporción de su PIB a sanidad que a defensa. Por otro lado, la mayoría de puntos que aparecen por debajo de la bisectriz son de del grupo High income, denotando países donde se invierte mucho en defensa, cómo podrían ser Estados Unidos o Israel, entre otros.
@@ -427,34 +404,26 @@ De este modo, se pretende identificar las principales desigualdades sanitarias e
 ```{r, echo = TRUE, fig.width = 5, fig.height= 4}
 # BLOQUE 3. NECESIDADES SANITARIAS
 # Indicadores generales de salud según región.
-
 # Esperanza de vida:
 ggplot(datos_cohorte_2019,
        aes(x = stringr::str_wrap(region, width = 15),y = esperanza_vida, fill = region)) +
   geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
   stat_summary(fun = mean, geom = 'point',shape = 18, size = 3, color = 'darkred') +
   scale_fill_brewer(palette = 'Set2') +
-  labs(
-    title = 'Esperanza de vida según la región geográfica',
-    x = 'Región',
-    y = 'Esperanza de vida (años)'
-  ) +
-  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'none', title = element_text(size=9,   face='bold')) +
-  coord_flip()
-
+  labs(title = 'Esperanza de vida según la región geográfica',x = 'Región',
+    y = 'Esperanza de vida (años)') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'none',
+        title = element_text(size=9,   face='bold')) + coord_flip()
 # Mortalidad infantil:
 ggplot(datos_cohorte_2019,
        aes(x = stringr::str_wrap(region, width = 15),y = mortalidad_infantil, fill = region)) +
   geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
   stat_summary(fun = mean, geom = 'point',shape = 18, size = 3, color = 'darkred') +
   scale_fill_brewer(palette = 'Set2') +
-  labs(
-    title = 'Mortalidad infantil según la región geográfica',
-    x = 'Región',
-    y = 'Muertes por cada 1000 nacimientos'
-  ) +
-  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'none', title = element_text(size=9,   face='bold')) +
-  coord_flip()
+  labs(title = 'Mortalidad infantil según la región geográfica',x = 'Región',
+    y = 'Muertes por cada 1000 nacimientos') +
+  theme(axis.text.y = element_text(size = 7, face = 'bold'), legend.position = 'none', 
+        title = element_text(size=9,   face='bold')) + coord_flip()
 ```
 
 Observamos que las dos gráficas muestran importantes desigualdades sanitarias entre las regiones geográficas.
@@ -492,18 +461,14 @@ datos_mortalidad <- datos_cohorte_2019 %>%
 ggplot(datos_mortalidad, aes(x = income,y = `Mortalidad (%)`, fill = `Tipo de enfermedad`)) +
  geom_boxplot(alpha = 0.7,outlier.shape = 21, outlier.size = 1) +
  scale_fill_brewer(palette = 'Set2') +
-  facet_grid(
-    . ~ income, scales = 'free_x',
-  space = 'free_x'
-  ) +
- labs(
-   title = 'Causas de mortalidad: enfermedades agudas vs crónicas',
-   x = 'Nivel de ingresos del país',
-   y = 'Porcentaje del total de muertes',
-   fill = 'Tipo de enfermedad'
- ) +
+  facet_grid(. ~ income, scales = 'free_x',space = 'free_x') +
+ labs(title = 'Causas de mortalidad: enfermedades agudas vs crónicas',
+      x = 'Nivel de ingresos del país',y = 'Porcentaje del total de muertes',
+      fill = 'Tipo de enfermedad') +
  theme(axis.text.x = element_blank(),legend.position = 'bottom',
-       legend.text = element_text(size = 5), legend.title = element_text(size = 7), title = element_text(size=9,   face='bold'), panel.grid.minor = element_blank(),strip.text = element_text(size=7))
+       legend.text = element_text(size = 5), legend.title = element_text(size = 7), 
+       title = element_text(size=9,   face='bold'),
+       panel.grid.minor = element_blank(),strip.text = element_text(size=7))
 
 ```
 
@@ -529,30 +494,19 @@ En este último bloque, veremos si existe una correspondencia entre el gasto pú
 
 datos_correspondencia <- datos_cohorte_2019 %>%
  mutate(
-   indice_necesidades = rowMeans(cbind(
-       scale(mortalidad_infantil),
-       scale(mortalidad_higiene),
-       scale(fertilidad),
-       scale(causa_muerte_agudas),
-       scale(causa_muerte_cronicas)
-       -scale(esperanza_vida),
-       -scale(acceso_agua)
-     ),
-     na.rm = TRUE
-   )
- )
+   indice_necesidades = rowMeans(cbind(scale(mortalidad_infantil),scale(mortalidad_higiene),
+       scale(fertilidad),scale(causa_muerte_agudas),-scale(causa_muerte_cronicas)
+       -scale(esperanza_vida),-scale(acceso_agua)),na.rm = TRUE))
 
 ggplot(datos_correspondencia, aes(x = indice_necesidades, y = gasto_salud_gdp)) +
  geom_point(aes(color=income)) +
-  geom_smooth(color='darkred',fill='darkred')+
- scale_colour_brewer(palette = "Set2") +
+  geom_smooth(color='darkred',fill='darkred')+scale_colour_brewer(palette = "Set2") +
  labs(title = "Gasto sanitario vs. necesidades sanitarias segun income",
-   x = "Índice de necesidades sanitarias",
-   y = "Gasto sanitario (% del PIB)",
-   colour = "Nivel de ingresos"
- ) +
+      x = "Índice de necesidades sanitarias",y = "Gasto sanitario (% del PIB)",
+      colour = "Nivel de ingresos") +
  theme(legend.position = 'bottom', legend.text = element_text(size = 5),
-        legend.title = element_text(size = 7), title = element_text(size=9,   face='bold'))
+       legend.title = element_text(size = 7), title = element_text(size=9, face='bold'),
+       legend.key.size = unit(5, 'pt'))
 ```
 
 La gráfica muestra que no existe una relación fuerte entre las necesidades sanitarias y el gasto sanitario (como porcentaje) del PIB. Aunque la tendencia general desciende ligeramente para valores negativos del índice, que indican una menor necesidad de inversión sanitaria, y luego se estabiliza e incluso aumenta levemente para valores positivos, la gran dispersión de los puntos indica que países con necesidades similares pueden destinar porcentajes muy diferentes de su PIB a sanidad.
@@ -560,26 +514,16 @@ La gráfica muestra que no existe una relación fuerte entre las necesidades san
 Además, los países de ingresos altos tienden a concentrarse en valores negativos o cercanos a cero del índice (menor necesidad de una mayor inversión), mientras que los de ingresos bajos presentan una mayor variabilidad y mayores necesidades de inversión.
 
 ```{r, fig.width=4, fig.height=4}
-if (!require("GGally")) install.packages("GGally")
-library(GGally)
-
 datos_corr <- datos_cohorte_2019 %>%
-  select(
-    gasto_salud_gdp,
-    esperanza_vida,
-    fertilidad,
-    mortalidad_infantil,
-    acceso_agua,
-    mortalidad_higiene
-  )
-
+  select(gasto_salud_gdp,esperanza_vida,fertilidad,mortalidad_infantil,acceso_agua,
+         mortalidad_higiene)
 # Correlación entre variables
 cor(datos_corr, use = "pairwise.complete.obs")
 
 # Gráfica
-ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 2)),  mapping = aes(colour = datos_cohorte_2019$income, alpha = 0.5))+
+ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 2)), 
+        mapping = aes(colour = datos_cohorte_2019$income, alpha = 0.5))+
   theme(strip.text = element_text(size=4), axis.text = element_text(size=5))
-#ggsave('./results/Correlaciones_necesidades.pdf')
 ```
 
 La matriz de correlaciones permite evaluar la intensidad de la relación entre las variables. Los valores de correlación cercanos a 1 o -1 indican una relación fuerte (positiva o negativa, respectivamente), mientras que los valores cercanos a 0 sugieren una relación débil o inexistente. En general, se observan numerosas correlaciones altas en valor absoluto, lo que indica que las variables están estrechamente relacionadas entre sí.
