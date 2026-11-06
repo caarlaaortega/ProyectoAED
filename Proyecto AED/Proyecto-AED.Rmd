@@ -182,78 +182,97 @@ A continuación se muestran los resultados del estudio, divididos en 4 bloques, 
 
 ## Bloque 1. Contexto socioeconómico.
 
-El objetivo es analizar el PIB por cápita de los diferentes países, agrupándolos atendiendo a la variable 'income'. Asimismo, se estudiará a las regiones a las que pertenece cada país, por grupos, para determinar si existe alguna relación entre situación económica y localización geográfica. Finalmente, se incorporará el concepto de densidad demográfica para estudiar si existe una relación entre esta y el PIB por cápita del país.
+En este primer bloque, el objetivo es obtener una visión general del contexto socioeconómico de los países que componen nuestra muestra.
 
-```{r, echo = TRUE, fig.width = 5, fig.height= 3.5}
-# 1. Relación entre región, PIB per cápita y el 'income':
+Para ello, en primer lugar se estudiará la distribución de los países según su nivel de ingresos (*income*) y la región geográfica a la que pertenecen, para determinar si existe alguna relación entre estas dos.
 
-# Las variables región e income son categóricas, y el PIB es numérica. Vamos a representar la 
-# región vs. income en un gráfico de barras apiladas y el PIB per capita vs. región mediante
-# boxplots. 
+A continuación, se analizará el PIB per cápita de las distintas regiones, con el fin de comparar sus niveles de riqueza y estudiar las diferencias económicas existentes entre ellas.
 
+Por último, se incorporará la variable de densidad demográfica para investigar si existe alguna relación entre la concentración de población de un país y su PIB per cápita.
+
+
+```{r, echo = TRUE, fig.width = 5, fig.height= 4}
+# Distribución de niveles de ingresos en las diferentes regiones
 datos_cohorte_2019$income<-factor(datos_cohorte_2019$income,levels=c('Low income', 'Lower middle income', 'Upper middle income', 'High income'))
 
-# 1.1. Región vs. income:
 ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15),fill = income)) +
   geom_bar(position = 'fill', color = 'black', alpha = 0.8) +
   scale_y_continuous(labels = scales::percent) +
   scale_fill_brewer(palette = 'Set2') +
   labs(title = 'Distribución porcentual de ingresos por región',
-       subtitle = 'Proporción de niveles de renta en cada área geográfica',
        x = 'Región geográfica',
        y = 'Porcentaje (%)',
        fill = 'Nivel de ingresos') + 
-  theme(axis.text.y = element_text(size = 7, face = 'bold'),legend.position = 'bottom',
-        legend.key.size = unit(5, 'pt'), legend.text = element_text(size = 6),
-        legend.title = element_text(size = 7)) + coord_flip()
+  theme(title = element_text(size=9, face='bold'), 
+        axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'bottom', 
+        legend.title = element_text(size=7), 
+        legend.text = element_text(size=5)) + 
+  coord_flip()
 
 # Hacemos un test chi2 para ver si existe una asociación estadísticamente significativa entre 
 # el income y la región:
-
 t_contingencia <- table(datos_cohorte_2019$region,datos_cohorte_2019$income)
 resultado_chi2 <- chisq.test(t_contingencia,simulate.p.value = TRUE, B = 10000)
 resultado_chi2
+```
+En esta primera gráfica se analiza la distribución de los niveles de ingresos según la región. En ella se observa cómo, mientras América del Norte se sitúa en un extremo con la totalidad de sus países en el nivel de ingresos altos, regiones como África Subsahariana y Asia Meridional concentran la mayor parte de su estructura socioeconómica en países de ingresos bajos y medios-bajos.
 
-# 1.2. Región vs. PIB per cápita:
-ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15),y = gdp_per_capita,
-                               fill = region)) +
+Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos. 
+
+
+```{r, echo = TRUE, fig.width = 5, fig.height= 4}
+# Distribución del PIB por región
+ggplot(datos_cohorte_2019, 
+       aes(x = str_wrap(region, width=15),y = gdp_per_capita,fill = region)) +
   # Boxplot:
   geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
   # Añadimos la media:
-  stat_summary(fun = mean, geom = 'point', shape = 18,size = 3, color = 'darkred',
-               aes(group = region)) +
+  stat_summary(fun = mean, geom = 'point', shape = 18,size = 3, color = 'darkred', aes(group = region)) +
   # Escala logarítmica:
-  scale_y_log10(labels = scales::dollar_format(prefix = '$'),
-                breaks = c(100, 1000, 10000, 100000)) +
+  scale_y_log10(labels = scales::dollar_format(prefix = '$'), 
+                breaks = c(100,300 ,1000,3000,10000, 100000)) +
   # Paleta de colores:
   scale_fill_brewer(palette = 'Set2') + 
   # Etiquetas:
-  labs(title = 'Distribución del PIB per cápita',
-    subtitle = 'Diferenciación por región',
+  labs(title = 'Distribución del PIB per cápita por región',
     x = 'Región',
     y = 'PIB per cápita (US$, escala log10)',
     fill = 'Región') +
-  theme(axis.text.y = element_text(size = 7, face = 'bold'),
-        legend.position = 'none') + coord_flip()
+  theme(title = element_text(size=9, face='bold'), 
+        axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'none') + 
+  coord_flip()
+```
+En este boxplot pretendemos ver la distribucuón del PIB per cápita segun la region.
 
-# 2. Comparación de la densidad demográfica con el PIB por cápita:
+Podemos observar como América del Norte destaca por presentar los niveles de PIB per cápita más elevados, con una mediana superior a los \$50.000 y una baja variabilidad interna. En el extremo opuesto, África Subsahariana y Asia Meridional registran los niveles más bajos. África Subsahariana presenta una mayor dispersión, con valores desde los \$100  hasta los \$10.000, mientras que Asia Meridional muestra una distribución más concentrada, con una mediana inferior a los \$3.000.
 
-# Para ello se realizará un scatter plot, usando una escala logarítmica en ambos ejes (pues la
-# densidad de población también se encuentra desbalanceada)
+Por otro lado, las demás regiones presentan una mayor variabilidad. Europa y Asia Central destaca por tener la mediana más elevada, con un PIB per cápita superior a los \$20.000, aunque también presenta una dispersión considerable entre países. Oriente Medio y Norte de África muestra una distribución muy amplia y una mediana relativamente baja, reflejando importantes desigualdades económicas internas. Por su parte, América Latina y el Caribe presenta una distribución más concentrada, con una mediana cercana a los \$10.000, mientras que Asia Oriental y el Pacífico muestra una mayor dispersión, reflejada en una caja más ancha
 
-ggplot(datos_cohorte_2019, aes(x = gdp_per_capita, y = pop_per_area, colour = income)) +
+```{r, echo = TRUE, fig.width = 5, fig.height= 4}
+# Comparación de la densidad demográfica con el PIB por cápita:
+ggplot(datos_cohorte_2019, 
+       aes(x = gdp_per_capita, y = pop_per_area, colour = income)) +
   geom_point(alpha = 0.75) + 
-  scale_y_log10(labels = scales::label_comma(), breaks = c(1, 10, 100, 1000, 10000)) +
-  scale_x_log10(labels = scales::dollar_format(prefix = '$'),breaks = c(500, 100, 1000, 10000)) +
+  scale_y_log10(labels = scales::label_comma(), 
+                breaks = c(1, 10, 100, 1000, 10000)) +
+  scale_x_log10(labels = scales::dollar_format(prefix = '$'),
+                breaks = c(500, 100, 1000, 10000)) +
   scale_fill_brewer(palette = 'Set2', name = 'Nivel de ingresos') +
   labs(title = 'Densidad demográfica vs. PIB per cápita',
-       subtitle = 'Escala logarítmica base 10',
        x = "PIB per cápita (US$, escala logarítmica)",
-       y = "hab/km², escala logarítmica", colour='Nivel de ingresos') + coord_flip()+
-  theme(legend.position = 'bottom', legend.text = element_text(size = 6),
-        legend.title = element_text(size = 7))
+       y = "hab/km², escala logarítmica", colour='Nivel de ingresos') + 
+  theme(title = element_text(size=9, face='bold'), 
+        axis.text.y = element_text(size = 7, face = 'bold'),
+        legend.position = 'bottom', 
+        legend.title = element_text(size=7), 
+        legend.text = element_text(size=5)) +
+  coord_flip()
 ```
+En esta última gráfica de este primer bloque podemos observar la distribución de los países según su nivel de ingresos, PIB per cápita y densidad demográfica.
 
+Se aprecia que los países de ingresos altos presentan una mayor variabilidad en su densidad demográfica, incluyendo valores en ambos extremos. A medida que disminuye el nivel de ingresos, las densidades tienden a concentrarse más en valores intermedios. No obstante, se observa una concentración importante de países de todos los niveles de ingresos en el intervalo de 300 a 3.000 habitantes/km², lo que indica que no existe una relación claramente definida entre el nivel de ingresos y la densidad de población.
 
 ## Bloque 2. Inversión en salud y defensa. 
 
