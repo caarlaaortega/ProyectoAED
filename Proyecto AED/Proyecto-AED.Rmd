@@ -342,11 +342,9 @@ ggplot(datos_cohorte_2019,
 ```
 En esta última gráfica de este primer bloque podemos observar la distribución de los países según su nivel de ingresos, PIB per cápita y densidad demográfica.
 
-
-## Bloque 2. Inversión en salud y defensa.
-
 Se aprecia que los países de ingresos altos presentan una mayor variabilidad en su densidad demográfica, incluyendo valores en ambos extremos. A medida que disminuye el nivel de ingresos, las densidades tienden a concentrarse más en valores intermedios. No obstante, se observa una concentración importante de países de todos los niveles de ingresos en el intervalo de 300 a 3.000 habitantes/km², lo que indica que no existe una relación claramente definida entre el nivel de ingresos y la densidad de población.
 
+## Bloque 2. Inversión en salud y defensa.
 
 El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos.
 
