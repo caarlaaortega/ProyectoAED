@@ -49,7 +49,7 @@ En un contexto global caracterizado por importantes desigualdades económicas, d
 
 Con el objetivo de abordar esta problemática, se analizará un conjunto de indicadores económicos, sanitarios y demográficos de países de distintas regiones del mundo. A través de técnicas de análisis exploratorio, visualización de datos y contrastes estadísticos, se buscará identificar patrones de distribución de la riqueza, diferencias en las prioridades de gasto y posibles relaciones entre la situación sanitaria de la población y las decisiones de inversión pública.
 
-El estudio se articula en torno a la siguiente pregunta principal: __¿Existe una correspondencia entre las prioridades de gasto de los países y las necesidades epidemiológicas de su población?__ Los resultados obtenidos se integrarán en una discusión conjunta que permitirá valorar si las decisiones de gasto público se encuentran alineadas con las necesidades epidemiológicas de la población.
+El estudio se articula en torno a la siguiente pregunta principal: __\textquestiondown{}Existe una correspondencia entre las prioridades de gasto de los países y las necesidades epidemiológicas de su población?__ Los resultados obtenidos se integrarán en una discusión conjunta que permitirá valorar si las decisiones de gasto público se encuentran alineadas con las necesidades epidemiológicas de la población.
 
 # Materiales y Métodos
 
@@ -351,7 +351,7 @@ ggplot(datos_mortalidad, aes(x = income,y = `Mortalidad (%)`, fill = `Tipo de en
 
 La gráfica deja claro que, a medida que aumenta el nivel de ingresos de un país, las enfermedades crónicas prevalecen sobre las agudas, lo que refleja una transición epidemiológica asociada al desarrollo económico y al envejecimiento de la población.
 
-# Bloque 4. Correspondencia entre gasto público y necesidades
+## Bloque 4. Correspondencia entre gasto público y necesidades
 
 En este último bloque, se estudiará si existe una correspondencia entre el gasto público y se identificarán las principales desigualdades sanitarias existentes entre países para determinar si estas están relacionadas con su situación socioeconómica o geográfica.
 
