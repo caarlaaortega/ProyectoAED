@@ -165,10 +165,7 @@ Ante la presencia de datos faltantes, se aplicó una imputación KNN. En cuanto 
 ```{r, echo = TRUE}
 # Suma de valores faltantes por variable:
 valores_na <- sapply(datos_cohorte_2019_raw,function(x) sum(is.na(x)))
-outliers_3sigma <- sapply(datos_num, function(x) {
-  sum(abs(x-mean(x, na.rm = TRUE))>3*sd(x, na.rm = TRUE), na.rm = TRUE)})
 cat('Número total de valores faltantes:',sum(valores_na))
-cat('Número total de outliers:',sum(outliers_3sigma))
 ```
 
 ```{r, echo = FALSE}
