@@ -49,15 +49,7 @@ En un contexto global caracterizado por importantes desigualdades económicas, d
 
 Con el objetivo de abordar esta problemática, se analizará un conjunto de indicadores económicos, sanitarios y demográficos de países de distintas regiones del mundo. A través de técnicas de análisis exploratorio, visualización de datos y contrastes estadísticos, se buscará identificar patrones de distribución de la riqueza, diferencias en las prioridades de gasto y posibles relaciones entre la situación sanitaria de la población y las decisiones de inversión pública.
 
-El estudio se articula en torno a la siguiente pregunta principal: __Existe una correspondencia entre las prioridades de gasto de los países y las necesidades epidemiológicas de su población?__ Para responderla, el análisis se estructura en diferentes bloques:
-
-- **Distribución de la riqueza**: estudiar cómo se distribuye la riqueza a nivel mundial y si existen patrones asociados a la localización geográfica.
-
-- **Prioridades de gasto**: analizar el peso relativo del gasto en salud y defensa, así como las diferencias existentes entre regiones y grupos de ingresos.
-
-- **Necesidades sanitarias**: identificar los principales problemas de salud que afectan a las distintas regiones y evaluar su relación con los patrones de inversión observados.
-
-Finalmente, los resultados obtenidos se integrarán en una discusión conjunta que permitirá valorar si las decisiones de gasto público se encuentran alineadas con las necesidades epidemiológicas de la población.
+El estudio se articula en torno a la siguiente pregunta principal: __Existe una correspondencia entre las prioridades de gasto de los países y las necesidades epidemiológicas de su población?__ Los resultados obtenidos se integrarán en una discusión conjunta que permitirá valorar si las decisiones de gasto público se encuentran alineadas con las necesidades epidemiológicas de la población.
 
 # Materiales y Métodos
 
@@ -82,11 +74,9 @@ library(VIM)
 
 ## Fuente y obtención de los datos
 
-Los datos utilizados en este trabajo proceden del Banco Mundial, concretamente de la base de datos *World Development Indicators* (WDI), la cual recopila indicadores tanto económicos como sanitarios o demográficos de países de todo el mundo.
+Los datos utilizados proceden del Banco Mundial, concretamente de la base de datos *World Development Indicators* (WDI), la cual recopila indicadores tanto económicos como sanitarios o demográficos de países de todo el mundo. La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial. Esta base de datos contiene diversos indicadores, con datos para aproximadamente 200 países desde 1960.
 
-La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial. Esta base de datos contiene diversos indicadores, con datos para aproximadamente 200 países desde 1960.
-
-Teniendo en cuenta las preguntas que se han formulado inicialmente, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son: **Esperanza de vida al nacer** (años), **PIB per capita** (US\$), **Gasto en salud** (% PIB), **Gasto en defensa** (% PIB), **Mortalidad infantil** (n:1000), **Acceso al agua** (% población), **Escolaridad secundaria** (total), **Causa de muerte por enf. agudas**(% del total de muertes), **Causa de muerte por enf. crónicas** (% del total de muertes), **Mortalidad por falta de higiene** (n:100.000), **Fertilidad** (nacimientos/mujer), **Embarazos adolescentes**, **Población**, **Area** ($km^2$), **Mortalidad por contaminación del aire** (muertes:100.000), **Inmunización** (% bebes).
+Teniendo en cuenta la pregunta formulada, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son: **Esperanza de vida al nacer** (años), **PIB per capita** (US\$), **Gasto en salud** (% PIB), **Gasto en defensa** (% PIB), **Mortalidad infantil** (n:1000), **Acceso al agua** (% población), **Escolaridad secundaria** (total), **Causa de muerte por enf. agudas**(% del total de muertes), **Causa de muerte por enf. crónicas** (% del total de muertes), **Mortalidad por falta de higiene** (n:100.000), **Fertilidad** (nacimientos/mujer), **Embarazos adolescentes**, **Población**, **Area** ($km^2$), **Mortalidad por contaminación del aire** (muertes:100.000), **Inmunización** (% bebes).
 
 Asimismo, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración, puesto que son los más recientes y que contienen más registros completos. En el archivo `Carga_datos_WDI.Rmd` se detalla paso a paso el procedimiento seguido para manipular los datos.
 
@@ -110,7 +100,7 @@ print(datos_salud[c(1,17,28),c(1,4,7,8,9)]) # Mostramos 3 países en diferentes 
 
 ## Selección de la muestra
 
-Dado que los datos descargados eran abundantes (2476 observaciones de 29 variables, 29 indicadores para 218 países y 7 años), se realizó una exploración inicial de los datos descargados para elegir un año y descartar las variables con un porcentaje de datos faltantes superior al 70%.
+Dado que los datos descargados eran abundantes (2476 observaciones de 29 variables, 29 indicadores para 218 países y 7 años), se realizó una exploración inicial de los datos descargados para elegir un año y se descartaron las variables con un porcentaje de datos faltantes superior al 70%.
 
 ```{r, echo = TRUE}
 # Búsqueda de datos faltantes y cribado de variables:
@@ -203,18 +193,18 @@ tabla_resumen_global <- datos_cohorte_2019 %>%
     IQR     = round(IQR(valor, na.rm = TRUE), 2),
     .groups = "drop"
   )
-print(as.data.frame(tabla_resumen_global[11:14,]))
+print(as.data.frame(tabla_resumen_global[12:13,]))
 ```
 
 # Resultados y discusión
 
-A continuación se muestran los resultados del estudio, divididos en 4 bloques, que están organizados de modo que permitan responder a la pregunta principal del trabajo.
+A continuación se muestran los resultados del estudio, divididos en 4 bloques, organizados de modo que permitan responder a la pregunta principal del trabajo.
 
 ## Bloque 1. Contexto socioeconómico.
 
-En este primer bloque, el objetivo es obtener una visión general del contexto socioeconómico de los países que componen nuestra muestra. Para ello, en primer lugar se estudiará la distribución de los países según su nivel de ingresos (*income*) y la región geográfica a la que pertenecen, para determinar si existe alguna relación entre estas dos. A continuación, se analizará el PIB per cápita de las distintas regiones, con el fin de comparar sus niveles de riqueza y estudiar las diferencias económicas existentes entre ellas. Por último, se incorporará la variable de densidad demográfica para investigar si existe alguna relación entre la concentración de población de un país y su PIB per cápita.
+En este primer bloque, el objetivo es obtener una visión general del contexto socioeconómico de los países que componen nuestra muestra. Para ello, en primer lugar se estudiará la distribución de los países según su nivel de ingresos (*income*) y la región geográfica a la que pertenecen, para determinar si existe alguna relación entre estas dos. A continuación, se analizará el PIB per cápita de las distintas regiones. Por último, se incorporará la variable de densidad demográfica para investigar si existe alguna relación entre la concentración de población de un país y su PIB per cápita.
 
-```{r, echo = TRUE, fig.width = 5, fig.height= 3}
+```{r, echo = TRUE, fig.width = 5, fig.height= 2.5}
 # Distribución de niveles de ingresos en las diferentes regiones
 datos_cohorte_2019$income<-factor(datos_cohorte_2019$income,levels=c('Low income', 'Lower middle income',
                                                                      'Upper middle income', 'High income'))
@@ -224,7 +214,7 @@ ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15),fill = income)) +
   scale_fill_brewer(palette = 'Set2') + labs(title = 'Distribución porcentual de ingresos por región',
                                              x = 'Región geográfica',y = 'Porcentaje (%)',
                                              fill = 'Nivel de ingresos') + 
-  theme(title = element_text(size=9, face='bold'), axis.text.y = element_text(size = 7, face = 'bold'),
+  theme(title = element_text(size=7, face='bold'), axis.text.y = element_text(size = 4, face = 'bold'),
         legend.position = 'bottom', legend.title = element_text(size=7),legend.text = element_text(size=5),
         legend.key.size = unit(5, 'pt')) + coord_flip()
 # Hacemos un test chi2 para ver si existe una asociación estadísticamente significativa entre
@@ -238,7 +228,7 @@ En esta primera gráfica se analiza la distribución de los niveles de ingresos 
 
 Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos. Asimismo, dado el resultado del test chi2 (p-valor <<< 0.05) la suposición de independencia de la situación económica y localización geográfica de los países se puede rechazar. 
 
-```{r, echo = TRUE, fig.width = 5, fig.height= 3}
+```{r, echo = TRUE, fig.width = 5, fig.height= 2.5}
 # Como hay gráficas que se asemejan en morfología (boxplots por regiones), definimos:
 plot_boxplot_region <- function(data, y_var, 
                                 titulo, y_label, log_scale = FALSE, breaks_log = NULL) {
@@ -247,13 +237,12 @@ plot_boxplot_region <- function(data, y_var,
     stat_summary(fun = mean, geom = 'point', shape = 18, size = 3, color = 'darkred') +
     scale_fill_brewer(palette = 'Set2') +
     labs(title = titulo, x = 'Región', y = y_label, fill = 'Región') +
-    theme(title = element_text(size = 9, face = 'bold'), 
-          axis.text.y = element_text(size = 7,face = 'bold'),legend.position = 'none',
+    theme(title = element_text(size = 7, face = 'bold'), 
+          axis.text.y = element_text(size = 4,face = 'bold'),legend.position = 'none',
           legend.key.size = unit(3,'pt')) +coord_flip()
   if (log_scale) { # para los que requieren escala logarítmica
     p <- p + scale_y_log10(labels = scales::dollar_format(prefix = '$'),breaks = breaks_log)}
   return(p)}
-
 # Distribución del PIB por región (con escala logarítmica)
 plot_boxplot_region(data = datos_cohorte_2019,y_var = gdp_per_capita,
   titulo = 'Distribución del PIB per cápita por región',
@@ -261,31 +250,31 @@ plot_boxplot_region(data = datos_cohorte_2019,y_var = gdp_per_capita,
   breaks_log = c(100, 300, 1000, 3000, 10000, 100000))
 ```
 
-En este boxplot pretendemos ver la distribucuón del PIB per cápita segun la region. Podemos observar como América del Norte destaca por presentar los niveles de PIB per cápita más elevados, con una mediana superior a los \$50.000 y una baja variabilidad interna. En el extremo opuesto, África Subsahariana y Asia Meridional registran los niveles más bajos. África Subsahariana presenta una mayor dispersión, con valores desde los \$100 hasta los \$10.000, mientras que Asia Meridional muestra una distribución más concentrada, con una mediana inferior a los \$3.000. Estos resultados se alinean con los anteriores, pudiendo afirmar que los países con mayor capital se sitúan en el hemisferio norte.
+En este boxplot podemos observar como América del Norte destaca por presentar los niveles de PIB per cápita más elevados, con una mediana superior a los \$50.000 y una baja variabilidad interna. En el extremo opuesto, África Subsahariana y Asia Meridional registran los niveles más bajos. África Subsahariana presenta una mayor dispersión, con valores desde los \$100 hasta los \$10.000, mientras que Asia Meridional muestra una distribución más concentrada, con una mediana inferior a los \$3.000. Estos resultados se alinean con los anteriores, pudiendo afirmar que los países con mayor capital se sitúan en el hemisferio norte.
 
-Por otro lado, las demás regiones presentan una mayor variabilidad. Europa y Asia Central destaca por tener la mediana más elevada, con un PIB per cápita superior a los \$20.000, aunque también presenta una dispersión considerable entre países. Oriente Medio y Norte de África muestra una distribución muy amplia y una mediana relativamente baja, reflejando importantes desigualdades económicas internas. Por su parte, América Latina y el Caribe presenta una distribución más concentrada, con una mediana cercana a los \$10.000, mientras que Asia Oriental y el Pacífico muestra una mayor dispersión, reflejada en una caja más ancha
+Por otro lado, las demás regiones presentan una mayor variabilidad. Europa y Asia Central destaca por tener la mediana más elevada, con un PIB per cápita superior a los \$20.000, aunque con una dispersión considerable entre países. Oriente Medio y Norte de África muestra una distribución muy amplia y una mediana relativamente baja, reflejando importantes desigualdades económicas internas. 
 
 ```{r, echo = TRUE, fig.width = 4.5, fig.height= 2.5}
 # Comparación de la densidad demográfica con el PIB por cápita:
 ggplot(datos_cohorte_2019, 
-       aes(x = gdp_per_capita,y = pop_per_area,colour = income)) + geom_point(alpha = 0.75) +
+       aes(x = gdp_per_capita,y = pop_per_area,colour = income)) + geom_point(alpha = 0.75, size = 0.5) +
   scale_y_log10(labels = scales::label_comma(), breaks = c(1, 10, 100, 1000, 10000)) +
   scale_x_log10(labels = scales::dollar_format(prefix = '$'), breaks = c(500, 100, 1000, 10000)) +
   scale_fill_brewer(palette = 'Set2', name = 'Nivel de ingresos') +
   labs(title = 'Densidad demográfica vs. PIB per cápita',x = "PIB per cápita (US$, escala logarítmica)",
        y = "hab/km², escala logarítmica", colour='Nivel de ingresos') + 
-  theme(title = element_text(size=9, face='bold'), axis.text.y = element_text(size = 7, face = 'bold'),
+  theme(title = element_text(size=7, face='bold'), axis.text.y = element_text(size = 4, face = 'bold'),
         legend.position = 'bottom', legend.title = element_text(size=7), 
         legend.text = element_text(size=5), legend.key.size = unit(5, 'pt')) + coord_flip()
 ```
 
-En esta última gráfica podemos observar la distribución de los países según su nivel de ingresos, PIB per cápita y densidad demográfica. Se aprecia que los países de ingresos altos presentan una mayor variabilidad en su densidad demográfica, incluyendo valores en ambos extremos. A medida que disminuye el nivel de ingresos, las densidades tienden a concentrarse más en valores intermedios. No obstante, se observa una concentración importante de países de todos los niveles de ingresos en el intervalo de 300 a 3.000 habitantes/km², lo que indica que no existe una relación claramente definida entre el nivel de ingresos y la densidad de población.
+En esta última gráfica podemos observar la distribución de los países según su nivel de ingresos, PIB per cápita y densidad demográfica. Se aprecia que los países de ingresos altos presentan una mayor variabilidad en su densidad demográfica, incluyendo valores en ambos extremos. A medida que disminuye el nivel de ingresos, las densidades tienden a concentrarse más en valores intermedios. No obstante, se observa una concentración importante de países de todos los niveles de ingresos en el intervalo de 300 a 3.000 habitantes/$km^2$, lo que indica que no existe una relación claramente definida entre el nivel de ingresos y la densidad de población.
 
 ## Bloque 2. Inversión en salud y defensa.
 
 El objetivo es analizar qué porcentaje del PIB por cápita se destina a recursos sanitarios y qué porcentaje se destina a propósitos militares. Puede tratarse de un indicador de la situación sociosanitaria del país y de su calidad de vida, además de ser un indicativo claro para estudiar dónde ponen el foco las autoridades a la hora de ofrecer servicios a sus ciudadanos.
 
-```{r, echo = TRUE, fig.width =5, fig.height= 5}
+```{r, echo = TRUE, fig.width =5, fig.height= 3.5}
 # Unimos las variables de gasto sanitario y militar, creando una columna que identifica el tipo 
 # de gasto y otra que recoge los valores correspondientes.
 datos_gastos<-datos_cohorte_2019 %>%
@@ -305,35 +294,31 @@ ggplot(datos_gastos, aes(x=str_wrap(region,width=15),y=`Gasto (%PIB)`, fill=regi
   labs(title = 'Comparación del gasto sanitario y militar según la región', x = 'Región',
        y = 'Gasto (% del PIB)') +
   theme(axis.text.y = element_text(angle = 0,hjust = 0.5,size = 4,face = 'bold'),legend.position = 'none',
-        panel.grid.minor = element_blank(), title = element_text(size=9,   face='bold')) + coord_flip()
+        panel.grid.minor = element_blank(), title = element_text(size=7,   face='bold')) + coord_flip()
 ```
 
 Se observa que, en general, el gasto en salud es claramente superior al gasto en defensa en la mayoría de las regiones. Además, el gasto sanitario presenta una mayor variabilidad entre países, mientras que el gasto en defensa suele concentrarse en valores más bajos y homogéneos.
 
 ```{r, echo = TRUE, fig.width =5, fig.height= 3}
 # 2. Relación entre el gasto sanitario y el gasto en defensa.
-# Representamos la relación entre ambos tipos de gastos mediante un scatter plot.
-# Eje X: gasto en salud (% del PIB)
-# Eje Y: gasto en defensa (% del PIB)
-# Nivel de ingresos por color
+# Representamos la relación entre ambos tipos de gastos mediante un scatter plot
 ggplot(datos_cohorte_2019, aes(x = gasto_salud_gdp, y = gasto_defensa_gdp, color = income)) +
   geom_point(alpha = 0.75) + scale_color_brewer(palette = "Set2", name = "Nivel de ingresos") +
   labs(title = "Relación entre el gasto sanitario y militar por nivel de ingresos",
        x = "Gasto sanitario (% del PIB)", y = "Gasto en defensa (% del PIB)", 
        color = "Nivel de ingresos") + geom_abline(color='darkred')+coord_flip()+
   theme(legend.position = 'bottom', legend.title = element_text(size=7), 
-        legend.text = element_text(size=5), title = element_text(size=9, face='bold'),
+        legend.text = element_text(size=5), title = element_text(size=7, face='bold'),
         legend.key.size = unit(5, 'pt'))
 ```
 
-La bisectriz representa los puntos donde el porcentaje de gasto en sanidad sería igual al porcentaje de gasto en defensa. Se observa que la mayoría de los países están por encima de la bisectriz, lo que indica que dedican una mayor proporción de su PIB a sanidad que a defensa. Por otro lado, la mayoría de puntos que aparecen por debajo de la bisectriz son de del grupo High income, denotando países donde se invierte mucho en defensa, cómo podrían ser Estados Unidos o Israel, entre otros. Además, los puntos aparecen bastante dispersos, por lo que no se aprecia una relación clara ni fuerte entre ambos gastos.
+Se observa que la mayoría de los países están por encima de la bisectriz, lo que indica que dedican una mayor proporción de su PIB a sanidad que a defensa. Por otro lado, la mayoría de puntos que aparecen por debajo de la bisectriz son de del grupo High income, denotando países donde se invierte mucho en defensa, cómo podrían ser Estados Unidos o Israel, entre otros. Además, los puntos aparecen bastante dispersos, por lo que no se aprecia una relación clara ni fuerte entre ambos gastos.
 
 ## Bloque 3. Necesidades sanitarias.
 
-El objetivo de este bloque es analizar las necesidades sanitarias de los diferentes países, estudiando cómo varían en función de su nivel de ingresos y de su región geográfica. Para ello, se utilizarán indicadores relacionados con la esperanza de vida, la mortalidad infantil, las condiciones de higiene y el acceso al agua potable. Además, se estudiará la distribución de las principales causas de mortalidad, diferenciando entre enfermedades agudas y crónicas. De este modo, se pretende identificar las principales desigualdades sanitarias existentes entre países y determinar si estas están relacionadas con su situación socioeconómica o geográfica.
+El objetivo de este bloque es analizar las necesidades sanitarias de los diferentes países, estudiando cómo varían en función de su nivel de ingresos y de su región geográfica. Para ello, se utilizarán indicadores relacionados con la esperanza de vida y la mortalidad infantil. Además, se estudiará la distribución de las principales causas de mortalidad, diferenciando entre enfermedades agudas y crónicas. 
 
 ```{r, echo = TRUE, fig.width = 5, fig.height= 3}
-# BLOQUE 3. NECESIDADES SANITARIAS
 # Esperanza de vida según la región geográfica
 plot_boxplot_region(data = datos_cohorte_2019,y_var = esperanza_vida,
   titulo = 'Esperanza de vida por región',y_label = 'Esperanza de vida (años)')
@@ -342,11 +327,11 @@ plot_boxplot_region(data = datos_cohorte_2019,y_var = mortalidad_infantil,
   titulo = 'Mortalidad infantil por región',y_label = 'Muertes por cada 1000 nacimientos')
 ```
 
-Observamos que las dos gráficas muestran importantes desigualdades sanitarias entre las regiones geográficas. África subsahariana presenta la situación más desfavorable, con la menor esperanza de vida y la mayor mortalidad infantil. Por otra parte, Europa y Asia Central y América del Norte registran las mayores esperanzas de vida y tasas de mortalidad infantil muy reducidas. Por tanto, se aprecia una relación inversa entre ambos indicadores: las regiones con mayor mortalidad infantil tienden a presentar una menor esperanza de vida, reflejando importantes desigualdades existentes en las condiciones sanitarias y de salud entre países y regiones.
+Las dos gráficas muestran importantes desigualdades sanitarias entre las regiones geográficas. África subsahariana presenta la situación más desfavorable, con la menor esperanza de vida y la mayor mortalidad infantil. Por otra parte, Europa y Asia Central y América del Norte registran las mayores esperanzas de vida y tasas de mortalidad infantil muy reducidas. Por tanto, se aprecia una relación inversa entre ambos indicadores, reflejando importantes desigualdades existentes en las condiciones sanitarias y de salud entre países y regiones.
 
-```{r, echo = TRUE, fig.width = 5, fig.height= 3}
+```{r, echo = TRUE, fig.width = 5, fig.height= 2.5}
 # Comparación de las diferentes causas de mortalidad: enfermedades agudas o crónicas
-# Para facilitar la representación, costruimos una tabla tidy creando una columna que identifica el tipo de
+# Costruimos una tabla tidy creando una columna que identifica el tipo de
 # enfermedad y otra que recoge los valores correspondientes al procetaje de mortalidad. 
 datos_mortalidad <- datos_cohorte_2019 %>%
   select(income, region, causa_muerte_agudas, causa_muerte_cronicas) %>%
@@ -361,19 +346,18 @@ ggplot(datos_mortalidad, aes(x = income,y = `Mortalidad (%)`, fill = `Tipo de en
   labs(title = 'Causas de mortalidad: enfermedades agudas vs crónicas',x = 'Nivel de ingresos del país',
        y = 'Porcentaje del total de muertes',fill = 'Tipo de enfermedad') +
  theme(axis.text.x = element_blank(),legend.position = 'bottom',legend.text = element_text(size = 5),
-       legend.title = element_text(size = 7),title = element_text(size=9, face='bold'),
+       legend.title = element_text(size = 7),title = element_text(size=7, face='bold'),
        panel.grid.minor = element_blank(),strip.text = element_text(size=7))
 ```
 
-La gráfica deja claro que, a medida que aumenta el nivel de ingresos de un país, las enfermedades crónicas prevalecen sobre las agudas. En los países más ricos, las muertes por enfermedades crónicas representan prácticamente el total, lo que refleja una transición epidemiológica asociada al desarrollo económico y al envejecimiento de la población, visto también anteriormente.
+La gráfica deja claro que, a medida que aumenta el nivel de ingresos de un país, las enfermedades crónicas prevalecen sobre las agudas, lo que refleja una transición epidemiológica asociada al desarrollo económico y al envejecimiento de la población.
 
 # Bloque 4. Correspondencia entre gasto público y necesidades
 
-En este último bloque, veremos si existe una correspondencia entre el gasto público. 
+En este último bloque, se estudiará si existe una correspondencia entre el gasto público y se identificarán las principales desigualdades sanitarias existentes entre países para determinar si estas están relacionadas con su situación socioeconómica o geográfica.
 
-```{r, echo = TRUE, fig.width = 5, fig.height= 3}
-# Para analizar si el gasto destinado a salud se corresponde con las necesidades sanitarias de
-# cada país, elaboramos un gráfico de dispersión (scatter plot). En el eje X representaremos el
+```{r, echo = TRUE, fig.width = 5, fig.height= 2}
+# Elaboramos un gráfico de dispersión (scatter plot). En el eje X representaremos el
 # gasto en salud y en el eje Y un índice compuesto de necesidades sanitarias.
 # Cálculo del índice de necesidades:
 # En primer lugar, estandarizamos las variables seleccionadas para que todas tengan una escala comparable y
@@ -385,23 +369,21 @@ datos_correspondencia <- datos_cohorte_2019 %>%
        scale(fertilidad),scale(causa_muerte_agudas),-scale(causa_muerte_cronicas),
        -scale(esperanza_vida),-scale(acceso_agua)),na.rm = TRUE))
 ggplot(datos_correspondencia, aes(x = indice_necesidades, y = gasto_salud_gdp)) +
-  geom_point(aes(color=income)) + geom_smooth(color='darkred',fill='darkred')+
+  geom_point(aes(color=income), size = 0.5) + geom_smooth(color='darkred',fill='darkred')+
   scale_colour_brewer(palette = "Set2") +
   labs(title = "Gasto sanitario vs. necesidades sanitarias segun income",colour = "Nivel de ingresos",
        x = "Índice de necesidades sanitarias",y = "Gasto sanitario (% del PIB)") +
  theme(legend.position = 'bottom', legend.text = element_text(size = 5),
-       legend.title = element_text(size = 7), title = element_text(size=9, face='bold'),
+       legend.title = element_text(size = 7), title = element_text(size=7, face='bold'),
        legend.key.size = unit(5, 'pt'))
 ```
 
-La gráfica muestra que no existe una relación fuerte entre las necesidades sanitarias y el gasto sanitario (como porcentaje) del PIB. Aunque la tendencia general desciende ligeramente para valores negativos del índice, que indican una menor necesidad de inversión sanitaria, y luego se estabiliza e incluso aumenta levemente para valores positivos, la gran dispersión de los puntos indica que países con necesidades similares pueden destinar porcentajes muy diferentes de su PIB a sanidad.
-
-Además, los países de ingresos altos tienden a concentrarse en valores negativos o cercanos a cero del índice (menor necesidad de una mayor inversión), mientras que los de ingresos bajos presentan una mayor variabilidad y mayores necesidades de inversión.
+La gráfica muestra que no existe una relación fuerte entre las necesidades sanitarias y el gasto sanitario (como porcentaje) del PIB. Aunque la tendencia general desciende ligeramente para valores negativos del índice, que indican una menor necesidad de inversión sanitaria, y luego se estabiliza e incluso aumenta levemente para valores positivos, la gran dispersión de los puntos indica que países con necesidades similares pueden destinar porcentajes muy diferentes de su PIB a sanidad. Además, los países de ingresos altos tienden a concentrarse en valores negativos o cercanos a cero del índice (menor necesidad de una mayor inversión), mientras que los de ingresos bajos presentan una mayor variabilidad y mayores necesidades de inversión.
 
 ```{r, fig.width=5, fig.height=3.5}
 datos_corr <- datos_cohorte_2019 %>%
   select(gasto_salud_gdp,esperanza_vida,fertilidad,mortalidad_infantil,acceso_agua,mortalidad_higiene)
-cor(datos_corr, use = "pairwise.complete.obs") # Correlación entre variables
+correlaciones <- cor(datos_corr, use = "pairwise.complete.obs") # Correlación entre variables
 ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 2)), 
         mapping = aes(colour = datos_cohorte_2019$income, alpha = 0.5))+
   theme(strip.text = element_text(size=4), axis.text = element_text(size=5))
