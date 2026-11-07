@@ -217,8 +217,7 @@ ggplot(datos_cohorte_2019, aes(x = str_wrap(region, width=15),fill = income)) +
   theme(title = element_text(size=7, face='bold'), axis.text.y = element_text(size = 4, face = 'bold'),
         legend.position = 'bottom', legend.title = element_text(size=7),legend.text = element_text(size=5),
         legend.key.size = unit(5, 'pt')) + coord_flip()
-# Hacemos un test chi2 para ver si existe una asociación estadísticamente significativa entre
-# el income y la región:
+# Hacemos un test chi2 para ver si existe una asociación entre el income y la región:
 t_contingencia <- table(datos_cohorte_2019$region,datos_cohorte_2019$income)
 resultado_chi2 <- chisq.test(t_contingencia,simulate.p.value = TRUE, B = 10000)
 cat('P-valor chi2:', resultado_chi2$p.value)
@@ -228,7 +227,7 @@ En esta gráfica se observa cómo, mientras América del Norte se sitúa en un e
 
 Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos. Asimismo, dado el resultado del test chi2 (p-valor $<<<$ 0.05) la suposición de independencia de la situación económica y localización geográfica de los países se puede rechazar. 
 
-```{r, echo = TRUE, fig.width = 5, fig.height= 2.5}
+```{r, echo = TRUE, fig.width = 5, fig.height= 1.8}
 # Como hay gráficas que se asemejan en morfología (boxplots por regiones), definimos:
 plot_boxplot_region <- function(data, y_var, 
                                 titulo, y_label, log_scale = FALSE, breaks_log = NULL) {
@@ -299,7 +298,7 @@ ggplot(datos_gastos, aes(x=str_wrap(region,width=15),y=`Gasto (%PIB)`, fill=regi
 
 Se observa que, en general, el gasto en salud es claramente superior al gasto en defensa en la mayoría de las regiones. Además, el gasto sanitario presenta una mayor variabilidad entre países, mientras que el gasto en defensa suele concentrarse en valores más bajos y homogéneos.
 
-```{r, echo = TRUE, fig.width =5, fig.height= 3}
+```{r, echo = TRUE, fig.width =5, fig.height= 2}
 # 2. Relación entre el gasto sanitario y el gasto en defensa.
 # Representamos la relación entre ambos tipos de gastos mediante un scatter plot
 ggplot(datos_cohorte_2019, aes(x = gasto_salud_gdp, y = gasto_defensa_gdp, color = income)) +
