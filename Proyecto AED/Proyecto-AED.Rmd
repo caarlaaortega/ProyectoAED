@@ -226,7 +226,7 @@ cat('P-valor chi2:', resultado_chi2$p.value)
 
 En esta primera gráfica se analiza la distribución de los niveles de ingresos según la región. En ella se observa cómo, mientras América del Norte se sitúa en un extremo con la totalidad de sus países en el nivel de ingresos altos, regiones como África Subsahariana y Asia Meridional concentran la mayor parte de su estructura socioeconómica en países de ingresos bajos y medios-bajos.
 
-Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos. Asimismo, dado el resultado del test chi2 (p-valor <<< 0.05) la suposición de independencia de la situación económica y localización geográfica de los países se puede rechazar. 
+Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos. Asimismo, dado el resultado del test chi2 (p-valor $<<<$ 0.05) la suposición de independencia de la situación económica y localización geográfica de los países se puede rechazar. 
 
 ```{r, echo = TRUE, fig.width = 5, fig.height= 2.5}
 # Como hay gráficas que se asemejan en morfología (boxplots por regiones), definimos:
@@ -250,7 +250,7 @@ plot_boxplot_region(data = datos_cohorte_2019,y_var = gdp_per_capita,
   breaks_log = c(100, 300, 1000, 3000, 10000, 100000))
 ```
 
-En este boxplot podemos observar como América del Norte destaca por presentar los niveles de PIB per cápita más elevados, con una mediana superior a los \$50.000 y una baja variabilidad interna. En el extremo opuesto, África Subsahariana y Asia Meridional registran los niveles más bajos. África Subsahariana presenta una mayor dispersión, con valores desde los \$100 hasta los \$10.000, mientras que Asia Meridional muestra una distribución más concentrada, con una mediana inferior a los \$3.000. Estos resultados se alinean con los anteriores, pudiendo afirmar que los países con mayor capital se sitúan en el hemisferio norte.
+En este boxplot podemos observar como América del Norte destaca por presentar los niveles de PIB per cápita más elevados, con una mediana superior a los \$50.000 y una baja variabilidad interna. En el extremo opuesto, África Subsahariana y Asia Meridional registran los niveles más bajos. La primera presenta una mayor dispersión, mientras que la segunda muestra una distribución más concentrada. Estos resultados se alinean con los anteriores, pudiendo afirmar que los países con mayor capital se sitúan en el hemisferio norte.
 
 Por otro lado, las demás regiones presentan una mayor variabilidad. Europa y Asia Central destaca por tener la mediana más elevada, con un PIB per cápita superior a los \$20.000, aunque con una dispersión considerable entre países. Oriente Medio y Norte de África muestra una distribución muy amplia y una mediana relativamente baja, reflejando importantes desigualdades económicas internas. 
 
