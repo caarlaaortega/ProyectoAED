@@ -43,13 +43,13 @@ header-includes:
 
 # Introducción
 
-En el presente trabajo se aplican los conocimientos adquiridos en la asignatura de Análisis Exploratorio de Datos (AED) a un problema de interés socioeconómico y sanitario: analizar si las prioridades presupuestarias de los países reflejan las necesidades reales de su población.
+En este trabajo se aplican los conocimientos adquiridos en la asignatura de Análisis Exploratorio de Datos a un problema de interés socioeconómico y sanitario: analizar si las prioridades presupuestarias de los países reflejan las necesidades reales de su población.
 
-En un contexto global caracterizado por importantes desigualdades económicas, demográficas y sanitarias, los gobiernos deben distribuir recursos limitados entre distintas áreas estratégicas. Entre ellas, la salud y la defensa constituyen dos ámbitos especialmente relevantes, ya que representan distintas formas de garantizar el bienestar y la seguridad de los ciudadanos. Sin embargo, surge la cuestión de si la magnitud de estas inversiones responde realmente a las características epidemiológicas y sanitarias de cada país o si existen otros factores que condicionan dichas decisiones.
+En un contexto global caracterizado por importantes desigualdades económicas, demográficas y sanitarias, los gobiernos deben distribuir recursos limitados entre distintas áreas estratégicas como la salud y la defensa. Esto plantea la cuestión de si la magnitud de estas inversiones responde realmente a las características epidemiológicas y sanitarias de cada país o si existen otros factores que condicionan dichas decisiones.
 
 Con el objetivo de abordar esta problemática, se analizará un conjunto de indicadores económicos, sanitarios y demográficos de países de distintas regiones del mundo. A través de técnicas de análisis exploratorio, visualización de datos y contrastes estadísticos, se buscará identificar patrones de distribución de la riqueza, diferencias en las prioridades de gasto y posibles relaciones entre la situación sanitaria de la población y las decisiones de inversión pública.
 
-El estudio se articula en torno a la siguiente pregunta principal: __Existe una correspondencia entre las prioridades de gasto de los países y las necesidades epidemiológicas de su población?__ Los resultados obtenidos se integrarán en una discusión conjunta que permitirá valorar si las decisiones de gasto público se encuentran alineadas con las necesidades epidemiológicas de la población.
+El estudio se articula en torno a la siguiente pregunta principal: __¿Existe una correspondencia entre las prioridades de gasto de los países y las necesidades epidemiológicas de su población?__ Los resultados obtenidos se integrarán en una discusión conjunta que permitirá valorar si las decisiones de gasto público se encuentran alineadas con las necesidades epidemiológicas de la población.
 
 # Materiales y Métodos
 
@@ -224,7 +224,7 @@ resultado_chi2 <- chisq.test(t_contingencia,simulate.p.value = TRUE, B = 10000)
 cat('P-valor chi2:', resultado_chi2$p.value)
 ```
 
-En esta primera gráfica se analiza la distribución de los niveles de ingresos según la región. En ella se observa cómo, mientras América del Norte se sitúa en un extremo con la totalidad de sus países en el nivel de ingresos altos, regiones como África Subsahariana y Asia Meridional concentran la mayor parte de su estructura socioeconómica en países de ingresos bajos y medios-bajos.
+En esta gráfica se observa cómo, mientras América del Norte se sitúa en un extremo con la totalidad de sus países en el nivel de ingresos altos, regiones como África Subsahariana y Asia Meridional concentran la mayor parte de su estructura socioeconómica en países de ingresos bajos y medios-bajos.
 
 Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos. Asimismo, dado el resultado del test chi2 (p-valor $<<<$ 0.05) la suposición de independencia de la situación económica y localización geográfica de los países se puede rechazar. 
 
@@ -268,7 +268,7 @@ ggplot(datos_cohorte_2019,
         legend.text = element_text(size=5), legend.key.size = unit(5, 'pt')) + coord_flip()
 ```
 
-En esta última gráfica podemos observar la distribución de los países según su nivel de ingresos, PIB per cápita y densidad demográfica. Se aprecia que los países de ingresos altos presentan una mayor variabilidad en su densidad demográfica, incluyendo valores en ambos extremos. A medida que disminuye el nivel de ingresos, las densidades tienden a concentrarse más en valores intermedios. No obstante, se observa una concentración importante de países de todos los niveles de ingresos en el intervalo de 300 a 3.000 habitantes/$km^2$, lo que indica que no existe una relación claramente definida entre el nivel de ingresos y la densidad de población.
+En esta última gráfica se aprecia que los países de ingresos altos presentan una mayor variabilidad en su densidad demográfica, incluyendo valores en ambos extremos. A medida que disminuye el nivel de ingresos, las densidades tienden a concentrarse más en valores intermedios. No obstante, se observa una concentración importante de países de todos los niveles de ingresos en el intervalo de 300 a 3.000 habitantes/$km^2$, lo que indica que no existe una relación claramente definida entre el nivel de ingresos y la densidad de población.
 
 ## Bloque 2. Inversión en salud y defensa.
 
