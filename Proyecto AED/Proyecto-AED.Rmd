@@ -1,7 +1,7 @@
 ---
 title: "Análisis Exploratorio de Datos: Relación entre Gasto Público y Necesidades Sanitarias Globales"
 author:
-  - name: Fran Jiménez Jiménez
+  - name: Francisco Jiménez Jiménez
     affil: 1
   - name: Carla Ortega Fernández
     affil: 1
@@ -76,7 +76,7 @@ library(VIM)
 
 Los datos utilizados proceden del Banco Mundial, concretamente de la base de datos *World Development Indicators* (WDI), la cual recopila indicadores tanto económicos como sanitarios o demográficos de países de todo el mundo. La obtención de los datos se ha realizado mendiante el paquete WDI de R, que permite acceder y descargar directamente los datos del Banco Mundial. Esta base de datos contiene diversos indicadores, con datos para aproximadamente 200 países desde 1960.
 
-Teniendo en cuenta la pregunta formulada, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son: **Esperanza de vida al nacer** (años), **PIB per capita** (US\$), **Gasto en salud** (% PIB), **Gasto en defensa** (% PIB), **Mortalidad infantil** (n:1000), **Acceso al agua** (% población), **Escolaridad secundaria** (total), **Causa de muerte por enf. agudas**(% del total de muertes), **Causa de muerte por enf. crónicas** (% del total de muertes), **Mortalidad por falta de higiene** (n:100.000), **Fertilidad** (nacimientos/mujer), **Embarazos adolescentes**, **Población**, **Area** ($km^2$), **Mortalidad por contaminación del aire** (muertes:100.000), **Inmunización** (% bebes).
+Teniendo en cuenta la pregunta formulada, se ha elegido un subconjunto de variables de interés, para formar un dataset propio. Estas variables son: **Esperanza de vida al nacer** (años), **PIB per cápita** (US\$), **Gasto en salud** (% PIB), **Gasto en defensa** (% PIB), **Mortalidad infantil** (n:1000), **Acceso al agua** (% población), **Escolaridad secundaria** (total), **Causa de muerte por enfermedades agudas**(% del total de muertes), **Causa de muerte por enfermedades crónicas** (% del total de muertes), **Mortalidad por falta de higiene** (n:100.000), **Fertilidad** (nacimientos/mujer), **Embarazos adolescentes**, **Población**, **Área** ($km^2$), **Mortalidad por contaminación del aire** (muertes:100.000), **Inmunización** (% bebes).
 
 Asimismo, se tomaron datos del 2015 al 2022 para acotar el análisis en la primera fase de exploración, puesto que son los más recientes y que contienen más registros completos. En el archivo `Carga_datos_WDI.Rmd` se detalla paso a paso el procedimiento seguido para manipular los datos.
 
@@ -117,7 +117,7 @@ cobertura_por_anyo <- aggregate(datos_salud[variables_aed_init], by = list(year 
                                 FUN = function(x) sum(!is.na(x)))
 ```
 
-Tras este análisis exploratorio, se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enf. agudas, mortalidad por enf. crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional creada a partir de la población y el área del país). El resto de variables fueron descartadas.
+Tras este análisis exploratorio, se tomó la cohorte de 218 países del año 2019, con 17 variables: el país, clasificación de 'income', región, año, esperanza de vida, fertilidad, embarazos adolescentes, población, PIB por capita, gasto en salud, gasto en defensa, mortalidad infantil, acceso a agua, mortalidad por enfermedades agudas, mortalidad por enfermedades crónicas, mortalidad por falta de higiene y densidad demográfica (una variable adicional creada a partir de la población y el área del país). El resto de variables fueron descartadas.
 
 ```{r, echo = FALSE}
 variables_interes <- c('country', 'income', 'region', 'year', 'esperanza_vida','fertilidad',
@@ -144,7 +144,7 @@ sumario <- data.frame( # Sumario para analizar inicialmente los datos raw:
 rownames(sumario) <- NULL
 ```
 
-Visualizamos mediante un sumario las características del 'raw data', incluyendo el nombre de la variable, su tipo, el número de niveles, la fracción de valores faltantes y de outliers detectados mediante el método 3 sigma.
+Visualizamos mediante un sumario las características del 'raw data', incluyendo el nombre de la variable, su tipo, el número de niveles, y la fracción de valores faltantes y de outliers detectados mediante el método 3 sigma.
 
 ```{r}
 print(sumario[6:10,])
@@ -326,7 +326,7 @@ plot_boxplot_region(data = datos_cohorte_2019,y_var = mortalidad_infantil,
   titulo = 'Mortalidad infantil por región',y_label = 'Muertes por cada 1000 nacimientos')
 ```
 
-Las dos gráficas muestran importantes desigualdades sanitarias entre las regiones geográficas. África subsahariana presenta la situación más desfavorable, con la menor esperanza de vida y la mayor mortalidad infantil. Por otra parte, Europa y Asia Central y América del Norte registran las mayores esperanzas de vida y tasas de mortalidad infantil muy reducidas. Por tanto, se aprecia una relación inversa entre ambos indicadores, reflejando importantes desigualdades existentes en las condiciones sanitarias y de salud entre países y regiones.
+Las dos gráficas muestran importantes desigualdades sanitarias entre las regiones geográficas. África Subsahariana presenta la situación más desfavorable, con la menor esperanza de vida y la mayor mortalidad infantil. Por otra parte, Europa y Asia Central y América del Norte registran las mayores esperanzas de vida y tasas de mortalidad infantil muy reducidas. Por tanto, se aprecia una relación inversa entre ambos indicadores, reflejando importantes desigualdades existentes en las condiciones sanitarias y de salud entre países y regiones.
 
 ```{r, echo = TRUE, fig.width = 5, fig.height= 2.5}
 # Comparación de las diferentes causas de mortalidad: enfermedades agudas o crónicas
@@ -388,12 +388,12 @@ ggpairs(datos_corr, upper = list(continuous = wrap("cor", size = 2)),
   theme(strip.text = element_text(size=4), axis.text = element_text(size=5))
 ```
 
-La matriz de correlaciones permite evaluar la intensidad de la relación entre las variables. Los valores de correlación cercanos a 1 o -1 indican una relación fuerte (positiva o negativa, respectivamente), mientras que los valores cercanos a 0 sugieren una relación débil o inexistente. En general, se observan numerosas correlaciones altas en valor absoluto, lo que indica que las variables están estrechamente relacionadas entre sí.Esto sugiere que los indicadores sanitarios, demográficos y de desarrollo evolucionan, por lo general, de forma conjunta, reflejando diferentes aspectos de una misma realidad socioeconómica.
+La matriz de correlaciones permite evaluar la intensidad de la relación entre las variables. Los valores de correlación cercanos a 1 o -1 indican una relación fuerte (positiva o negativa, respectivamente), mientras que los valores cercanos a 0 sugieren una relación débil o inexistente. En general, se observan numerosas correlaciones altas en valor absoluto, lo que indica que las variables están estrechamente relacionadas entre sí. Esto sugiere que los indicadores sanitarios, demográficos y de desarrollo evolucionan, por lo general, de forma conjunta, reflejando diferentes aspectos de una misma realidad socioeconómica.
 
 # Conclusiones
 El análisis exploratorio anterior permite dar respuesta a la pregunta central del estudio, concluyendo que no existe una correspondencia real ni proporcional entre las prioridades de gasto público en salud y las necesidades epidemiológicas de la población. 
-A nivel global, se constata una marcada polarización socioeconómica donde la riqueza, la localización geográfica y los indicadores de bienestar (esperanza de vida y mortalidad infantil) están fuertemente condicionados por el nivel de ingresos del país. Esto se traduce en una clara transición epidemiológica: mientras que las naciones de ingresos altos presentan sistemas maduros domiados por la mortalidad por enfermedades crónicas, los países de bajos ingresos enfrentan una alta carga de morbilidad por causas agudas e infecciosas, asociadas a una menor disponibilidad de recursos básicos como el agua potable y la higiene. 
-En cuanto a las prioridades presupuestarias, aunque el gasto sanitario suele superar al de defensa en la mayoría de territorios, la falta de una tendencia creciente en el índice de necesidades sanitarias frente a la inversión en salud evidencia un desajuste estructural. Los países que registran mayores carencias epidemiológicas no desyinan necesariamente un mayor porcentaje de su PIB a sanidad. Esto sugiere que incrementar el gasto sanitario por sí solo es insuficiente; es necesario optimizar la combinación de políticas públicas integrales (incluyendon educación e infraestructuras) para lograr un impacto real en las condiciones de vida de la población global. 
+A nivel global, se constata una marcada polarización socioeconómica donde la riqueza, la localización geográfica y los indicadores de bienestar (esperanza de vida y mortalidad infantil) están fuertemente condicionados por el nivel de ingresos del país. Esto se traduce en una clara transición epidemiológica: mientras que las naciones de ingresos altos presentan sistemas maduros dominados por la mortalidad por enfermedades crónicas, los países de bajos ingresos enfrentan una alta carga de morbilidad por causas agudas e infecciosas, asociadas a una menor disponibilidad de recursos básicos como el agua potable y la higiene. 
+En cuanto a las prioridades presupuestarias, aunque el gasto sanitario suele superar al de defensa en la mayoría de territorios, la falta de una tendencia creciente en el índice de necesidades sanitarias frente a la inversión en salud evidencia un desajuste estructural. Los países que registran mayores carencias epidemiológicas no destinan necesariamente un mayor porcentaje de su PIB a sanidad. Esto sugiere que incrementar el gasto sanitario por sí solo es insuficiente; es necesario optimizar la combinación de políticas públicas integrales (incluyendo educación e infraestructuras) para lograr un impacto real en las condiciones de vida de la población global. 
 
 
 
