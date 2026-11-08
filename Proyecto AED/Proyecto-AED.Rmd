@@ -227,10 +227,13 @@ En esta gráfica se observa cómo, mientras América del Norte se sitúa en un e
 
 Por otro lado, regiones como Europa, América Latina, Asia Oriental y Oriente Medio, presentan una composición más diversa. Mientras que las dos primeras destacan por la coexistencia de economías de ingresos altos y medios-altos, las dos últimas presentan un variedad mayor, al tener una distribución que incluye todos los niveles de ingresos. Asimismo, dado el resultado del test chi2 (p-valor $<<<$ 0.05) la suposición de independencia de la situación económica y localización geográfica de los países se puede rechazar. 
 
-```{r, echo = TRUE, fig.width = 5, fig.height= 1.8}
+En este boxplot podemos observar como América del Norte destaca por presentar los niveles de PIB per cápita más elevados, con una mediana superior a los \$50.000 y una baja variabilidad interna. En el extremo opuesto, África Subsahariana y Asia Meridional registran los niveles más bajos. La primera presenta una mayor dispersión, mientras que la segunda muestra una distribución más concentrada. Estos resultados se alinean con los anteriores, pudiendo afirmar que los países con mayor capital se sitúan en el hemisferio norte.
+
+Por otro lado, las demás regiones presentan una mayor variabilidad. Europa y Asia Central destaca por tener la mediana más elevada, con un PIB per cápita superior a los \$20.000, aunque con una dispersión considerable entre países. Oriente Medio y Norte de África muestra una distribución muy amplia y una mediana relativamente baja, reflejando importantes desigualdades económicas internas. 
+
+```{r, echo = TRUE, fig.width = 5, fig.height= 2.25}
 # Como hay gráficas que se asemejan en morfología (boxplots por regiones), definimos:
-plot_boxplot_region <- function(data, y_var, 
-                                titulo, y_label, log_scale = FALSE, breaks_log = NULL) {
+plot_boxplot_region <- function(data, y_var,titulo, y_label, log_scale = F, breaks_log = NULL){
   p <- ggplot(data, aes(x = stringr::str_wrap(region, width = 15), y = {{ y_var }}, fill = region)) +
     geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2) +
     stat_summary(fun = mean, geom = 'point', shape = 18, size = 3, color = 'darkred') +
@@ -242,16 +245,11 @@ plot_boxplot_region <- function(data, y_var,
   if (log_scale) { # para los que requieren escala logarítmica
     p <- p + scale_y_log10(labels = scales::dollar_format(prefix = '$'),breaks = breaks_log)}
   return(p)}
-# Distribución del PIB por región (con escala logarítmica)
 plot_boxplot_region(data = datos_cohorte_2019,y_var = gdp_per_capita,
   titulo = 'Distribución del PIB per cápita por región',
   y_label = 'PIB per cápita (US$, escala log10)',log_scale = TRUE,
   breaks_log = c(100, 300, 1000, 3000, 10000, 100000))
 ```
-
-En este boxplot podemos observar como América del Norte destaca por presentar los niveles de PIB per cápita más elevados, con una mediana superior a los \$50.000 y una baja variabilidad interna. En el extremo opuesto, África Subsahariana y Asia Meridional registran los niveles más bajos. La primera presenta una mayor dispersión, mientras que la segunda muestra una distribución más concentrada. Estos resultados se alinean con los anteriores, pudiendo afirmar que los países con mayor capital se sitúan en el hemisferio norte.
-
-Por otro lado, las demás regiones presentan una mayor variabilidad. Europa y Asia Central destaca por tener la mediana más elevada, con un PIB per cápita superior a los \$20.000, aunque con una dispersión considerable entre países. Oriente Medio y Norte de África muestra una distribución muy amplia y una mediana relativamente baja, reflejando importantes desigualdades económicas internas. 
 
 ```{r, echo = TRUE, fig.width = 4.5, fig.height= 2.5}
 # Comparación de la densidad demográfica con el PIB por cápita:
